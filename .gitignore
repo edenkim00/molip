@@ -1,4 +1,4 @@
-server/log/*
-server/node_modules/*
-server/lambda_zip/*
-server/*.zip
+backend/log/*
+backend/node_modules/*
+backend/lambda_zip/*
+backend/*.zip
