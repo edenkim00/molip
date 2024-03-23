@@ -7,7 +7,7 @@ require("dotenv").config();
 async function signUp(data) {
   // Validation
 
-  // Service
+  // Provider or Service
   await Service.signUp();
 
   // Return
