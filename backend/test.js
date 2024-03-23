@@ -1,27 +1,19 @@
 /* */
-const { signUp } = require("./src/app/Controller.js");
+const { createChallenge } = require("./src/app/Controller.js");
 
-const test = signUp;
-const userId = 1;
+/* API TO TEST */
+const testFunction = createChallenge;
+
+/* API INPUT */
+const userId = "daeseong"; // only authorzation required
 const data = {
-  email: "eotjd0986@gmail.com",
-  password: "1234",
+  name: "hi", // 50 글자 이내
+  description: "a;slkdfjal;kjfal;sfjaf", //150글자 이내
+  private: false,
+  password: 12345,
 };
-// const data = {
-//   category_id: 1,
-//   force: true,
-//   vote_data: {
-//     Mon: ["None", "None"],
-//     Tue: ["Basketball", "Badminton"],
-//     Wed: ["Basketball", "Badminton"],
-//     Thu: ["Basketball", "Badminton"],
-//     Fri1: ["Basketball", "Badminton"],
-//     Fri2: ["Basketball", "Badminton"],
-//     Sat1: ["Basketball", "Badminton"],
-//     Sat2: ["Basketball", "Badminton"],
-//   },
-// };
 
-test(data, { userId }).then((res) => {
+/* API CALL */
+testFunction(data, { userId }).then((res) => {
   console.log(res);
 });

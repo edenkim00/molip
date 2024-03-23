@@ -1,4 +1,5 @@
 const { signUp } = require("./lib/user");
+const { createChallenge } = require("./lib/challenge");
 
-/* for only admin */
 exports.signUp = signUp;
+exports.createChallenge = createChallenge;
