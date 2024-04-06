@@ -26,7 +26,14 @@ async function createChallenge(
   const connection = await pool.getConnection(async (conn) => conn); // DB 연결
   try {
     connection.beginTransaction(); // BACKUP
-    await Dao.createChallenge(connection, name, description, private, password, createrId);
+    await Dao.createChallenge(
+      connection,
+      name,
+      description,
+      private,
+      password,
+      createrId
+    );
     connection.commit(); // COMMIT
     return true;
   } catch (err) {
@@ -38,8 +45,7 @@ async function createChallenge(
   }
 }
 
-
-async function deleteUser(userId){
+async function deleteUser(userId) {
   const connection = await pool.getConnection(async (conn) => conn); // DB 연결
   try {
     connection.beginTransaction(); // BACKUP
@@ -55,9 +61,25 @@ async function deleteUser(userId){
   }
 }
 
+async function changePassword(id, newPassword) {
+  const connection = await pool.getConnection(async (conn) => conn); // DB 연결
+  try {
+    connection.beginTransaction(); // BACKUP
+    await Dao.changePassword(connection, [newPassword, id]);
+    connection.commit(); // COMMIT
+    return true;
+  } catch (err) {
+    connection.rollback();
+    console.error("[changePassword]", err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
 module.exports = {
   signUp,
   createChallenge,
   deleteUser,
-
+  changePassword,
 };

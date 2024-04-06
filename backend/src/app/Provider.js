@@ -13,4 +13,29 @@ async function select(daoFunc, params) {
   }
 }
 
-module.exports = {};
+async function getUserProfile(userId) {
+  const result = await select(Dao.getUserProfile, [userId]);
+  return result;
+}
+
+async function existUser(userId, password) {
+  const result = await select(Dao.selectUser, [userId, password]);
+  if (result.length > 0) {
+    return true;
+  }
+  return false;
+}
+
+async function checkId(id) {
+  const result = await select(Dao.checkId, [id]);
+  if (result.length > 0) {
+    return false;
+  }
+  return true;
+}
+
+module.exports = {
+  getUserProfile,
+  existUser,
+  checkId,
+};

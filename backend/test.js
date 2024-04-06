@@ -1,15 +1,15 @@
 /* */
-const { deleteUser } = require("./src/app/Controller.js");
+const { signUp } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = deleteUser;
+const testFunction = signUp;
 //id, password, email
 /* API INPUT */
-const userId = "alsakdfj"; // only authorzation required
+const userId = "danielkim"; // only authorzation required
 const data = {
-  // userId: "alsakdfj", // 50 글자 이내
-  // password: "a;sllk;jkdf", //150글자 이내
-  // email: "als;kdjfasl;djf@gmail.com",
+  id: "danidelkim", // 50 글자 이내
+  password: "asdfasdf", //150글자 이내
+  email: "als;kdjfasl;djf@gmail.com",
 };
 
 /* API CALL */

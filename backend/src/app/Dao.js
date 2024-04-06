@@ -29,9 +29,36 @@ async function deleteUser(connection, userId) {
   return;
 }
 
+async function getUserProfile(connection, params) {
+  const Qeury = "SELECT id, profile_image_url FROM Molip_Users WHERE id = ?";
+  const result = await connection.query(Qeury, params);
+  return result[0];
+}
+
+async function selectUser(connection, params) {
+  const Query = "SELECT id FROM Molip_Users WHERE id = ? and password = ?";
+  const result = await connection.query(Query, params);
+  return result[0];
+}
+
+async function changePassword(connection, params) {
+  const Qeury = "UPDATE Molip_Users SET password = ? WHERE id = ?";
+  const result = await connection.query(Qeury, params);
+  return;
+}
+
+async function checkId(connection, params) {
+  const Qeury = "SELECT id FROM Molip_Users WHERE id = ?";
+  const result = await connection.query(Qeury, params);
+  return result[0];
+}
+
 module.exports = {
   signUp,
   createChallenge,
   deleteUser,
-  
+  getUserProfile,
+  selectUser,
+  changePassword,
+  checkId,
 };
