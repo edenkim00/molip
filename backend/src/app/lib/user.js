@@ -35,6 +35,25 @@ async function signUp(data) {
   // Return - Response
   return response(baseResponse.SUCCESS);
 }
+
+
+async function deleteUser(data, verifiedToken) {
+  const userId = verifiedToken.userId;
+  try {
+    await Service.deleteUser(userId);
+  } catch (err) {
+    console.error(err);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+
+  // Return - Response
+  return response(baseResponse.SUCCESS);
+  
+}
+
+
 module.exports = {
   signUp,
+  deleteUser,
+
 };

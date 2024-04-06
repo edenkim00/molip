@@ -23,7 +23,15 @@ async function createChallenge(
   return;
 }
 
+async function deleteUser(connection, userId) {
+  const Query = "DELETE FROM Molip_Users WHERE id = ?";
+  await connection.query(Query, [userId]);
+  return;
+}
+
 module.exports = {
   signUp,
   createChallenge,
+  deleteUser,
+  
 };

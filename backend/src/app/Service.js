@@ -38,7 +38,26 @@ async function createChallenge(
   }
 }
 
+
+async function deleteUser(userId){
+  const connection = await pool.getConnection(async (conn) => conn); // DB 연결
+  try {
+    connection.beginTransaction(); // BACKUP
+    await Dao.deleteUser(connection, userId);
+    connection.commit(); // COMMIT
+    return true;
+  } catch (err) {
+    connection.rollback();
+    console.error("[deleteUser]", err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
 module.exports = {
   signUp,
   createChallenge,
+  deleteUser,
+
 };
