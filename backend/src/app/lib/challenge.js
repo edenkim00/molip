@@ -2,6 +2,7 @@
 const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const Service = require("../Service");
+const Provider = require("../Provider");
 require("dotenv").config();
 
 async function createChallenge(data, verifiedToken) {
@@ -59,6 +60,71 @@ async function createChallenge(data, verifiedToken) {
   // Return - Response
   return response(baseResponse.SUCCESS);
 }
+
+async function getChallenges(data, verifiedToken) {
+  const { user_id } = data;
+  if (!user_id) {
+    //select all challenges
+    const result = await Provider.getAllChallenges();
+    return response(baseResponse.SUCCESS, result);
+  } else {
+    //select challenges with user
+    const userIdFromToken = verifiedToken?.userId;
+    if (!userIdFromToken) {
+      return errResponse(baseResponse.NO_TOKEN);
+    }
+    if (user_id != userIdFromToken) {
+      return errResponse(baseResponse.AUTHORIZATION_FAILED);
+    }
+    const result = await Provider.getChallengesWithUser(user_id);
+    return response(baseResponse.SUCCESS, result);
+  }
+}
+
+async function record(data, verifiedToken) {
+  const { user_id, start, end, challenge_id } = data;
+  const userIdFromToken = verifiedToken?.userId;
+  if (!user_id || !start || !end || !challenge_id) {
+    return errResponse(baseResponse.WRONG_BODY);
+  }
+  if (userIdFromToken != user_id) {
+    return errResponse(baseResponse.AUTHORIZATION_FAILED);
+  }
+  const result = await Service.record(user_id, start, end, challenge_id);
+  return response(baseResponse.SUCCESS);
+}
+
+async function joinChallenge(data, verifiedToken) {
+  const { user_id, challenge_id } = data;
+  const userIdFromToken = verifiedToken.userId;
+  if (!user_id || !challenge_id) {
+    return errResponse(baseResponse.WRONG_BODY);
+  }
+  if (userIdFromToken != user_id) {
+    return errResponse(baseResponse.AUTHORIZATION_FAILED);
+  }
+  const result = await Service.joinChallenge(user_id, challenge_id);
+  return response(baseResponse.SUCCESS);
+}
+
+async function disconnectUserChallenge(data, verifiedToken) {
+  const { user_id, challenge_id } = data;
+  const userIdFromToken = verifiedToken.userId;
+  if (!user_id || !challenge_id) {
+    return errResponse(baseResponse.WRONG_BODY);
+  }
+  if (userIdFromToken != user_id) {
+    return errResponse(baseResponse.AUTHORIZATION_FAILED);
+  }
+  const result = await Service.disconnectUserChallenge(user_id, challenge_id);
+  return response(baseResponse.SUCCESS);
+}
+
 module.exports = {
   createChallenge,
+  getChallenges,
+  record,
+  joinChallenge,
+  disconnectUserChallenge,
+
 };

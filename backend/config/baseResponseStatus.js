@@ -32,4 +32,16 @@ module.exports = {
     code: 3003,
     message: "이미 존재하는 아이디",
   },
+
+  NO_TOKEN: {
+    isSuccess: false,
+    code: 4001,
+    message: "토큰 유효하지 않음",
+  },
+
+  AUTHORIZATION_FAILED: {
+    isSuccess: false,
+    code: 5001,
+    message: "유저가 조회할 권한이 없음",
+  },
 };

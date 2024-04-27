@@ -1,15 +1,14 @@
 /* */
-const { signUp } = require("./src/app/Controller.js");
+const { disconnectUserChallenge } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = signUp;
+const testFunction = disconnectUserChallenge;
 //id, password, email
 /* API INPUT */
-const userId = "danielkim"; // only authorzation required
+const userId = "11234"; // only authorzation required
 const data = {
-  id: "danidelkim", // 50 글자 이내
-  password: "asdfasdf", //150글자 이내
-  email: "als;kdjfasl;djf@gmail.com",
+  user_id: "11234",
+  challenge_id: 1,
 };
 
 /* API CALL */

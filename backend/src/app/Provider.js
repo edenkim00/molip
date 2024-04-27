@@ -34,8 +34,22 @@ async function checkId(id) {
   return true;
 }
 
+async function getAllChallenges() {
+  const result = await select(Dao.getAllChallenges, []);
+  return result;
+}
+
+async function getChallengesWithUser(user_id) {
+  const result = await select(Dao.getChallengesWithUser, [user_id]);
+  return result;
+}
+
+
+
 module.exports = {
   getUserProfile,
   existUser,
   checkId,
+  getAllChallenges,
+  getChallengesWithUser,
 };

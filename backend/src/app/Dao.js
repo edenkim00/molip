@@ -42,15 +42,49 @@ async function selectUser(connection, params) {
 }
 
 async function changePassword(connection, params) {
-  const Qeury = "UPDATE Molip_Users SET password = ? WHERE id = ?";
-  const result = await connection.query(Qeury, params);
+  const Query = "UPDATE Molip_Users SET password = ? WHERE id = ?";
+  const result = await connection.query(Query, params);
   return;
 }
 
 async function checkId(connection, params) {
-  const Qeury = "SELECT id FROM Molip_Users WHERE id = ?";
-  const result = await connection.query(Qeury, params);
+  const Query = "SELECT id FROM Molip_Users WHERE id = ?";
+  const result = await connection.query(Query, params);
   return result[0];
+}
+
+async function getAllChallenges(connection) {
+  const Query = "SELECT * FROM Molip_Challenges";
+  const result = await connection.query(Query);
+  return result[0];
+}
+
+async function getChallengesWithUser(connection, params) {
+  const Query =
+    "SELECT MC.* FROM Molip_User_Challenge_Connections MUCC JOIN Molip_Challenges MC on MUCC.challenge_id = MC.id WHERE MUCC.user_id = ?;";
+  const result = await connection.query(Query, params);
+  return result[0];
+}
+
+async function record(connection, params) {
+  const Query =
+    "INSERT INTO Molip_Records (user_id, start, end, challenge_id) VALUES(?,?,?,?);";
+  const result = await connection.query(Query, params);
+  return result;
+}
+
+async function joinChallenge(connection, params) {
+  const Query =
+    "INSERT INTO Molip_User_Challenge_Connections (user_id, challenge_id) VALUES (?,?);";
+  const result = await connection.query(Query, params);
+  return result;
+}
+
+async function disconnectUserChallenge(connection, params) {
+  const Query =
+    "UPDATE Molip_User_Challenge_Connections SET status = 'deleted' WHERE user_id = ? and challenge_id = ? and status = 'activate';";
+  const result = await connection.query(Query, params);
+  return result;
 }
 
 module.exports = {
@@ -61,4 +95,9 @@ module.exports = {
   selectUser,
   changePassword,
   checkId,
+  getAllChallenges,
+  getChallengesWithUser,
+  record,
+  joinChallenge,
+  disconnectUserChallenge,
 };

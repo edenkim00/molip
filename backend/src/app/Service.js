@@ -77,9 +77,60 @@ async function changePassword(id, newPassword) {
   }
 }
 
+async function record(user_id, start, end, challenge_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    connection.beginTransaction(); // BACKUP
+    await Dao.record(connection, [user_id, start, end, challenge_id]);
+    connection.commit(); // COMMIT
+    return true;
+  } catch (err) {
+    connection.rollback();
+    console.error("[record]", err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
+async function joinChallenge(user_id, challenge_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    connection.beginTransaction(); // BACKUP
+    await Dao.joinChallenge(connection, [user_id, challenge_id]);
+    connection.commit(); // COMMIT
+    return true;
+  } catch (err) {
+    connection.rollback();
+    console.error("[joinChallenge]", err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
+async function disconnectUserChallenge(user_id, challenge_id) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    connection.beginTransaction(); // BACKUP
+    await Dao.disconnectUserChallenge(connection, [user_id, challenge_id]);
+    connection.commit(); // COMMIT
+    return true;
+  } catch (err) {
+    connection.rollback();
+    console.error("[disconnectUserChallenge]", err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
 module.exports = {
   signUp,
   createChallenge,
   deleteUser,
   changePassword,
+  record,
+  joinChallenge,
+  disconnectUserChallenge,
 };
