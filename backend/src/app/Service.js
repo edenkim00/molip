@@ -93,7 +93,7 @@ async function record(user_id, start, end, challenge_id) {
   }
 }
 
-async function joinChallenge(user_id, challenge_id) {
+async function connectUserChallenge(user_id, challenge_id) {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     connection.beginTransaction(); // BACKUP
@@ -131,6 +131,6 @@ module.exports = {
   deleteUser,
   changePassword,
   record,
-  joinChallenge,
+  connectUserChallenge,
   disconnectUserChallenge,
 };

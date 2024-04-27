@@ -94,7 +94,7 @@ async function record(data, verifiedToken) {
   return response(baseResponse.SUCCESS);
 }
 
-async function joinChallenge(data, verifiedToken) {
+async function connectUserChallenge(data, verifiedToken) {
   const { user_id, challenge_id } = data;
   const userIdFromToken = verifiedToken.userId;
   if (!user_id || !challenge_id) {
@@ -103,7 +103,10 @@ async function joinChallenge(data, verifiedToken) {
   if (userIdFromToken != user_id) {
     return errResponse(baseResponse.AUTHORIZATION_FAILED);
   }
-  const result = await Service.joinChallenge(user_id, challenge_id);
+  const suc = await Service.connectUserChallenge(user_id, challenge_id);
+  if (!suc) {
+    return errResponse(baseResponse.DB_ERROR);
+  }
   return response(baseResponse.SUCCESS);
 }
 
@@ -116,7 +119,10 @@ async function disconnectUserChallenge(data, verifiedToken) {
   if (userIdFromToken != user_id) {
     return errResponse(baseResponse.AUTHORIZATION_FAILED);
   }
-  const result = await Service.disconnectUserChallenge(user_id, challenge_id);
+  const suc = await Service.disconnectUserChallenge(user_id, challenge_id);
+  if (!suc) {
+    return errResponse(baseResponse.DB_ERROR);
+  }
   return response(baseResponse.SUCCESS);
 }
 
@@ -124,7 +130,6 @@ module.exports = {
   createChallenge,
   getChallenges,
   record,
-  joinChallenge,
+  connectUserChallenge,
   disconnectUserChallenge,
-
 };

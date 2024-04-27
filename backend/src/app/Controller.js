@@ -1,7 +1,17 @@
-const { signUp, deleteUser, getUserProfile, signIn, changePassword} = require("./lib/user");
-const { createChallenge, getChallenges, record, joinChallenge, disconnectUserChallenge } = require("./lib/challenge");
-
-
+const {
+  signUp,
+  deleteUser,
+  getUserProfile,
+  signIn,
+  changePassword,
+} = require("./lib/user");
+const {
+  createChallenge,
+  getChallenges,
+  record,
+  connectUserChallenge,
+  disconnectUserChallenge,
+} = require("./lib/challenge");
 
 exports.signUp = signUp;
 exports.deleteUser = deleteUser;
@@ -11,5 +21,5 @@ exports.changePassword = changePassword;
 exports.getChallenges = getChallenges;
 exports.record = record;
 exports.createChallenge = createChallenge;
-exports.joinChallenge = joinChallenge;
+exports.connectUserChallenge = connectUserChallenge;
 exports.disconnectUserChallenge = disconnectUserChallenge;
