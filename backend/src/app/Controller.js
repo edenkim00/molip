@@ -3,8 +3,9 @@ const { createChallenge } = require("./lib/challenge");
 
 
 exports.signUp = signUp;
-exports.createChallenge = createChallenge;
 exports.deleteUser = deleteUser;
-exports.getUserProfile = getUserProfile;
 exports.signIn = signIn;
+exports.getUserProfile = getUserProfile;
 exports.changePassword = changePassword;
+
+exports.createChallenge = createChallenge;
