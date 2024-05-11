@@ -2,3 +2,4 @@ backend/log/*
 backend/node_modules/*
 backend/lambda_zip/*
 backend/*.zip
+.DS_Store
