@@ -1,8 +1,5 @@
 import React from 'react';
 import {View, Image, Text, TextInput, TouchableOpacity} from 'react-native';
-import {useState} from 'react';
-import LogoImage from '../../assets/molip_logo.png';
-import LearningApplicationBanner from '../../assets/language_learning_application.png';
 import PhoneImage from '../../assets/phone_image.png';
 
 // flex-col 주축이 세로로 정렬
