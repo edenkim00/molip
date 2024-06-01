@@ -22,6 +22,7 @@ exports.handler = async function (event) {
   }
 
   const { data, next, verifiedToken } = parsedData;
+  
   console.log(
     "[Main]: data",
     data,
