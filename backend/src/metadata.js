@@ -10,6 +10,12 @@ const ENDPOINT_METADATA = [
     next: Controller.signUp,
   },
   {
+    endpoint: "/app/user-password",
+    method: "PATCH",
+    tokenRequired: false,
+    next: Controller.changePassword,
+  },
+  {
     endpoint: "/app/challenge",
     method: "POST",
     tokenRequired: true,
