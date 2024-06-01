@@ -4,6 +4,7 @@ import {useState} from 'react';
 import LogoImage from '../../assets/molip_logo.png';
 import LearningApplicationBanner from '../../assets/language_learning_application.png';
 import BackgroundImage from '../../assets/login_page_background.png';
+import ApiManager from '../request';
 
 // flex-col 주축이 세로로 정렬
 // flex-row 주축이 가로로 정렬
@@ -26,12 +27,16 @@ function Space({heightClassName}) {
     return <View className={heightClassName} />;
 }
 
-function SignUpInputs() {
-    const [id, setId] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-
+function SignUpInputs({
+    email,
+    setEmail,
+    id,
+    setId,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+}) {
     return (
         <View className="w-full flex-col justify-center items-center">
             <EmailInputWithVerificationButton
@@ -133,13 +138,14 @@ function EmailInputWithVerificationButton({
     );
 }
 
-function CreateAccountButton() {
+function CreateAccountButton({signUp}) {
     return (
         <View className="w-[37%]">
             <Space heightClassName={'h-7'} />
             <TouchableOpacity
                 onPress={() => {
                     //TODO: 로그인 버튼 눌렀을 때 로그인 처리
+                    signUp();
                 }}
                 className="bg-[#312A5A] rounded py-3">
                 <Text className="text-white font-bold text-center tracking-tight text-sm">
@@ -167,14 +173,52 @@ function SignInMethodDivider() {
 }
 
 export default function SignUpPage() {
+    const [email, setEmail] = useState('');
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const validate = () => {
+        if (password !== confirmPassword) {
+            alert('Password and Confirm Password must be the same');
+            return false;
+        }
+
+        if (password.length < 4 || password.length > 30) {
+            alert('Password must be between 4 and 30 characters');
+            return false;
+        }
+        return true;
+    };
+
+    const signUp = async () => {
+        if (!validate()) {
+            return;
+        }
+
+        const res = await ApiManager.signUp({id, email, password});
+        if (!res.isSuccess) {
+            alert(res.message ?? 'Failed to sign up');
+        }
+    };
+
     return (
         <View className="w-full h-full flex-col justify-start items-center">
             <Space heightClassName={'h-[15%]'} />
             <Background />
             <Space heightClassName={'h-8'} />
             <View className=""></View>
-            <SignUpInputs />
-            <CreateAccountButton />
+            <SignUpInputs
+                email={email}
+                setEmail={setEmail}
+                id={id}
+                setId={setId}
+                password={password}
+                setPassword={setPassword}
+                confirmPassword={confirmPassword}
+                setConfirmPassword={setConfirmPassword}
+            />
+            <CreateAccountButton signUp={signUp} />
             <Space heightClassName={'h-8'} />
             <SignInMethodDivider />
         </View>
