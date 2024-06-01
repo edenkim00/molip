@@ -33,6 +33,12 @@ module.exports = {
     message: "이미 존재하는 아이디",
   },
 
+  WRONG_PASSWORD_LENGTH: {
+    isSuccess: false,
+    code: 3004,
+    message: "비밀번호는 4자 이상 30자 이하로 입력해주세요.",
+  },
+
   NO_TOKEN: {
     isSuccess: false,
     code: 4001,
