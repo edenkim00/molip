@@ -19,11 +19,11 @@ async function signUp(data) {
   }
 
   if (id.length > 30 || id.length < 5) {
-    return errResponse(baseResponse.WRONG_PASSWORD_LENGTH);
+    return errResponse(baseResponse.WRONG_BODY);
   }
 
   if (password.length < 8 || password.length > 20) {
-    return errResponse(baseResponse.WRONG_BODY);
+    return errResponse(baseResponse.WRONG_PASSWORD_LENGTH);
   }
   const wowie = await Provider.checkId(id);
   if (!wowie) {
