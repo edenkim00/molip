@@ -10,11 +10,21 @@ const ENDPOINT_METADATA = [
     next: Controller.signUp,
   },
   {
+    endpoint: "/app/challenge",
+    method: "POST",
+    tokenRequired: true,
+    next: Controller.createChallenge,
+  },
+  {
     endpoint: "/app/hojintest",
     method: "GET",
     tokenRequired: false,
     next: () => {
       console.log("HOJIN WELCOME");
+      return {
+        statusCode: 200,
+        body: "HOJIN WELCOME",
+      };
     },
   },
 ];
