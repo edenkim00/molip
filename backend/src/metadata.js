@@ -9,6 +9,14 @@ const ENDPOINT_METADATA = [
     tokenRequired: false,
     next: Controller.signUp,
   },
+  {
+    endpoint: "/app/hojintest",
+    method: "GET",
+    tokenRequired: false,
+    next: () => {
+      console.log("HOJIN WELCOME");
+    },
+  },
 ];
 
 module.exports = {
