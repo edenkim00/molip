@@ -13,7 +13,6 @@ import PasswordResetPage from './src/pages/PasswordResetPage';
 import LoginPage from './src/pages/LoginPage';
 import SignUpPage from './src/pages/SignUpPage';
 
-// import Tabbar from './src/pages/Tabbar';
 import {PageName, PAGES, PageStackParamList} from './src/pages/PageConfig';
 
 const {StatusBarManager} = NativeModules;
