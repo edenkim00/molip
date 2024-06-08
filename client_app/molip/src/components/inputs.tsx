@@ -1,0 +1,117 @@
+import React, {useState, version} from 'react';
+import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
+import ApiManager from '@api';
+
+interface EmailInputWithVerificationButtonProps {
+    email: string;
+    setEmail: (email: string) => void;
+    verified: boolean;
+    setVerified: (verified: boolean) => void;
+}
+
+interface PublishedAuth {
+    emailCode?: string;
+}
+
+export function EmailAuthorization({
+    email,
+    setEmail,
+    verified,
+    setVerified,
+}: EmailInputWithVerificationButtonProps): JSX.Element {
+    const [authCode, setAuthCode] = useState('');
+    const [requested, setRequested] = useState(false);
+    const [processing, setProcessing] = useState(false);
+
+    const [border, setBorder] = useState('border-black text-black');
+    const [authCodeBorder, setAuthCodeBorder] = useState(
+        'border-black text-black',
+    );
+    const [authCodePublished, setAuthCodePublished] = useState(
+        {} as PublishedAuth,
+    );
+
+    return (
+        <>
+            <View
+                className={`w-[80%] border rounded-3xl flex-row relative ${border}`}>
+                <TextInput
+                    className={`px-6 py-3.5 ${border}`}
+                    style={{opacity: verified ? 0.5 : 1, borderColor: border}}
+                    placeholder={'Email'}
+                    value={email}
+                    onChangeText={setEmail}
+                    secureTextEntry={false}
+                    onFocus={() => setBorder('border-[#504593] text-[#504593]')}
+                    onBlur={() => setBorder('border-black text-black')}
+                    readOnly={verified}
+                />
+                {!processing && !requested && (
+                    <TouchableOpacity
+                        onPress={async () => {
+                            setProcessing(true);
+                            const res = await ApiManager.requestEmailAuthCode(
+                                email,
+                            );
+                            if (!res.isSuccess) {
+                                setProcessing(false);
+                                Alert.alert('Failed to request auth code');
+                            }
+                            setRequested(true);
+                            console.log('Hi');
+                            setAuthCodePublished({
+                                emailCode: res.result.code,
+                            });
+                        }}
+                        disabled={processing}
+                        className={`bg-white px-4 py-3 absolute right-0 h-full rounded-3xl shadow-sm flex-col justify-center border border-gray-400`}>
+                        <Text className="text-center tracking-tight text-xs">
+                            Authorize
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+            {processing && (
+                <View
+                    className={`w-[80%] border rounded-3xl my-2 flex-row relative ${authCodeBorder}`}>
+                    <TextInput
+                        className={`px-6 py-3.5 ${authCodeBorder}`}
+                        placeholder={'Verification Code'}
+                        value={authCode}
+                        onChangeText={setAuthCode}
+                        secureTextEntry={false}
+                        onFocus={() =>
+                            setAuthCodeBorder('border-[#504593] text-[#504593]')
+                        }
+                        onBlur={() =>
+                            setAuthCodeBorder('border-black text-black')
+                        }
+                    />
+                    {requested && processing && (
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (
+                                    authCodePublished.emailCode &&
+                                    authCode === authCodePublished.emailCode
+                                ) {
+                                    setProcessing(false);
+                                    setVerified(true);
+                                } else {
+                                    console.log(
+                                        'publishedAuthCode: ',
+                                        authCodePublished,
+                                    );
+                                    Alert.alert('Wrong auth code');
+                                }
+                            }}
+                            className={`bg-white px-4 py-3 absolute right-0 h-full rounded-3xl shadow-sm flex-col justify-center border border-gray-400`}>
+                            <Text className="text-center tracking-tight text-xs">
+                                Verify
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+            )}
+        </>
+    );
+}
