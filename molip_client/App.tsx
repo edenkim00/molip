@@ -13,33 +13,26 @@ import PasswordResetPage from './src/pages/PasswordResetPage';
 import LoginPage from './src/pages/LoginPage';
 import SignUpPage from './src/pages/SignUpPage';
 
-import Tabbar from './src/pages/Tabbar';
-import {PAGES} from './src/pages/PageConfig';
+// import Tabbar from './src/pages/Tabbar';
+import {PageName, PAGES, PageStackParamList} from './src/pages/PageConfig';
 
 const {StatusBarManager} = NativeModules;
 
-type RootStackParamList = {
-    LoginPage: {
-        userId: string | undefined;
-    };
-    SignUpPage: undefined;
-    Tabbar: {
-        userId: string;
-    };
-    PasswordResetPage: {};
-};
-
 const IS_IOS_PLATFORM = Platform.OS === 'ios';
-const PageStack = createStackNavigator<RootStackParamList>();
+const PageStack = createStackNavigator<PageStackParamList>();
 
 function MolipApp(): React.ReactElement {
     const [keyboardOffset, setKeyboardOffset] = React.useState(0);
 
-    useEffect(() => {
+    const avoidKeyboard: () => void = () => {
         Platform.OS === 'ios' &&
-            StatusBarManager.getHeight((res: {height: number}) => {
-                setKeyboardOffset(res.height || 0);
+            StatusBarManager.getHeight((data: {height: number}) => {
+                setKeyboardOffset(data.height || 0);
             });
+    };
+
+    useEffect(() => {
+        avoidKeyboard();
     }, []);
 
     return (
@@ -51,15 +44,15 @@ function MolipApp(): React.ReactElement {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <PageStack.Navigator screenOptions={{headerShown: false}}>
                         <PageStack.Screen
-                            name="LoginPage"
+                            name={PAGES.LoginPage.name as PageName}
                             component={LoginPage}
                         />
                         <PageStack.Screen
-                            name="SignUpPage"
+                            name={PAGES.SignUpPage.name as PageName}
                             component={SignUpPage}
                         />
                         <PageStack.Screen
-                            name="PasswordResetPage"
+                            name={PAGES.PasswordResetPage.name as PageName}
                             component={PasswordResetPage}
                         />
                     </PageStack.Navigator>
