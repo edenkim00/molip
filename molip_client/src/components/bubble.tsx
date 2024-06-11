@@ -7,7 +7,7 @@ export default function Bubble(): JSX.Element {
         <Image
             source={image}
             alt="logo"
-            className="absolute -left-12 -top-12 w-48 h-36"
+            className="absolute -left-16 -top-14 w-48 h-36"
         />
     );
 }
