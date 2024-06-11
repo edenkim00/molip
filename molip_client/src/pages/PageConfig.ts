@@ -8,7 +8,13 @@ interface SignUpPageProps extends NavigationProps {}
 
 interface ForgotPasswordLabelProps extends NavigationProps {}
 
-export type PageName = 'LoginPage' | 'SignUpPage' | 'PasswordResetPage';
+interface TabbarProps extends NavigationProps {}
+
+export type PageName =
+    | 'LoginPage'
+    | 'SignUpPage'
+    | 'PasswordResetPage'
+    | 'Tabbar';
 interface PageConfig {
     name: PageName;
 }
@@ -23,15 +29,20 @@ export const PAGES: Record<string, PageConfig> = {
     SignUpPage: {
         name: 'SignUpPage',
     },
+    Tabbar: {
+        name: 'Tabbar',
+    },
 };
 
 export type PageProps =
     | LoginPageProps
     | SignUpPageProps
-    | ForgotPasswordLabelProps;
+    | ForgotPasswordLabelProps
+    | TabbarProps;
 
 export type PageStackParamList = {
     LoginPage: LoginPageProps;
     SignUpPage: SignUpPageProps;
     PasswordResetPage: ForgotPasswordLabelProps;
+    Tabbar: TabbarProps;
 };

@@ -12,7 +12,7 @@ import PasswordResetPage from './src/pages/PasswordResetPage';
 
 import LoginPage from './src/pages/LoginPage';
 import SignUpPage from './src/pages/SignUpPage';
-
+import Tabbar from './src/pages/Tabbar';
 import {PageName, PAGES, PageStackParamList} from './src/pages/PageConfig';
 
 const {StatusBarManager} = NativeModules;
@@ -42,6 +42,10 @@ function MolipApp(): React.ReactElement {
                 className="w-full h-full relative">
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <PageStack.Navigator screenOptions={{headerShown: false}}>
+                        <PageStack.Screen
+                            name={PAGES.Tabbar.name as PageName}
+                            component={Tabbar}
+                        />
                         <PageStack.Screen
                             name={PAGES.LoginPage.name as PageName}
                             component={LoginPage}
