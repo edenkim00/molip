@@ -6,11 +6,14 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
+    Alert,
+    Button,
 } from 'react-native';
 import {CircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Space} from './space';
 import _ from 'lodash';
+import {Challenge} from './challenge';
 
 const getButtonClassNames: (enable: boolean) => string = (enable: boolean) => {
     return `w-[28%] p-2 justify-center items-center ${
@@ -59,11 +62,15 @@ function LapRecord({
     );
 }
 
-function TimerScreen() {
+function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
     const [seconds, setSeconds] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [lapRecords, setLapRecords] = useState<number[]>([]);
     const [timeDisplay, setTimeDisplay] = useState('00:00:00');
+
+    useEffect(() => {
+        handleRefresh();
+    }, [selectedChallenge]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -81,6 +88,14 @@ function TimerScreen() {
         setTimeDisplay(convertSecondsToTimeDisplay(seconds));
     }, [seconds]);
 
+    function checkChallengeSelected() {
+        if (!selectedChallenge) {
+            Alert.alert('Please select a challenge first!');
+            return false;
+        }
+        return true;
+    }
+
     async function trackLap() {
         const newLapRecords = [...lapRecords, seconds];
         // ORDER BY DESC AND SET RECORDS
@@ -96,12 +111,13 @@ function TimerScreen() {
     }
 
     function handleRefresh() {
+        setIsActive(false);
         setSeconds(0);
         setLapRecords([]);
     }
 
     return (
-        <View className="flex-col justify-start items-center z-10 w-full">
+        <View className="flex-col justify-between items-center z-10 w-full">
             <CircularProgress
                 size={200}
                 width={10}
@@ -115,6 +131,9 @@ function TimerScreen() {
                 <TouchableOpacity
                     className={getButtonClassNames(isActive)}
                     onPress={() => {
+                        if (!checkChallengeSelected()) {
+                            return;
+                        }
                         setIsActive(!isActive);
                     }}>
                     <Icon
@@ -126,12 +145,20 @@ function TimerScreen() {
                 <TouchableOpacity
                     className={getButtonClassNames(!isActive)}
                     disabled={isActive}
-                    onPress={handleRefresh}>
+                    onPress={() => {
+                        if (!checkChallengeSelected()) {
+                            return;
+                        }
+                        handleRefresh();
+                    }}>
                     <Icon name="refresh" size={18} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity
                     className="w-[28%] bg-[#2D1486] p-2 justify-center items-center"
                     onPress={() => {
+                        if (!checkChallengeSelected()) {
+                            return;
+                        }
                         if (isActive) {
                             trackLap();
                         } else {
@@ -145,13 +172,15 @@ function TimerScreen() {
             </View>
             {lapRecords?.length > 0 && (
                 <ScrollView
-                    className={`w-[85%] mt-4 border-t border-gray-600 max-h-36 ${
+                    className={`w-[85%] mt-4 border-t border-gray-600 max-h-72 ${
                         lapRecords.length > 4 ? 'border-b' : ''
                     }`}>
                     {lapRecords.map((time, index) => {
                         const isTheLastRecord = index === 0;
                         return (
-                            <View className="w-full border-b border-gray-600 py-2.5 px-1">
+                            <View
+                                className="w-full border-b border-gray-600 py-2.5 px-1"
+                                key={index}>
                                 <LapRecord
                                     key={index}
                                     index={lapRecords.length - index - 1}

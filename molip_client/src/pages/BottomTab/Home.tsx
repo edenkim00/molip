@@ -2,20 +2,9 @@ import Bubble from '@components/bubble';
 import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import {Space} from '@components/space';
 import TimerScreen from '@components/timer';
+import {HeaderText} from '@components/header_text';
 import React from 'react';
 import {View, Text} from 'react-native';
-
-function HeaderText() {
-    return (
-        <View className="flex-row justify-center w-full flex-row">
-            <View className="flex-row w-[80%] justify-start">
-                <Text className="text-xl tracking-tight font-semibold">
-                    Start Challenge!
-                </Text>
-            </View>
-        </View>
-    );
-}
 const sampleChallenges = [
     {
         id: 1,
@@ -89,20 +78,24 @@ const sampleChallenges = [
     },
 ];
 
-export default function Home() {
+export default function Home({navigation}: any) {
+    const [selectedChallenge, setSelectedChallenge] = React.useState(undefined);
     return (
-        <View className="flex-col justify-start items-center w-full relative h-full">
+        <View className="flex-col justify-start items-center w-full relative h-full bg-white">
             <Bubble />
-            <Space heightClassName={'h-20'} />
-            <HeaderText />
+
+            <HeaderText text="Start Challenge!" />
             <Space heightClassName={'h-2'} />
             <View className="flex-row justify-center w-full z-50">
                 <View className="flex-row w-[85%] justify-center">
-                    <ChallengesDropdown challenges={sampleChallenges} />
+                    <ChallengesDropdown
+                        challenges={sampleChallenges}
+                        onChallengeSelect={setSelectedChallenge}
+                    />
                 </View>
             </View>
             <Space heightClassName={'h-3'} />
-            <TimerScreen />
+            <TimerScreen selectedChallenge={selectedChallenge} />
             <Space heightClassName={'h-4'} />
         </View>
     );

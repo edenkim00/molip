@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+
 import PasswordResetPage from './src/pages/PasswordResetPage';
 
 import LoginPage from './src/pages/LoginPage';
@@ -35,7 +36,7 @@ function MolipApp(): React.ReactElement {
     }, []);
 
     return (
-        <NavigationContainer>
+        <NavigationContainer independent={true}>
             <KeyboardAvoidingView
                 keyboardVerticalOffset={keyboardOffset}
                 behavior={IS_IOS_PLATFORM ? 'padding' : 'height'}

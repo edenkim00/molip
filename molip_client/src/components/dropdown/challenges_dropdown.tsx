@@ -2,29 +2,24 @@ import React, {useEffect, useState, useRef} from 'react';
 import {
     View,
     Text,
-    StyleSheet,
     TouchableOpacity,
     TextInput,
     FlatList,
-    ScrollView,
     Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
-import Autocomplete from 'react-native-autocomplete-input';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Challenge} from '@components/challenge';
 
-interface Challenge {
-    id: number;
-    name: string;
-    description?: string;
-    private: boolean;
-    password?: string;
-    creator_id: string;
-    status: string;
-    joined_users_count: number;
-}
-
-export function ChallengesDropdown({challenges}: {challenges: Challenge[]}) {
+export function ChallengesDropdown({
+    challenges,
+    onFilteredChange,
+    onChallengeSelect,
+}: {
+    challenges: Challenge[];
+    onFilteredChange?: any;
+    onChallengeSelect?: any;
+}) {
     const filtered = challenges.filter(
         challenge => challenge.status !== 'deleted',
     );
@@ -56,6 +51,7 @@ export function ChallengesDropdown({challenges}: {challenges: Challenge[]}) {
     const handleInputChange = (text: string) => {
         setQuery(text);
         refreshFilteredData(text);
+        setSelectedChallenge(null);
         if (!text) {
             setIsDropdownVisible(false);
         } else {
@@ -80,19 +76,31 @@ export function ChallengesDropdown({challenges}: {challenges: Challenge[]}) {
 
     const handleItemPress = (item: Challenge) => {
         setQuery(item.name);
-        setFilteredData([]);
         setIsDropdownVisible(false);
-        setSelectedChallenge(item);
         setQueryTextColorClassName('text-black');
+        setFilteredData([item]);
+        setSelectedChallenge(item);
     };
 
     useEffect(() => {
+        if (onChallengeSelect) {
+            onChallengeSelect(selectedChallenge);
+        }
+    }, [selectedChallenge]);
+
+    useEffect(() => {
         if (!isDropdownVisible) {
-            setFilteredData([]);
             return;
         }
         refreshFilteredData(query);
     }, [isDropdownVisible]);
+
+    useEffect(() => {
+        if (!onFilteredChange) {
+            return;
+        }
+        onFilteredChange(filteredData);
+    }, [filteredData]);
 
     return (
         <TouchableWithoutFeedback onPress={handleOutsidePress}>
@@ -107,19 +115,23 @@ export function ChallengesDropdown({challenges}: {challenges: Challenge[]}) {
                             placeholder="Enter your challenge name"
                             ref={inputRef}
                         />
-                        <TouchableOpacity
-                            onPress={handleDropdownToggle}
-                            className="absolute right-3">
-                            <Icon
-                                name={
-                                    isDropdownVisible
-                                        ? 'chevron-up-outline'
-                                        : 'chevron-down-outline'
-                                }
-                                size={18}
-                            />
-                        </TouchableOpacity>
+                        <View className="space-x-1 flex-row items-center justify-center absolute right-3">
+                            {!!selectedChallenge && (
+                                <Icon name={'lock-closed-outline'} size={18} />
+                            )}
+                            <TouchableOpacity onPress={handleDropdownToggle}>
+                                <Icon
+                                    name={
+                                        isDropdownVisible
+                                            ? 'chevron-up-outline'
+                                            : 'chevron-down-outline'
+                                    }
+                                    size={18}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
+
                     {isDropdownVisible && filteredData?.length !== 0 && (
                         <View className="absolute top-full right-0 border rounded-3xl pt-1 px-2 bg-white z-50 w-full max-h-60">
                             <FlatList
