@@ -173,7 +173,7 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
             {lapRecords?.length > 0 && (
                 <ScrollView
                     className={`w-[85%] mt-4 border-t border-gray-600 max-h-72 ${
-                        lapRecords.length > 4 ? 'border-b' : ''
+                        lapRecords.length > 6 ? 'border-b' : ''
                     }`}>
                     {lapRecords.map((time, index) => {
                         const isTheLastRecord = index === 0;
