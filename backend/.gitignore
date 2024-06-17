@@ -3,3 +3,4 @@ node_modules/*
 lambda_zip/*
 *.zip
 .DS_Store
+.env
