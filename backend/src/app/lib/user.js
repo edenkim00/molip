@@ -4,6 +4,9 @@ const { response, errResponse } = require("../../../config/response");
 const jwt = require("jsonwebtoken");
 const Service = require("../Service");
 const Provider = require("../Provider");
+const nodemailer = require("nodemailer");
+var smtpTransport = require("nodemailer-smtp-transport");
+
 require("dotenv").config();
 
 async function signUp(data) {
@@ -79,6 +82,7 @@ async function signIn(data) {
     {
       userId: id,
     },
+    // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
     {
       expiresIn: "365d",
@@ -112,10 +116,55 @@ async function changePassword(data) {
   return response(baseResponse.SUCCESS);
 }
 
+async function requestEmailVerification(data) {
+  const { email, shouldExist } = data;
+  if (shouldExist) {
+    const exist = await Provider.doesExistUserHaving(email);
+    if (!exist) {
+      // 6001
+      return errResponse(baseResponse.EMAIL_DOES_NOT_EXIST);
+    }
+  }
+
+  let authNum = Math.random().toString().substring(2, 8);
+  // 7001
+  if (!email) return response(baseResponse.WRONG_BODY);
+
+  const mailPoster = nodemailer.createTransport(
+    smtpTransport({
+      service: "gmail",
+      auth: {
+        user: "nlcsjejusportshall@gmail.com",
+        // eslint-disable-next-line no-undef
+        pass: process.env.EMAIL_AUTH_PASSWORD,
+      },
+    })
+  );
+
+  const mailOptions = {
+    from: "nlcsjejusportshall@gmail.com",
+    to: email,
+    subject: "[Molip] Email Verification Code",
+    text: "The Auth Code is " + authNum,
+  };
+  return new Promise((resolve) => {
+    mailPoster.sendMail(mailOptions, function (error) {
+      if (error) {
+        //7002
+        console.error("[Send Email]: ", error);
+        return resolve(errResponse(baseResponse.EMAIL_SEND_ERROR));
+      } else {
+        resolve(response(baseResponse.SUCCESS, { code: authNum }));
+      }
+    });
+  });
+}
+
 module.exports = {
   signUp,
   deleteUser,
   getUserProfile,
   signIn,
   changePassword,
+  requestEmailVerification,
 };

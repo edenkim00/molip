@@ -4,6 +4,7 @@ const {
   getUserProfile,
   signIn,
   changePassword,
+  requestEmailVerification,
 } = require("./lib/user");
 const {
   createChallenge,
@@ -18,6 +19,8 @@ exports.deleteUser = deleteUser;
 exports.signIn = signIn;
 exports.getUserProfile = getUserProfile;
 exports.changePassword = changePassword;
+exports.requestEmailVerification = requestEmailVerification;
+
 exports.getChallenges = getChallenges;
 exports.record = record;
 exports.createChallenge = createChallenge;

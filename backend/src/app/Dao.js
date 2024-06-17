@@ -23,12 +23,6 @@ async function createChallenge(
   return;
 }
 
-async function deleteUser(connection, userId) {
-  const Query = "DELETE FROM Molip_Users WHERE id = ?";
-  await connection.query(Query, [userId]);
-  return;
-}
-
 async function getUserProfile(connection, params) {
   const Qeury =
     "SELECT id, profile_image_url FROM Molip_Users WHERE id = ? AND status = 'activate'";
@@ -90,6 +84,19 @@ async function disconnectUserChallenge(connection, params) {
   await connection.query(Query, params);
 }
 
+async function doesExistUserHaving(connection, email) {
+  const Query =
+    "SELECT id FROM Molip_Users WHERE email = ? AND status = 'activate'";
+  const result = await connection.query(Query, [email]);
+  return result[0];
+}
+
+async function deleteUser(connection, userId) {
+  const Query = "UPDATE Molip_Users SET status = 'deleted' WHERE id = ?";
+  await connection.query(Query, [userId]);
+  return;
+}
+
 module.exports = {
   signUp,
   createChallenge,
@@ -103,4 +110,5 @@ module.exports = {
   record,
   connectUserChallenge,
   disconnectUserChallenge,
+  doesExistUserHaving,
 };

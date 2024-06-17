@@ -44,7 +44,13 @@ async function getChallengesWithUser(user_id) {
   return result;
 }
 
-
+async function doesExistUserHaving(email) {
+  const result = await select(Dao.doesExistUserHaving, [email]);
+  if (result.length > 0) {
+    return true;
+  }
+  return false;
+}
 
 module.exports = {
   getUserProfile,
@@ -52,4 +58,5 @@ module.exports = {
   checkId,
   getAllChallenges,
   getChallengesWithUser,
+  doesExistUserHaving,
 };

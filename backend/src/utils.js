@@ -9,8 +9,14 @@ function parseEvent(event) {
     if (!requestData) return null;
     const { method: requestMethod, path } = requestData;
     const { method, tokenRequired, next, extraData } = ENDPOINT_METADATA.find(
-      (meta) => meta.endpoint === path
+      (meta) =>
+        meta.endpoint === path &&
+        meta.method === requestMethod &&
+        meta.tokenRequired
+          ? !!event?.headers?.["x-access-token"]
+          : true
     );
+
     console.log(path, requestMethod, method, next);
     if (!(path && requestMethod)) return null;
     if (!(method && next)) return null;
