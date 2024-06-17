@@ -17,6 +17,7 @@
             "@assets/*": ["./assets/*"],
             "@components/*": ["./src/components/*"],
             "@api": ["./src/api/index"],
+            "@storage": ["./src/storage/index"],
             "@pages/*": ["./src/pages/*"]
         }
     },

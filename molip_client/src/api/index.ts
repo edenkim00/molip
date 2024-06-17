@@ -1,33 +1,50 @@
 import {ENDPOINTS} from '../constants';
-
-interface SignUpParams {
+import Storage from '../storage';
+interface SignUpRequestParams {
     id: string;
     email: string;
     password: string;
 }
 
-interface ChangePasswordParams {
+interface SignInRequestParams {
+    id: string;
+    password: string;
+}
+
+interface ChangePasswordRequestParams {
     id: string;
     newPassword: string;
 }
 
 class ApiManager {
-    static async signUp({id, email, password}: SignUpParams): Promise<any> {
+    static async signUp({
+        id,
+        email,
+        password,
+    }: SignUpRequestParams): Promise<any> {
         const request = new Request();
         request.set({
-            endpoint: '/app/user',
+            endpoint: ENDPOINTS.PATH.SIGN_UP,
             method: 'POST',
             body: JSON.stringify({id, email, password}),
         });
-        const body = await request.fire();
-        console.log('body: ', body);
-        return body;
+        return await request.fire();
     }
-    // method: PATCH, body: id, newPassword
+
+    static async signIn({id, password}: SignInRequestParams): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.SIGN_IN,
+            method: 'POST',
+            body: JSON.stringify({id, password}),
+        });
+        return await request.fire();
+    }
+
     static async changePassword({
         id,
         newPassword,
-    }: ChangePasswordParams): Promise<any> {
+    }: ChangePasswordRequestParams): Promise<any> {
         const request = new Request();
         // request.set({});
     }
@@ -74,7 +91,7 @@ class Request {
         this.baseUrl = ENDPOINTS.API_SERVER;
         this.headers = {
             'Content-Type': 'application/json',
-            Authorization: undefined,
+            'X-Access-Token': undefined,
         } as RequestHeaders;
     }
 
@@ -94,14 +111,21 @@ class Request {
             headers: this.headers as HeadersInit_,
             body: this.body,
         });
+        let body;
         try {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return await response.json();
+            body = await response.json();
         } catch (error) {
             return null;
         }
+        if (!body.isSuccess || !body.result) {
+            let responseError = new Error();
+            responseError.message = body.message;
+            throw responseError;
+        }
+        return body.result;
     }
 }
 

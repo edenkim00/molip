@@ -14,6 +14,7 @@ import BackgroundImage from '@assets/login_page_background.png';
 import {KakaoLoginButton} from '@components/buttons/kakao_login';
 import {PAGES, PageProps} from '@pages/PageConfig';
 import {MethodDivider} from '@components/divider';
+import AuthManger from 'src/api/auth';
 // flex-col 주축이 세로로 정렬
 // flex-row 주축이 가로로 정렬
 
@@ -136,13 +137,11 @@ function ForgotPasswordLabel({
     );
 }
 
-function LoginButton() {
+function LoginButton({handleLogin}: {handleLogin: () => void}): JSX.Element {
     return (
         <View className="w-[80%] mt-2.5">
             <TouchableOpacity
-                onPress={() => {
-                    //TODO: 로그인 버튼 눌렀을 때 로그인 처리
-                }}
+                onPress={handleLogin}
                 className="bg-[#342D60] rounded py-3">
                 <Text className="text-white font-bold text-center">
                     Sign In
@@ -152,10 +151,28 @@ function LoginButton() {
     );
 }
 
-export default function LoginPage({navigation}: PageProps): JSX.Element {
+export default function LoginPage({
+    navigation,
+    userId,
+}: PageProps): JSX.Element {
+    if (userId) {
+        navigation.navigate(PAGES.Tabbar.name);
+    }
+
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const kakaoLoginCallback = async () => {};
+
+    const handleLogin = async () => {
+        if (!id || !password) {
+            Alert.alert('Please fill in all fields');
+            return;
+        }
+        await AuthManger.set({id, password});
+        await AuthManger.setup();
+        navigation.navigate(PAGES.Tabbar.name, {userId: id});
+    };
+
     return (
         <View className="w-full h-full flex-col justify-end items-center bg-white overflow-hidden relative pb-8">
             <BackgroundImages />
@@ -168,7 +185,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
                 setPassword={setPassword}
             />
             <ForgotPasswordLabel navigation={navigation} />
-            <LoginButton />
+            <LoginButton handleLogin={handleLogin} />
             <MethodDivider />
             <KakaoLoginButton callback={kakaoLoginCallback} />
         </View>

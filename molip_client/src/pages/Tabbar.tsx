@@ -31,7 +31,7 @@ type RootTabParamList = {
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-function App({navigation}: PageProps) {
+function App({navigation, userId}: PageProps) {
     const navigateToLoginPage = () => {
         navigation.navigate('LoginPage');
     };

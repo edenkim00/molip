@@ -1,5 +1,6 @@
 interface NavigationProps {
     navigation: any;
+    userId?: string;
 }
 
 interface LoginPageProps extends NavigationProps {}

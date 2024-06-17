@@ -15,13 +15,21 @@ import LoginPage from './src/pages/LoginPage';
 import SignUpPage from './src/pages/SignUpPage';
 import Tabbar from './src/pages/Tabbar';
 import {PageName, PAGES, PageStackParamList} from './src/pages/PageConfig';
+import AuthManger from 'src/api/auth';
 
 const {StatusBarManager} = NativeModules;
 
 const IS_IOS_PLATFORM = Platform.OS === 'ios';
 const PageStack = createStackNavigator<PageStackParamList>();
 
+async function tryAutoLoginAndSelectUserId() {
+    await AuthManger.tryAutoLogin();
+    return await AuthManger.selectUserId();
+}
+
 function MolipApp(): React.ReactElement {
+    const [userId, setUserId] = React.useState<string | undefined>(undefined);
+
     const [keyboardOffset, setKeyboardOffset] = React.useState(0);
 
     const avoidKeyboard: () => void = () => {
@@ -33,6 +41,11 @@ function MolipApp(): React.ReactElement {
 
     useEffect(() => {
         avoidKeyboard();
+        try {
+            tryAutoLoginAndSelectUserId().then(setUserId);
+        } catch {
+            // do nothing
+        }
     }, []);
 
     return (
@@ -46,10 +59,12 @@ function MolipApp(): React.ReactElement {
                         <PageStack.Screen
                             name={PAGES.Tabbar.name as PageName}
                             component={Tabbar}
+                            initialParams={{userId}}
                         />
                         <PageStack.Screen
                             name={PAGES.LoginPage.name as PageName}
                             component={LoginPage}
+                            initialParams={{userId}}
                         />
                         <PageStack.Screen
                             name={PAGES.SignUpPage.name as PageName}
