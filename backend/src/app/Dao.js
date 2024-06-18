@@ -53,10 +53,10 @@ async function checkId(connection, params) {
 
 async function getAllChallenges(connection) {
   const Query =
-    `SELECT C.*, count(MUCC.user_id) AS joined_users_count FROM Molip_Challenges C 
-                    LEFT OUTER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'activate'
-                    WHERE C.status = 'activate'
-                  GROUP BY C.id`
+    `SELECT C.*, SUM(CASE WHEN user_id is not null then 1 else 0 end) AS joined_users_count FROM Molip_Challenges C
+      LEFT OUTER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'activate'
+      WHERE C.status = 'activate'
+      GROUP BY C.id`
       .replace(/\s+/g, " ")
       .trim();
   const result = await connection.query(Query);
