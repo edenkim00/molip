@@ -55,7 +55,7 @@ const ENDPOINT_METADATA = [
 
   // select challenge for a user
   {
-    endpoint: "/app/challenge",
+    endpoint: "/app/user/challenge",
     method: "GET",
     tokenRequired: true,
     next: Controller.getChallenges,
