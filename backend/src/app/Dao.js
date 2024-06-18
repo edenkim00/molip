@@ -54,7 +54,7 @@ async function checkId(connection, params) {
 async function getAllChallenges(connection) {
   const Query =
     `SELECT C.*, count(*) AS joined_users_count FROM Molip_Challenges C 
-                    INNER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'activate'
+                    LEFT OUTER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'activate'
                     WHERE C.status = 'activate'
                   GROUP BY C.id`
       .replace(/\s+/g, " ")
