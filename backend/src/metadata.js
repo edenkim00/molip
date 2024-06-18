@@ -33,7 +33,7 @@ const ENDPOINT_METADATA = [
   },
   {
     endpoint: "/app/user/email-verification",
-    method: "POST",
+    method: "GET",
     tokenRequired: false,
     next: Controller.requestEmailVerification,
   },
