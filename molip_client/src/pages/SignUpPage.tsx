@@ -10,7 +10,8 @@ import {PasswordInput} from '@components/inputs/password';
 import {Space} from '@components/space';
 import {MethodDivider} from '@components/divider';
 import {CreateAccountButton} from '@components/buttons/signup_button';
-import {PageProps} from './PageConfig';
+import {PageProps, PAGES} from './PageConfig';
+import {validateEmail} from '@lib/utils';
 
 function Background() {
     return (
@@ -23,7 +24,7 @@ function Background() {
     );
 }
 
-export default function SignUpPage({}: PageProps) {
+export default function SignUpPage({navigation}: PageProps) {
     const [email, setEmail] = useState('');
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -32,6 +33,11 @@ export default function SignUpPage({}: PageProps) {
     const [passwordChecked, setPasswordChecked] = useState(false);
 
     const validate = () => {
+        if (!validateEmail(email)) {
+            Alert.alert('Invalid email format');
+            return false;
+        }
+
         if (password.length < 4 || password.length > 30) {
             Alert.alert('Password must be between 4 and 30 characters');
             return false;
@@ -43,10 +49,12 @@ export default function SignUpPage({}: PageProps) {
         if (!validate()) {
             return;
         }
-
-        const res = await ApiManager.signUp({id, email, password});
-        if (!res.isSuccess) {
-            Alert.alert(res.message ?? 'Failed to sign up');
+        try {
+            await ApiManager.signUp({id, email, password});
+            Alert.alert('Sign up successful');
+            navigation.navigate(PAGES.LoginPage.name);
+        } catch (e) {
+            Alert.alert('Failed to sign up: ' + e.message);
         }
     };
 

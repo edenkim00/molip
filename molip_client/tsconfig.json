@@ -17,8 +17,10 @@
             "@assets/*": ["./assets/*"],
             "@components/*": ["./src/components/*"],
             "@api": ["./src/api/index"],
+            "@auth": ["./src/api/auth/index"],
             "@storage": ["./src/storage/index"],
-            "@pages/*": ["./src/pages/*"]
+            "@pages/*": ["./src/pages/*"],
+            "@lib/*": ["./src/lib/*"]
         }
     },
     "exclude": [

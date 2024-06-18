@@ -49,18 +49,15 @@ class ApiManager {
         // request.set({});
     }
 
-    static async requestEmailAuthCode(email: string): Promise<any> {
-        return {
-            isSuccess: true,
-            result: {
-                code: '123456',
-            },
-        };
+    static async requestEmailAuthCode(
+        email: string,
+        shouldExist: boolean = false,
+    ): Promise<any> {
         const request = new Request();
         request.set({
-            endpoint: '/app/email-auth-code',
-            method: 'POST',
-            body: JSON.stringify({email}),
+            endpoint: ENDPOINTS.PATH.REQUEST_EMAIL_VERIFICATION,
+            method: 'GET',
+            query: {email, shouldExist},
         });
         const body = await request.fire();
         console.log('body: ', body);
@@ -78,6 +75,7 @@ type RequestParams = {
     method: string | undefined;
     headers?: RequestHeaders | undefined;
     body?: string | undefined;
+    query?: {[key: string]: any} | undefined;
 };
 
 class Request {
@@ -85,6 +83,7 @@ class Request {
     endpoint?: string;
     method?: string;
     headers: RequestHeaders;
+    query?: {[key: string]: any};
     body?: string;
 
     constructor() {
@@ -95,7 +94,7 @@ class Request {
         } as RequestHeaders;
     }
 
-    set({endpoint, method, headers, body}: RequestParams) {
+    set({endpoint, method, headers, body, query}: RequestParams) {
         this.endpoint = endpoint;
         this.method = method;
         this.headers = Object.assign(
@@ -103,10 +102,18 @@ class Request {
             headers ?? {},
         ) as RequestHeaders;
         this.body = body;
+        this.query = query;
     }
 
     async fire() {
-        const response = await fetch(`${this.baseUrl}/${this.endpoint}`, {
+        const path =
+            `${this.baseUrl}${this.endpoint}` +
+            (this.query
+                ? `?${new URLSearchParams(this.query).toString().trim()}`
+                : ''
+            ).replace(/ /g, '');
+        console.log(path);
+        const response = await fetch(path, {
             method: this.method,
             headers: this.headers as HeadersInit_,
             body: this.body,
@@ -116,11 +123,13 @@ class Request {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            console.log(this.body);
             body = await response.json();
+            console.log('body: ', body);
         } catch (error) {
             return null;
         }
-        if (!body.isSuccess || !body.result) {
+        if (!body.isSuccess) {
             let responseError = new Error();
             responseError.message = body.message;
             throw responseError;

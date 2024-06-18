@@ -1,6 +1,7 @@
 import React, {useState, version} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import ApiManager from '@api';
+import {validateEmail} from '@lib/utils';
 
 interface EmailInputWithVerificationButtonProps {
     email: string;
@@ -49,18 +50,23 @@ export function EmailAuthorization({
                 {!processing && !requested && (
                     <TouchableOpacity
                         onPress={async () => {
-                            setProcessing(true);
-                            const res = await ApiManager.requestEmailAuthCode(
-                                email,
-                            );
-                            if (!res.isSuccess) {
-                                setProcessing(false);
-                                Alert.alert('Failed to request auth code');
+                            if (!email) {
+                                Alert.alert('Please enter email');
+                                return;
                             }
+
+                            if (!validateEmail(email)) {
+                                Alert.alert('Invalid email format');
+                                return;
+                            }
+
+                            setProcessing(true);
+                            const {code} =
+                                await ApiManager.requestEmailAuthCode(email);
+
                             setRequested(true);
-                            console.log('Hi');
                             setAuthCodePublished({
-                                emailCode: res.result.code,
+                                emailCode: code,
                             });
                         }}
                         disabled={processing}

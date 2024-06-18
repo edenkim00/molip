@@ -1,6 +1,6 @@
 import ApiManager from '@api';
 import Storage from '@storage';
-import {STORAGE_KEYS} from 'src/constants';
+import {STORAGE_KEYS} from '../../constants';
 import retry from 'async-retry';
 
 interface LoginInfo {
@@ -13,27 +13,36 @@ interface AuthCard {
     jwtToken: string;
 }
 
-export default class AuthManger {
+class AuthManager {
     private _cached: AuthCard | undefined = undefined;
     private _id: string | undefined = undefined;
     private _password: string | undefined = undefined;
-    static main: AuthManger | undefined = undefined;
+    static main: AuthManager | undefined = undefined;
 
     constructor() {
         this._id = undefined;
         this._password = undefined;
-        AuthManger.main = this;
+        AuthManager.main = this;
     }
 
     static async set({id, password}: LoginInfo) {
-        new AuthManger();
+        new AuthManager();
         if (id && password) {
-            Storage.set(STORAGE_KEYS.LOGIN_INFO, {id, password});
+            const main = AuthManager.main;
+            if (!main) {
+                throw new Error('AuthManager is not initialized');
+            }
+            main._id = id;
+            main._password = password;
+            Storage.set(
+                STORAGE_KEYS.LOGIN_INFO,
+                JSON.stringify({id, password}),
+            );
         }
     }
 
     static async setup() {
-        const main = AuthManger.main;
+        const main = AuthManager.main;
         if (!main) {
             throw new Error('AuthManager is not initialized');
         }
@@ -44,15 +53,20 @@ export default class AuthManger {
         }
 
         const loginInfo = await ApiManager.signIn({id, password});
-        await Storage.set(STORAGE_KEYS.AUTH, JSON.stringify(loginInfo));
-        main._cached = {
-            userId: loginInfo.userId,
-            jwtToken: loginInfo.jwtToken,
+        if (!loginInfo?.token) {
+            throw new Error('Failed to login');
+        }
+
+        const auth = {
+            userId: id,
+            jwtToken: loginInfo.token,
         };
+        await Storage.set(STORAGE_KEYS.AUTH, JSON.stringify(auth));
+        main._cached = auth;
     }
 
     static async refresh() {
-        const main = AuthManger.main;
+        const main = AuthManager.main;
         if (!main) {
             throw new Error('AuthManager is not initialized');
         }
@@ -62,7 +76,7 @@ export default class AuthManger {
     }
 
     static async selectUserId(): Promise<string> {
-        const main = AuthManger.main;
+        const main = AuthManager.main;
         if (!main) {
             throw new Error('AuthManager is not initialized');
         }
@@ -72,10 +86,13 @@ export default class AuthManger {
             return cachedUserId;
         }
 
-        await this.refresh();
         return retry(
             async () => {
-                return this.selectUserId();
+                if (this.main?._cached?.userId) {
+                    return this.main?._cached?.userId;
+                }
+                await this.refresh();
+                throw new Error('Failed to get userId');
             },
             {
                 retries: 2,
@@ -84,7 +101,7 @@ export default class AuthManger {
     }
 
     static async selectJwtToken(): Promise<string> {
-        const main = AuthManger.main;
+        const main = AuthManager.main;
         if (!main) {
             throw new Error('AuthManager is not initialized');
         }
@@ -94,11 +111,13 @@ export default class AuthManger {
             return cachedJwtToken;
         }
 
-        await this.refresh();
-
         return retry(
             async () => {
-                return this.selectJwtToken();
+                if (this.main?._cached?.jwtToken) {
+                    return this.main?._cached?.jwtToken;
+                }
+                await this.refresh();
+                throw new Error('Failed to get jwtToken');
             },
             {
                 retries: 2,
@@ -107,7 +126,7 @@ export default class AuthManger {
     }
 
     static async tryAutoLogin() {
-        const main = AuthManger.main;
+        const main = AuthManager.main;
         if (!main) {
             throw new Error('AuthManager is not initialized');
         }
@@ -121,9 +140,12 @@ export default class AuthManger {
         if (!loginInfo) {
             throw new Error('Auto login failed');
         }
+        const parsedLoginInfo = JSON.parse(loginInfo);
 
-        main._id = loginInfo.id;
-        main._password = loginInfo.password;
+        main._id = parsedLoginInfo.id;
+        main._password = parsedLoginInfo.password;
         return this.setup();
     }
 }
+
+export default AuthManager;

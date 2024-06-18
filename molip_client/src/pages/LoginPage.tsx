@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Image,
@@ -14,7 +14,7 @@ import BackgroundImage from '@assets/login_page_background.png';
 import {KakaoLoginButton} from '@components/buttons/kakao_login';
 import {PAGES, PageProps} from '@pages/PageConfig';
 import {MethodDivider} from '@components/divider';
-import AuthManger from 'src/api/auth';
+import AuthManager from '@auth';
 // flex-col 주축이 세로로 정렬
 // flex-row 주축이 가로로 정렬
 
@@ -137,39 +137,56 @@ function ForgotPasswordLabel({
     );
 }
 
-function LoginButton({handleLogin}: {handleLogin: () => void}): JSX.Element {
+function LoginButton({
+    handleLogin,
+    processing,
+}: {
+    handleLogin: () => void;
+    processing: boolean;
+}): JSX.Element {
     return (
         <View className="w-[80%] mt-2.5">
             <TouchableOpacity
                 onPress={handleLogin}
+                disabled={processing}
                 className="bg-[#342D60] rounded py-3">
-                <Text className="text-white font-bold text-center">
-                    Sign In
-                </Text>
+                {processing ? (
+                    <Text className="text-white font-bold text-center">
+                        Requesting...
+                    </Text>
+                ) : (
+                    <Text className="text-white font-bold text-center">
+                        Sign In
+                    </Text>
+                )}
             </TouchableOpacity>
         </View>
     );
 }
 
-export default function LoginPage({
-    navigation,
-    userId,
-}: PageProps): JSX.Element {
-    if (userId) {
-        navigation.navigate(PAGES.Tabbar.name);
-    }
+export default function LoginPage({navigation, route}: PageProps): JSX.Element {
+    const userId = route.params?.userId;
+    useEffect(() => {
+        if (userId) {
+            navigation.navigate(PAGES.Tabbar.name, {userId});
+        }
+    }, [userId]);
 
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const [processing, setProcessing] = useState(false);
+
     const kakaoLoginCallback = async () => {};
 
     const handleLogin = async () => {
+        setProcessing(true);
         if (!id || !password) {
             Alert.alert('Please fill in all fields');
             return;
         }
-        await AuthManger.set({id, password});
-        await AuthManger.setup();
+        await AuthManager.set({id, password});
+        await AuthManager.setup();
+        setProcessing(false);
         navigation.navigate(PAGES.Tabbar.name, {userId: id});
     };
 
@@ -185,7 +202,7 @@ export default function LoginPage({
                 setPassword={setPassword}
             />
             <ForgotPasswordLabel navigation={navigation} />
-            <LoginButton handleLogin={handleLogin} />
+            <LoginButton handleLogin={handleLogin} processing={processing} />
             <MethodDivider />
             <KakaoLoginButton callback={kakaoLoginCallback} />
         </View>
