@@ -36,7 +36,13 @@ module.exports = {
   WRONG_PASSWORD_LENGTH: {
     isSuccess: false,
     code: 3004,
-    message: "Password should be 4~30 characters.",
+    message: "Password should be 8~20 characters.",
+  },
+
+  WRONG_ID_LENGTH: {
+    isSuccess: false,
+    code: 3005,
+    message: "ID should be 5~30 characters.",
   },
 
   NO_TOKEN: {
