@@ -12,9 +12,7 @@ function parseEvent(event) {
       (meta) =>
         meta.endpoint === path &&
         meta.method === requestMethod &&
-        meta.tokenRequired
-          ? !!event?.headers?.["x-access-token"]
-          : true
+        (meta.tokenRequired ? !!event?.headers?.["x-access-token"] : true)
     );
 
     console.log(path, requestMethod, method, next);
