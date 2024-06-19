@@ -1,98 +1,39 @@
 import React, {useEffect, useState} from 'react';
 import Bubble from '@components/bubble';
-import {ShortChallegeCard} from '@components/challenge';
+import {Challenge, ShortChallegeCard} from '@components/challenge';
 import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import {Space} from '@components/space';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CreateChallengeModal} from '@components/modals/create_challenge';
 import {HeaderText} from '@components/header_text';
+import {LoadingSpinner} from '@components/loading_spinner';
 
-const sampleChallenges = [
-    {
-        id: 1,
-        name: 'Challenge',
-        description: 'Description 1',
-        private: false,
-        password: '',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 1,
-        image_url:
-            'https://notifly.tech/_next/image?url=https%3A%2F%2Fcdn.notifly.tech%2Fprofile_images%2Ffec2f3d0-9e36-4a02-b9b4-05690408fea7.jpg&w=2048&q=75',
-    },
-    {
-        id: 2,
-        name: 'Challenge 2',
-        description: 'Description 2',
-        private: true,
-        password: '123',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 3,
-    },
-    {
-        id: 3,
-        name: 'Challenge 3',
-        description: 'Description 2',
-        private: true,
-        password: '123',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 3,
-    },
-    {
-        id: 4,
-        name: 'Challenge 5',
-        description: 'Description 2',
-        private: true,
-        password: '123',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 3,
-    },
-    {
-        id: 5,
-        name: 'Challenge 55',
-        description: 'Description 2',
-        private: true,
-        password: '123',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 3,
-    },
-    {
-        id: 6,
-        name: 'Challenge 5523',
-        description: 'Description 2',
-        private: true,
-        password: '123',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 3,
-    },
-    {
-        id: 7,
-        name: 'sChallenge 55',
-        description: 'Description 2',
-        private: true,
-        password: '123',
-        creator_id: '1',
-        status: 'active',
-        joined_users_count: 3,
-    },
-];
+export default function Discover({navigation, route}: any) {
+    const {userId, allChallenges} = route.params ?? {};
+    const [Challenges, setChallenges] = React.useState<Challenge[]>(
+        allChallenges ?? [],
+    );
+    const [processing, setProcessing] = React.useState(!!allChallenges);
 
-export default function Discover({navigation}: {navigation: any}) {
     const [showCreateChallengeModal, setShowCreateChallengeModal] =
         useState<boolean>(false);
     const [filteredChalleges, setFilteredChallenges] = React.useState(
-        sampleChallenges ?? [],
+        allChallenges ?? [],
     );
 
     useEffect(() => {
-        console.log('KDS', filteredChalleges.length);
-    }, [filteredChalleges]);
+        console.log('allChallenges', allChallenges);
+        if (allChallenges) {
+            setProcessing(false);
+        } else {
+            setProcessing(true);
+        }
+    }, [allChallenges]);
+
+    if (processing || !allChallenges) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <>
@@ -107,7 +48,7 @@ export default function Discover({navigation}: {navigation: any}) {
                         <View className="flex-row justify-center w-full z-50">
                             <View className="flex-row w-[85%] justify-center">
                                 <ChallengesDropdown
-                                    challenges={sampleChallenges}
+                                    challenges={Challenges}
                                     onFilteredChange={setFilteredChallenges}
                                 />
                             </View>
@@ -126,14 +67,12 @@ export default function Discover({navigation}: {navigation: any}) {
                             <Space heightClassName={'h-2'} />
                             {filteredChalleges.length > 0 && (
                                 <View className="w-[90%] flex-col border rounded-md border-gray-200 px-[4%] py-[3%] relative">
-                                    <ScrollView
-                                        className="w-full flex-col  space-y-2 "
-                                        // style={{
-                                        //     backgroundColor: 'white !important',
-                                        // }}
-                                    >
+                                    <ScrollView className="w-full flex-col  space-y-2 ">
                                         {filteredChalleges.map(
-                                            (challenge, index) => (
+                                            (
+                                                challenge: Challenge,
+                                                index: number,
+                                            ) => (
                                                 <View
                                                     className="w-full flex-row justify-center"
                                                     key={index}>

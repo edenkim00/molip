@@ -28,6 +28,10 @@ export function ChallengesDropdown({
     const [selectedChallenge, setSelectedChallenge] =
         useState<Challenge | null>(null);
     const [filteredData, setFilteredData] = useState<Challenge[]>(filtered);
+    const [noChallenges, setNoChallenges] = useState(
+        filteredData?.length === 0,
+    );
+
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
     const inputRef = useRef<TextInput>(null);
 
@@ -99,6 +103,13 @@ export function ChallengesDropdown({
         if (!onFilteredChange) {
             return;
         }
+
+        if (!filteredData?.length) {
+            setNoChallenges(true);
+        } else {
+            setNoChallenges(false);
+        }
+
         onFilteredChange(filteredData);
     }, [filteredData]);
 
@@ -112,14 +123,21 @@ export function ChallengesDropdown({
                             value={query}
                             onChangeText={handleInputChange}
                             onFocus={() => setIsDropdownVisible(true)}
-                            placeholder="Enter your challenge name"
+                            placeholder={
+                                noChallenges
+                                    ? 'No challenges'
+                                    : 'Enter your challenge name'
+                            }
+                            readOnly={noChallenges}
                             ref={inputRef}
                         />
                         <View className="space-x-1 flex-row items-center justify-center absolute right-3">
                             {!!selectedChallenge && (
                                 <Icon name={'lock-closed-outline'} size={18} />
                             )}
-                            <TouchableOpacity onPress={handleDropdownToggle}>
+                            <TouchableOpacity
+                                onPress={handleDropdownToggle}
+                                disabled={noChallenges}>
                                 <Icon
                                     name={
                                         isDropdownVisible

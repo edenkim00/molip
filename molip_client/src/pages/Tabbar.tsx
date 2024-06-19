@@ -17,24 +17,30 @@ function SettingsScreen() {
     );
 }
 
+interface TabbarInitialParams {
+    userId: string;
+    myChallenges: any;
+    setMyChallenges: any;
+    allChallenges: any;
+    setAllChallenges: any;
+}
+
 type RootTabParamList = {
-    Home: {
-        navigateToLoginPage: () => void;
-    };
-    Discover: {
-        navigateToLoginPage?: () => void;
-    };
-    'My Profile': {
-        navigateToLoginPage?: () => void;
-    };
+    Home: TabbarInitialParams;
+    Discover: TabbarInitialParams;
+    'My Profile': TabbarInitialParams;
 };
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-function App({navigation, userId}: PageProps) {
-    const navigateToLoginPage = () => {
-        navigation.navigate('LoginPage');
-    };
+function App({navigation, route}: PageProps) {
+    const {
+        userId,
+        myChallenges,
+        setMyChallenges,
+        allChallenges,
+        setAllChallenges,
+    } = route.params ?? {};
 
     return (
         <BottomTab.Navigator
@@ -43,6 +49,13 @@ function App({navigation, userId}: PageProps) {
             <BottomTab.Screen
                 name="Home"
                 component={Home}
+                initialParams={{
+                    userId,
+                    myChallenges,
+                    setMyChallenges,
+                    allChallenges,
+                    setAllChallenges,
+                }}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({color, size, focused}) => (
@@ -58,6 +71,13 @@ function App({navigation, userId}: PageProps) {
             <BottomTab.Screen
                 name="Discover"
                 component={Discover}
+                initialParams={{
+                    userId,
+                    myChallenges,
+                    setMyChallenges,
+                    allChallenges,
+                    setAllChallenges,
+                }}
                 options={{
                     tabBarLabel: 'Discover',
                     tabBarIcon: ({color, size, focused}) => (
@@ -72,6 +92,13 @@ function App({navigation, userId}: PageProps) {
             <BottomTab.Screen
                 name="My Profile"
                 component={SettingsScreen}
+                initialParams={{
+                    userId,
+                    myChallenges,
+                    setMyChallenges,
+                    allChallenges,
+                    setAllChallenges,
+                }}
                 options={{
                     tabBarLabel: 'My Profile',
                     tabBarIcon: ({color, size, focused}) => (

@@ -15,6 +15,9 @@ import {KakaoLoginButton} from '@components/buttons/kakao_login';
 import {PAGES, PageProps} from '@pages/PageConfig';
 import {MethodDivider} from '@components/divider';
 import AuthManager from '@auth';
+import {Challenge} from '@components/challenge';
+import ApiManager from '@api';
+import {LoadingSpinner} from '@components/loading_spinner';
 // flex-col 주축이 세로로 정렬
 // flex-row 주축이 가로로 정렬
 
@@ -166,11 +169,37 @@ function LoginButton({
 
 export default function LoginPage({navigation, route}: PageProps): JSX.Element {
     const userId = route.params?.userId;
+    const [myChallenges, setMyChallenges] = React.useState<
+        Challenge[] | undefined
+    >(undefined);
+
+    const [allChallenges, setAllChallenges] = React.useState<
+        Challenge[] | undefined
+    >(undefined);
+
     useEffect(() => {
         if (userId) {
-            navigation.navigate(PAGES.Tabbar.name, {userId});
+            setProcessing(true);
+            setupAndPrepareInitialParams(userId)
+                .then(params => {
+                    setProcessing(false);
+                    navigation.navigate(PAGES.Tabbar.name, params);
+                })
+                .catch(() => {
+                    setProcessing(false);
+                });
         }
     }, [userId]);
+
+    async function setupAndPrepareInitialParams(uid: string) {
+        const allChallengesFetched = await ApiManager.selectChallenges();
+        const myChallengesFetched = await ApiManager.selectUserChallenges(uid);
+        return {
+            userId: uid,
+            allChallenges: allChallengesFetched,
+            myChallenges: myChallengesFetched,
+        };
+    }
 
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -187,8 +216,19 @@ export default function LoginPage({navigation, route}: PageProps): JSX.Element {
         await AuthManager.set({id, password});
         await AuthManager.setup();
         setProcessing(false);
-        navigation.navigate(PAGES.Tabbar.name, {userId: id});
+        setupAndPrepareInitialParams(id)
+            .then(params => {
+                navigation.navigate(PAGES.Tabbar.name, params);
+            })
+            .catch(() => {
+                Alert.alert('Failed to login, please try again.');
+                setProcessing(false);
+            });
     };
+
+    if (processing) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <View className="w-full h-full flex-col justify-end items-center bg-white overflow-hidden relative pb-8">

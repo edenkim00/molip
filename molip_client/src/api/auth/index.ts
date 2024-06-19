@@ -1,6 +1,5 @@
-import ApiManager from '@api';
 import Storage from '@storage';
-import {STORAGE_KEYS} from '../../constants';
+import {ENDPOINTS, STORAGE_KEYS} from '../../constants';
 import retry from 'async-retry';
 
 interface LoginInfo {
@@ -23,6 +22,24 @@ class AuthManager {
         this._id = undefined;
         this._password = undefined;
         AuthManager.main = this;
+    }
+
+    static async requestAuth({id, password}: LoginInfo): Promise<any> {
+        const path = `${ENDPOINTS.API_SERVER}${ENDPOINTS.PATH.SIGN_IN}`;
+        const res = await fetch(path, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id, password}),
+        });
+        const body = await res.json();
+        if (!body.isSuccess) {
+            let responseError = new Error();
+            responseError.message = body.message || 'Failed to login';
+            throw responseError;
+        }
+        return body.result;
     }
 
     static async set({id, password}: LoginInfo) {
@@ -52,7 +69,7 @@ class AuthManager {
             throw new Error('Invalid id or password');
         }
 
-        const loginInfo = await ApiManager.signIn({id, password});
+        const loginInfo = await this.requestAuth({id, password});
         if (!loginInfo?.token) {
             throw new Error('Failed to login');
         }
