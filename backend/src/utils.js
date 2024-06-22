@@ -4,7 +4,7 @@ const { ENDPOINT_METADATA } = require("./metadata");
 function parseEvent(event) {
   try {
     console.log(event);
-    const contentType = event?.headers?.["Content-Type"];
+    const contentType = event?.headers?.["content-type"];
     const body = event?.body
       ? contentType === "multipart/form-data"
         ? event.body
