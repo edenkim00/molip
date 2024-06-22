@@ -4,12 +4,15 @@ const { ENDPOINT_METADATA } = require("./metadata");
 const parser = require("lambda-multipart-parser");
 
 async function parseBody(event) {
+  if (!event.body) {
+    return undefined;
+  }
   const contentType =
     (event?.headers?.["content-type"] || event?.headers?.["Content-Type"]) ??
     "application/json";
 
   if (!contentType.startsWith("multipart/form-data")) {
-    return JSON.parse(event.body ?? "");
+    return JSON.parse(event?.body);
   }
   const result = await parser.parse(event);
   console.log(result);
