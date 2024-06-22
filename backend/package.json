@@ -17,6 +17,7 @@
     "form-data-parser": "^0.0.3",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
+    "lambda-multipart-parser": "^1.0.1",
     "mysql2": "^3.3.2",
     "nodemailer": "^6.9.13",
     "nodemailer-smtp-transport": "^2.7.4",

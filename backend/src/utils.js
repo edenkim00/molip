@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const jwt = require("jsonwebtoken");
 const { ENDPOINT_METADATA } = require("./metadata");
-const { parse } = require("form-data-parser");
+const parser = require("lambda-multipart-parser");
 
 async function parseBody(event) {
   const contentType =
@@ -9,17 +9,11 @@ async function parseBody(event) {
   if (contentType !== "multipart/form-data") {
     return JSON.parse(event.body);
   }
+  const result = await parser.parse(event);
+  console.log(result);
+  console.log(result.files);
 
-  const buffer = Buffer.from(event.body, "base64");
-  const parsedData = await parse(buffer, {
-    headers: {
-      "content-type": contentType,
-    },
-  });
-
-  // 이제 parsedData 객체에서 파과 필드 데이터를 사용할 수 있습니다.
-  console.log(parsedData);
-  return parsedData;
+  return result;
 }
 
 async function parseEvent(event) {
