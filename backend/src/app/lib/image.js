@@ -5,7 +5,7 @@ const IMAGE_BUCKET_NAME = "molip-images";
 
 async function uploadImageToS3(data) {
   const { image_file: file } = data;
-  console.log(Buffer.from(file, "binary"));
+  console.log(file);
 
   // 파일의 mime 타입 확인
   const contentType = file.mimetype || getMimeType(file);
@@ -16,7 +16,7 @@ async function uploadImageToS3(data) {
     Key: `${v4().replace(/-/g, "").substring(0, 10)}_${
       file.name ?? file.originalname ?? ""
     }`,
-    Body: Buffer.from(file, "binary"),
+    Body: file,
     ContentType: contentType,
     ACL: "public-read",
   };
