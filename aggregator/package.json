@@ -2,13 +2,16 @@
   "name": "aggregator",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "local": "serverless invoke local --function aggregator --stage local"
   },
   "author": "edenkim00",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "knex": "^3.1.0",
     "mysql": "^2.18.1"
   }
