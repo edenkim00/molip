@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 const jwt = require("jsonwebtoken");
 const { ENDPOINT_METADATA } = require("./metadata");
-const { parse } = require("multipart-parser");
+const { parse } = require("form-data-parser");
 
 async function parseBody(event) {
   const contentType =
