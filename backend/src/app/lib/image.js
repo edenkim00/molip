@@ -5,14 +5,14 @@ const IMAGE_BUCKET_NAME = "molip-images";
 
 async function uploadImageToS3(data) {
   const { image_file: file } = data;
-  console.log("HERE? ", file, file.buffer);
-
+  console.log(Buffer.from(file, "binary"));
   const uploadParams = {
     Bucket: IMAGE_BUCKET_NAME,
     Key: `${v4().replace(/-/g, "").substring(0, 10)}_${
       file.originalname ?? ""
     }`,
-    Body: file,
+    Body: Buffer.from(file, "binary"), // file은 binary 데이터로 가정합니다.
+    ACL: "public-read",
   };
 
   try {
