@@ -20,9 +20,10 @@ async function uploadImageToS3(data) {
   };
 
   try {
-    const data = await s3Client.send(new PutObjectCommand(uploadParams));
-    console.log(data.Location, data);
-    return response(baseResponse.SUCCESS, { imageUrl: data.Location });
+    await s3Client.send(new PutObjectCommand(uploadParams));
+    return response(baseResponse.SUCCESS, {
+      imageUrl: `https://${IMAGE_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${uploadParams.Key}`,
+    });
   } catch (err) {
     console.error("[Image upload]", err);
     return errResponse(baseResponse.DB_ERROR);
