@@ -14,6 +14,8 @@ const {
   disconnectUserChallenge,
 } = require("./lib/challenge");
 
+const { uploadImageToS3 } = require("./lib/image");
+
 exports.signUp = signUp;
 exports.deleteUser = deleteUser;
 exports.signIn = signIn;
@@ -26,3 +28,5 @@ exports.record = record;
 exports.createChallenge = createChallenge;
 exports.connectUserChallenge = connectUserChallenge;
 exports.disconnectUserChallenge = disconnectUserChallenge;
+
+exports.uploadImageToS3 = uploadImageToS3;

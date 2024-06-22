@@ -4,6 +4,7 @@ const { ENDPOINT_METADATA } = require("./metadata");
 function parseEvent(event) {
   try {
     const body = event?.body ? JSON.parse(event.body) : {};
+    console.log("body:".body);
     const queryString = event.queryStringParameters || {};
     const requestData = event?.requestContext?.http;
     if (!requestData) return null;

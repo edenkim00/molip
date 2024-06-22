@@ -74,6 +74,14 @@ const ENDPOINT_METADATA = [
     tokenRequired: true,
     next: Controller.disconnectUserChallenge,
   },
+
+  // util
+  {
+    endpoint: "/app/image",
+    method: "POST",
+    tokenRequired: true,
+    next: Controller.uploadImage,
+  },
 ];
 
 module.exports = {
