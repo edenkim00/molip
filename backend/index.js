@@ -2,8 +2,7 @@ const baseResponse = require("./config/baseResponseStatus");
 const { parseEvent, verifyAccessToken } = require("./src/utils");
 require("dotenv").config();
 exports.handler = async function (event) {
-  const parsedData = parseEvent(event);
-
+  const parsedData = await parseEvent(event);
   if (!parsedData) {
     return {
       statusCode: 400,
@@ -22,7 +21,7 @@ exports.handler = async function (event) {
   }
 
   const { data, next, verifiedToken } = parsedData;
-  
+
   console.log(
     "[Main]: data",
     data,
