@@ -25,7 +25,7 @@ async function createChallenge(
 
 async function getUserProfile(connection, params) {
   const Qeury =
-    "SELECT id, profile_image_url FROM Molip_Users WHERE id = ? AND status = 'activate'";
+    "SELECT id, profile_image_url FROM Molip_Users WHERE id = ? AND status = 'active'";
   const result = await connection.query(Qeury, params);
   return result[0];
 }
