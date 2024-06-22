@@ -14,7 +14,7 @@ async function uploadImageToS3(data) {
   const uploadParams = {
     Bucket: IMAGE_BUCKET_NAME,
     Key: `${v4().replace(/-/g, "").substring(0, 10)}_${
-      file.originalname ?? ""
+      file.name ?? file.originalname ?? ""
     }`,
     Body: Buffer.from(file, "binary"),
     ContentType: contentType,
