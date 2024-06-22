@@ -1,0 +1,15 @@
+{
+  "name": "aggregator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "edenkim00",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "knex": "^3.1.0",
+    "mysql": "^2.18.1"
+  }
+}
