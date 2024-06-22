@@ -14,7 +14,6 @@ async function uploadImageToS3(data) {
     }`,
     Body: Buffer.from(file, "binary"),
     ContentType: file.mimetype ?? "image/jpeg",
-    ACL: "public-read",
   };
 
   try {
