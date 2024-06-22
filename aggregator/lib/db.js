@@ -1,5 +1,4 @@
 import db from "../db/index.js";
-import _ from "lodash";
 const TABLES = {
   Challenges: "Molip_Challenges",
   UserChallengeConnections: "Molip_User_Challenge_Connections",
