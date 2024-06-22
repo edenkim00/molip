@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { ENDPOINT_METADATA } = require("./metadata");
-const Busboy = require("busboy");
+const { parse } = require("multipart-parser");
 
 async function parseBody(event) {
   const contentType =
@@ -9,40 +9,16 @@ async function parseBody(event) {
     return JSON.parse(event.body);
   }
 
-  return new Promise((resolve, reject) => {
-    const busboy = new Busboy({ headers: { "content-type": contentType } });
-    const result = { files: [], fields: {} };
-
-    busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-      const fileChunks = [];
-      file.on("data", (data) => {
-        fileChunks.push(data);
-      });
-      file.on("end", () => {
-        result.files.push({
-          fieldname,
-          filename,
-          encoding,
-          mimetype,
-          content: Buffer.concat(fileChunks),
-        });
-      });
-    });
-
-    busboy.on("field", (fieldname, val) => {
-      result.fields[fieldname] = val;
-    });
-
-    busboy.on("finish", () => {
-      resolve(result);
-    });
-
-    busboy.on("error", (error) => {
-      reject(error);
-    });
-
-    busboy.end(Buffer.from(event.body, "base64"));
+  const buffer = Buffer.from(event.body, "base64");
+  const parsedData = await parse(buffer, {
+    headers: {
+      "content-type": contentType,
+    },
   });
+
+  // 이제 parsedData 객체에서 파과 필드 데이터를 사용할 수 있습니다.
+  console.log(parsedData);
+  return parsedData;
 }
 
 async function parseEvent(event) {
