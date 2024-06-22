@@ -32,21 +32,20 @@ async function getUserProfile(connection, params) {
 
 async function selectUser(connection, params) {
   const Query =
-    "SELECT id FROM Molip_Users WHERE id = ? and password = ? AND status = 'activate'";
+    "SELECT id FROM Molip_Users WHERE id = ? and password = ? AND status = 'active'";
   const result = await connection.query(Query, params);
   return result[0];
 }
 
 async function changePassword(connection, params) {
   const Query =
-    "UPDATE Molip_Users SET password = ? WHERE id = ? AND status = 'activate'";
+    "UPDATE Molip_Users SET password = ? WHERE id = ? AND status = 'active'";
   await connection.query(Query, params);
   return;
 }
 
 async function checkId(connection, params) {
-  const Query =
-    "SELECT id FROM Molip_Users WHERE id = ? AND status = 'activate'";
+  const Query = "SELECT id FROM Molip_Users WHERE id = ? AND status = 'active'";
   const result = await connection.query(Query, params);
   return result[0];
 }
@@ -54,8 +53,8 @@ async function checkId(connection, params) {
 async function getAllChallenges(connection) {
   const Query =
     `SELECT C.*, SUM(CASE WHEN user_id is not null then 1 else 0 end) AS joined_users_count FROM Molip_Challenges C
-      LEFT OUTER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'activate'
-      WHERE C.status = 'activate'
+      LEFT OUTER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'active'
+      WHERE C.status = 'active'
       GROUP BY C.id`
       .replace(/\s+/g, " ")
       .trim();
@@ -65,8 +64,8 @@ async function getAllChallenges(connection) {
 
 async function getChallengesWithUser(connection, params) {
   const Query = `SELECT MC.* FROM Molip_User_Challenge_Connections MUCC
-       JOIN Molip_Challenges MC ON MUCC.challenge_id = MC.id AND MUCC.status = 'activate'
-    WHERE MUCC.user_id = ? AND MUCC.status = 'activate';`;
+       JOIN Molip_Challenges MC ON MUCC.challenge_id = MC.id AND MUCC.status = 'active'
+    WHERE MUCC.user_id = ? AND MUCC.status = 'active';`;
   const result = await connection.query(Query, params);
   return result[0];
 }
@@ -86,13 +85,13 @@ async function connectUserChallenge(connection, params) {
 
 async function disconnectUserChallenge(connection, params) {
   const Query =
-    "UPDATE Molip_User_Challenge_Connections SET status = 'deleted' WHERE user_id = ? and challenge_id = ? and status = 'activate';";
+    "UPDATE Molip_User_Challenge_Connections SET status = 'deleted' WHERE user_id = ? and challenge_id = ? and status = 'active';";
   await connection.query(Query, params);
 }
 
 async function doesExistUserHaving(connection, email) {
   const Query =
-    "SELECT id FROM Molip_Users WHERE email = ? AND status = 'activate'";
+    "SELECT id FROM Molip_Users WHERE email = ? AND status = 'active'";
   const result = await connection.query(Query, [email]);
   return result[0];
 }
