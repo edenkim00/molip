@@ -1,7 +1,7 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const s3Client = new S3Client({ region: "ap-northease-2" });
 const { v4 } = require("uuid");
-const IMAGE_BUCKET_NAME = "molip_images";
+const IMAGE_BUCKET_NAME = "molip-images";
 
 async function uploadImageToS3(data) {
   const { image_file: file } = data;
