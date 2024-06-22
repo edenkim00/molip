@@ -5,7 +5,9 @@ const parser = require("lambda-multipart-parser");
 
 async function parseBody(event) {
   const contentType =
-    event?.headers?.["content-type"] || event?.headers?.["Content-Type"];
+    (event?.headers?.["content-type"] || event?.headers?.["Content-Type"]) ??
+    "application/json";
+
   if (!contentType.startsWith("multipart/form-data")) {
     return JSON.parse(event.body ?? "");
   }
