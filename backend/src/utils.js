@@ -5,7 +5,7 @@ function parseEvent(event) {
   try {
     const contentType = event?.headers?.["Content-Type"];
     const body = event?.body
-      ? contentType === "application/multipart/form-data"
+      ? contentType === "multipart/form-data"
         ? event.body
         : JSON.parse(event.body)
       : {};
