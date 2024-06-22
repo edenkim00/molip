@@ -14,44 +14,34 @@ async function parseBody(event) {
     const result = { files: [], fields: {} };
 
     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-      console.log(
-        `File [${fieldname}]: filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`
-      );
       const fileChunks = [];
-      file
-        .on("data", (data) => {
-          fileChunks.push(data);
-        })
-        .on("end", () => {
-          console.log(`File [${fieldname}] Finished`);
-          result.files.push({
-            fieldname,
-            filename,
-            encoding,
-            mimetype,
-            file: Buffer.concat(fileChunks),
-          });
+      file.on("data", (data) => {
+        fileChunks.push(data);
+      });
+      file.on("end", () => {
+        result.files.push({
+          fieldname,
+          filename,
+          encoding,
+          mimetype,
+          content: Buffer.concat(fileChunks),
         });
+      });
     });
 
     busboy.on("field", (fieldname, val) => {
-      console.log(`Field [${fieldname}]: value: ${val}`);
       result.fields[fieldname] = val;
     });
 
     busboy.on("finish", () => {
-      console.log("Done parsing form!");
       resolve(result);
     });
 
     busboy.on("error", (error) => {
-      console.log("Error parsing form!");
       reject(error);
     });
 
-    // eslint-disable-next-line no-undef
-    busboy.write(Buffer.from(event.body, "base64"));
-    busboy.end();
+    busboy.end(Buffer.from(event.body, "base64"));
   });
 }
 
