@@ -6,14 +6,15 @@ const IMAGE_BUCKET_NAME = "molip-images";
 async function uploadImageToS3(data) {
   const { image_file: file } = data;
   console.log(Buffer.from(file, "binary"));
-
+  // Public Read 권한을 가진 이미지 업로드
   const uploadParams = {
     Bucket: IMAGE_BUCKET_NAME,
     Key: `${v4().replace(/-/g, "").substring(0, 10)}_${
       file.originalname ?? ""
     }`,
     Body: Buffer.from(file, "binary"),
-    ContentType: file.mimetype ?? "image/jpeg",
+    ContentType: file.mimetype ?? "image/jpg",
+    ACL: "public-read",
   };
 
   try {
