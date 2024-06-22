@@ -7,7 +7,7 @@ async function parseBody(event) {
   const contentType =
     event?.headers?.["content-type"] || event?.headers?.["Content-Type"];
   if (!contentType.startsWith("multipart/form-data")) {
-    return JSON.parse(event.body);
+    return JSON.parse(event.body ?? "");
   }
   const result = await parser.parse(event);
   console.log(result);
