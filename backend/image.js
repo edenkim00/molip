@@ -21,7 +21,7 @@ async function callApi() {
   form.append("image_file", blob, fileName);
 
   try {
-    await axios.post(
+    const res = await axios.post(
       "https://yvn47itsk7gktfq7sz3bw5vpru0bkknb.lambda-url.ap-northeast-2.on.aws/app/image",
       form,
       {
@@ -30,6 +30,7 @@ async function callApi() {
         },
       }
     );
+    console.log(res.data);
   } catch (err) {
     console.error(err);
   }

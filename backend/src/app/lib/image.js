@@ -21,6 +21,7 @@ async function uploadImageToS3(data) {
 
   try {
     const data = await s3Client.send(new PutObjectCommand(uploadParams));
+    console.log(data.Location, data);
     return response(baseResponse.SUCCESS, { imageUrl: data.Location });
   } catch (err) {
     console.error("[Image upload]", err);
