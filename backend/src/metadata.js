@@ -79,7 +79,7 @@ const ENDPOINT_METADATA = [
   {
     endpoint: "/app/image",
     method: "POST",
-    tokenRequired: true,
+    tokenRequired: false,
     next: Controller.uploadImage,
   },
 ];
