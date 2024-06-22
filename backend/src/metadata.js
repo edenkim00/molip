@@ -80,7 +80,7 @@ const ENDPOINT_METADATA = [
     endpoint: "/app/image",
     method: "POST",
     tokenRequired: false,
-    next: Controller.uploadImage,
+    next: Controller.uploadImageToS3,
   },
 ];
 
