@@ -97,12 +97,12 @@ async function connectUserChallenge(user_id, challenge_id) {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     connection.beginTransaction(); // BACKUP
-    await Dao.joinChallenge(connection, [user_id, challenge_id]);
+    await Dao.connectUserChallenge(connection, [user_id, challenge_id]);
     connection.commit(); // COMMIT
     return true;
   } catch (err) {
     connection.rollback();
-    console.error("[joinChallenge]", err);
+    console.error("[connectUserChallenge]", err);
     throw err;
   } finally {
     connection.release();
