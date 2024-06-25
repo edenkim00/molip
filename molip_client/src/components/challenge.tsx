@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {PasswordInputModal} from './modals/password_input';
+import ApiManager from '@api';
 
 export interface Challenge {
     id: number;
@@ -86,7 +87,14 @@ export function ShortChallegeCard({challenge}: {challenge: Challenge}) {
     };
 
     const requestJoin = async () => {
-        //TODO: Implement join request
+        try {
+            await ApiManager.requestJoinChallenge({
+                challengeId: challenge.id,
+            });
+            Alert.alert('Successfully joined the challenge');
+        } catch (e) {
+            Alert.alert('Failed to join the challenge');
+        }
     };
 
     const join = () => {

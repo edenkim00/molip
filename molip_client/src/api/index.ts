@@ -1,3 +1,4 @@
+import AuthManager from '@auth';
 import {ENDPOINTS} from '../constants';
 import Request from './request';
 
@@ -67,6 +68,52 @@ class ApiManager {
             endpoint: ENDPOINTS.PATH.SELECT_USER_CHALLENGES,
             method: 'GET',
             query: {user_id: userId},
+        });
+        await request.setAuth();
+        const res = await request.fire();
+        console.log(res);
+        return res;
+    }
+
+    static async requestJoinChallenge({
+        challengeId,
+    }: {
+        challengeId: number;
+    }): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.CONNECT_USER_CHALLENGE,
+            method: 'POST',
+            body: JSON.stringify({
+                challenge_id: challengeId,
+                user_id: await AuthManager.selectUserId(),
+            }),
+        });
+        await request.setAuth();
+        return await request.fire();
+    }
+
+    static async createChallenge({
+        name,
+        description,
+        isPrivate = false,
+        password,
+    }: {
+        name: string;
+        description: string;
+        isPrivate: boolean;
+        password?: string;
+    }): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.CREATE_CHALLENGE,
+            method: 'POST',
+            body: JSON.stringify({
+                name,
+                description,
+                private: isPrivate,
+                password,
+            }),
         });
         await request.setAuth();
         return await request.fire();

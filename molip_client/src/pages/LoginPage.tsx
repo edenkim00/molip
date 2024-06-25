@@ -183,6 +183,7 @@ export default function LoginPage({navigation, route}: PageProps): JSX.Element {
             setupAndPrepareInitialParams(userId)
                 .then(params => {
                     setProcessing(false);
+                    console.log(params);
                     navigation.navigate(PAGES.Tabbar.name, params);
                 })
                 .catch(() => {
