@@ -15,13 +15,7 @@ async function createChallenge(data, verifiedToken) {
   const { name, description, private, password, image_url: imageUrl } = data;
   const createrId = userIdFromToken;
 
-  if (
-    !name ||
-    !description ||
-    private == undefined ||
-    !password ||
-    !createrId
-  ) {
+  if (!name || !description || (private && !password) || !createrId) {
     return errResponse(baseResponse.WRONG_BODY);
   }
 
