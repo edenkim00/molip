@@ -12,7 +12,7 @@ async function createChallenge(data, verifiedToken) {
   // 1. 챌린지 이름 20글자 이내
   // 2. 챌린지 설명 150글자 이내
   // 3. 비밀번호 4글자 이상 10글자 이하
-  const { name, description, private, password } = data;
+  const { name, description, private, password, image_url: imageUrl } = data;
   const createrId = userIdFromToken;
 
   if (
@@ -51,7 +51,8 @@ async function createChallenge(data, verifiedToken) {
       description,
       private,
       password,
-      createrId
+      createrId,
+      imageUrl
     );
   } catch (err) {
     console.error(err);

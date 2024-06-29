@@ -10,15 +10,17 @@ async function createChallenge(
   description,
   private,
   password,
-  createrId
+  createrId,
+  imageUrl = undefined
 ) {
-  const Query = `INSERT INTO Molip_Challenges(name, description, private, password, creator_id) VALUES(?, ?, ?, ?, ?);`;
+  const Query = `INSERT INTO Molip_Challenges(name, description, private, password, creator_id, image_url) VALUES(?, ?, ?, ?, ?, ?);`;
   await connection.query(Query, [
     name,
     description,
     private,
     password,
     createrId,
+    imageUrl,
   ]);
   return;
 }

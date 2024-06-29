@@ -21,7 +21,8 @@ async function createChallenge(
   description,
   private,
   password,
-  createrId
+  createrId,
+  imageUrl
 ) {
   const connection = await pool.getConnection(async (conn) => conn); // DB 연결
   try {
@@ -32,7 +33,8 @@ async function createChallenge(
       description,
       private,
       password,
-      createrId
+      createrId,
+      imageUrl
     );
     connection.commit(); // COMMIT
     return true;
