@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, Alert} from 'react-native';
 import {HeaderText} from '@components/header_text';
 import {Space} from '@components/space';
@@ -10,27 +10,25 @@ import {LoadingSpinner} from '@components/loading_spinner';
 import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
 import {PAGES} from '@pages/PageConfig';
+import {MyDataContext} from '@lib/context';
 
-export default function Home({route, navigation}: any) {
-    const {myData} = route.params ?? {};
-    if (!myData) {
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Failed to get data. Please try again.');
-        return null;
-    }
-
+export default function Home({navigation}: any) {
+    const myData = useContext(MyDataContext);
     const {
         userId,
         myChallenges: challenges,
         setMyChallenges: setChallenges,
     } = myData;
 
+    if (!userId) {
+        navigation.navigate(PAGES.LoginPage.name);
+        Alert.alert('Failed to get data. Please try again.');
+        return null;
+    }
+
     const [processing, setProcessing] = React.useState(false);
     const [selectedChallenge, setSelectedChallenge] = React.useState(undefined);
 
-    useEffect(() => {
-        console.log('CHANGE: ', challenges);
-    }, [challenges]);
     const refreshMyChallenges = async () => {
         try {
             setProcessing(true);

@@ -178,9 +178,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
             setProcessing(true);
             fetchMyData(userId)
                 .then(() => {
-                    navigation.navigate(PAGES.Tabbar.name, {
-                        myData,
-                    });
+                    navigation.navigate(PAGES.Tabbar.name);
                     setProcessing(false);
                 })
                 .catch(() => {

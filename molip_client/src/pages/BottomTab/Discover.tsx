@@ -1,4 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useContext} from 'react';
+import {MyDataContext} from '@lib/context';
+
 import Bubble from '@components/bubble';
 import {ShortChallegeCard} from '@components/challenge';
 import {Challenge} from '@pages/Challenge';
@@ -11,20 +13,21 @@ import {HeaderText} from '@components/header_text';
 import {LoadingSpinner} from '@components/loading_spinner';
 import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
+import {PAGES} from '@pages/PageConfig';
 
-export default function Discover({navigation, route}: any) {
-    const {myData} = route.params ?? {};
-    if (!myData) {
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Failed to get data. Please try again.');
-        return null;
-    }
-
+export default function Discover({navigation}: any) {
+    const myData = useContext(MyDataContext);
     const {
         userId,
         allChallenges: challenges,
         setAllChallenges: setChallenges,
     } = myData;
+
+    if (!userId) {
+        navigation.navigate(PAGES.LoginPage.name);
+        Alert.alert('Failed to get data. Please try again.');
+        return null;
+    }
 
     const [processing, setProcessing] = React.useState(false);
     const [showCreateChallengeModal, setShowCreateChallengeModal] =

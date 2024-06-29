@@ -7,7 +7,7 @@ import Svg, {Path} from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {View, Text, Alert} from 'react-native';
-import {PageProps, RootTabParamList} from './PageConfig';
+import {PageProps, PAGES, RootTabParamList} from './PageConfig';
 import Home from './BottomTab/Home';
 import Discover from './BottomTab/Discover';
 import MyProfile from './BottomTab/MyProfile';
@@ -17,7 +17,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 export default function App({navigation}: PageProps) {
     const myData = useContext(MyDataContext);
     if (!myData.userId) {
-        navigation.navigate('LoginPage');
+        navigation.navigate(PAGES.LoginPage.name);
         Alert.alert('Failed to get data. Please try again.');
         return null;
     }
@@ -29,9 +29,6 @@ export default function App({navigation}: PageProps) {
             <BottomTab.Screen
                 name="Home"
                 component={Home}
-                initialParams={{
-                    myData,
-                }}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({color, size, focused}) => (
@@ -47,9 +44,6 @@ export default function App({navigation}: PageProps) {
             <BottomTab.Screen
                 name="Discover"
                 component={Discover}
-                initialParams={{
-                    myData,
-                }}
                 options={{
                     tabBarLabel: 'Discover',
                     tabBarIcon: ({color, size, focused}) => (
@@ -64,9 +58,6 @@ export default function App({navigation}: PageProps) {
             <BottomTab.Screen
                 name="My Profile"
                 component={MyProfile}
-                initialParams={{
-                    myData,
-                }}
                 options={{
                     tabBarLabel: 'My Profile',
                     tabBarIcon: ({color, size, focused}) => (
