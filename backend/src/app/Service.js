@@ -27,7 +27,7 @@ async function createChallenge(
   const connection = await pool.getConnection(async (conn) => conn); // DB 연결
   try {
     connection.beginTransaction(); // BACKUP
-    await Dao.createChallenge(
+    const challengeId = await Dao.createChallenge(
       connection,
       name,
       description,
@@ -37,7 +37,7 @@ async function createChallenge(
       imageUrl
     );
     connection.commit(); // COMMIT
-    return true;
+    return challengeId;
   } catch (err) {
     connection.rollback();
     console.error("[createChallenge]", err);

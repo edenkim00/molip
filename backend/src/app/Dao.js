@@ -14,7 +14,7 @@ async function createChallenge(
   imageUrl = undefined
 ) {
   const Query = `INSERT INTO Molip_Challenges(name, description, private, password, creator_id, image_url) VALUES(?, ?, ?, ?, ?, ?);`;
-  await connection.query(Query, [
+  const res = await connection.query(Query, [
     name,
     description,
     private,
@@ -22,7 +22,8 @@ async function createChallenge(
     createrId,
     imageUrl,
   ]);
-  return;
+  const challengeId = res[0].insertId;
+  return challengeId;
 }
 
 async function getUserProfile(connection, params) {

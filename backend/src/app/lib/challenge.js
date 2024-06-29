@@ -35,7 +35,8 @@ async function createChallenge(data, verifiedToken) {
     if (doesExist) {
       return errResponse(baseResponse.ALREADY_EXISTING_CHALLENGE);
     }
-    await Service.createChallenge(
+
+    const challengeId = await Service.createChallenge(
       name,
       description,
       private,
@@ -43,6 +44,7 @@ async function createChallenge(data, verifiedToken) {
       createrId,
       imageUrl
     );
+    await Service.connectUserChallenge(createrId, challengeId);
   } catch (err) {
     console.error(err);
     return errResponse(baseResponse.DB_ERROR);
