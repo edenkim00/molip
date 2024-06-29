@@ -183,7 +183,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [processing, setProcessing] = useState(false);
-    console.log('LOGIN');
+
     useEffect(() => {
         const fetchData = async (userId: string) => {
             try {

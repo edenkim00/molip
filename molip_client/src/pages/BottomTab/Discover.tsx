@@ -8,7 +8,7 @@ import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import {Space} from '@components/space';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CreateChallengeModal} from '@components/modals/create_challenge';
+import {CreateChallengeComponent} from '@components/modals/create_challenge';
 import {HeaderText} from '@components/header_text';
 import {LoadingSpinner} from '@components/loading_spinner';
 import ApiManager from '@api';
@@ -25,6 +25,10 @@ export default function Discover({navigation}: any) {
         setAllChallenges,
         setMyChallenges,
     } = myData;
+
+    if (!userId) {
+        return;
+    }
 
     const filter = (all: Challenge[]) => {
         const my = myChallenges.map(mc => mc.id);
@@ -46,7 +50,25 @@ export default function Discover({navigation}: any) {
     return (
         <>
             {showCreateChallengeModal ? (
-                <CreateChallengeBackground />
+                <View className="w-full flex-col justify-start bg-white items-center space-y-6">
+                    <CreateChallengeBackground />
+                    <CreateChallengeComponent
+                        onClose={async () => {
+                            const {allChallengesFetched, myChallengesFetched} =
+                                await fetchChallengeData(
+                                    userId,
+                                    'AllChallenges',
+                                );
+                            if (allChallengesFetched) {
+                                setAllChallenges(allChallengesFetched);
+                            }
+                            if (myChallengesFetched) {
+                                setMyChallenges(myChallengesFetched);
+                            }
+                            setShowCreateChallengeModal(false);
+                        }}
+                    />
+                </View>
             ) : (
                 <View className="flex-col justify-betwen items-center w-full h-full bg-white ">
                     <View className="flex-col justify-start items-center w-full relative h-full bg-white max-h-[90%] overflow-hidden">
@@ -130,30 +152,14 @@ export default function Discover({navigation}: any) {
                     </View>
                 </View>
             )}
-            {showCreateChallengeModal && (
-                <CreateChallengeModal
-                    visible={showCreateChallengeModal}
-                    onClose={async () => {
-                        const {allChallengesFetched, myChallengesFetched} =
-                            await fetchChallengeData(userId, 'AllChallenges');
-                        if (allChallengesFetched) {
-                            setAllChallenges(allChallengesFetched);
-                        }
-                        if (myChallengesFetched) {
-                            setMyChallenges(myChallengesFetched);
-                        }
-                        setShowCreateChallengeModal(false);
-                    }}
-                />
-            )}
         </>
     );
 }
 
 function CreateChallengeBackground() {
     return (
-        <View className="flex-col justify-betwen items-center w-full h-full bg-white ">
-            <View className="flex-col justify-start items-center w-full relative h-full bg-white max-h-[90%] overflow-hidden">
+        <View className="flex-col justify-betwen items-center w-full bg-white ">
+            <View className="flex-col justify-start items-center w-full relative bg-white  overflow-hidden">
                 <Bubble />
                 <Space heightClassName={'h-24'} />
                 <View className="flex-row justify-between w-[80%]">
