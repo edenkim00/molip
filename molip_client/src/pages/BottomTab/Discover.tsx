@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Bubble from '@components/bubble';
-import {Challenge, ShortChallegeCard} from '@components/challenge';
+import {ShortChallegeCard} from '@components/challenge';
+import {Challenge} from '@pages/Challenge';
 import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import {Space} from '@components/space';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
@@ -12,37 +13,39 @@ import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
 
 export default function Discover({navigation, route}: any) {
-    const {userId, allChallenges} = route.params ?? {};
-    const [challenges, setChallenges] = React.useState<Challenge[]>(
-        allChallenges ?? [],
-    );
-    const [processing, setProcessing] = React.useState(!!allChallenges);
+    const {myData} = route.params ?? {};
+    if (!myData) {
+        navigation.navigate(PAGES.LoginPage.name);
+        Alert.alert('Failed to get data. Please try again.');
+        return null;
+    }
 
+    const {
+        userId,
+        allChallenges: challenges,
+        setAllChallenges: setChallenges,
+    } = myData;
+
+    const [processing, setProcessing] = React.useState(false);
     const [showCreateChallengeModal, setShowCreateChallengeModal] =
         useState<boolean>(false);
     const [filteredChalleges, setFilteredChallenges] = React.useState(
-        allChallenges ?? [],
+        challenges ?? [],
     );
 
     const refreshAllChallenges = async () => {
         try {
+            setProcessing(true);
             const allChallengesFetched = await ApiManager.selectChallenges();
             setChallenges(allChallengesFetched);
+            setProcessing(false);
         } catch (err) {
             Alert.alert('Failed to refresh challenges');
+            setProcessing(false);
         }
     };
 
-    useEffect(() => {
-        if (allChallenges) {
-            setProcessing(false);
-            setChallenges(allChallenges);
-        } else {
-            setProcessing(true);
-        }
-    }, [allChallenges]);
-
-    if (processing || !allChallenges) {
+    if (processing) {
         return <LoadingSpinner />;
     }
 

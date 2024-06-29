@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
     View,
     Image,
@@ -8,21 +8,19 @@ import {
     Alert,
 } from 'react-native';
 
+import AuthManager from '@auth';
+import ApiManager from '@api';
+
 import LogoImage from '@assets/molip_logo.png';
 import LearningApplicationBanner from '@assets/language_learning_application.png';
 import BackgroundImage from '@assets/login_page_background.png';
-import {KakaoLoginButton} from '@components/buttons/kakao_login';
-import {PAGES, PageProps} from '@pages/PageConfig';
-import {MethodDivider} from '@components/divider';
-import AuthManager from '@auth';
-import {Challenge} from '@components/challenge';
-import ApiManager from '@api';
-import {LoadingSpinner} from '@components/loading_spinner';
-// flex-col 주축이 세로로 정렬
-// flex-row 주축이 가로로 정렬
 
-// 텍스트 크기 조절: text-xs, text-sm, text-base, text-lg, text-xl, text-2xl, text-3xl, text-4xl, text-5xl
-// 텍스트 색깔: text-black, text-white, text-gray-200, text-gray-400, text-gray-600, text-gray-800, text-red-200
+import {PAGES, PageProps} from '@pages/PageConfig';
+
+import {KakaoLoginButton} from '@components/buttons/kakao_login';
+import {LoadingSpinner} from '@components/loading_spinner';
+import {MethodDivider} from '@components/divider';
+import {MyDataContext} from '@lib/context';
 
 function BackgroundImages(): JSX.Element {
     return (
@@ -167,16 +165,23 @@ function LoginButton({
     );
 }
 
-export default function LoginPage({navigation, route}: PageProps): JSX.Element {
-    const userId = route.params?.userId;
+export default function LoginPage({navigation}: PageProps): JSX.Element {
+    const myData = useContext(MyDataContext);
+    const {userId, setUserId, setMyChallenges, setAllChallenges} = myData;
+
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+    const [processing, setProcessing] = useState(false);
+
     useEffect(() => {
         if (userId) {
             setProcessing(true);
-            setupAndPrepareInitialParams(userId)
-                .then(params => {
+            fetchMyData(userId)
+                .then(() => {
+                    navigation.navigate(PAGES.Tabbar.name, {
+                        myData,
+                    });
                     setProcessing(false);
-                    console.log(params);
-                    navigation.navigate(PAGES.Tabbar.name, params);
                 })
                 .catch(() => {
                     setProcessing(false);
@@ -184,19 +189,12 @@ export default function LoginPage({navigation, route}: PageProps): JSX.Element {
         }
     }, [userId]);
 
-    async function setupAndPrepareInitialParams(uid: string) {
+    async function fetchMyData(uid: string) {
         const allChallengesFetched = await ApiManager.selectChallenges();
         const myChallengesFetched = await ApiManager.selectUserChallenges(uid);
-        return {
-            userId: uid,
-            allChallenges: allChallengesFetched,
-            myChallenges: myChallengesFetched,
-        };
+        setAllChallenges(allChallengesFetched);
+        setMyChallenges(myChallengesFetched);
     }
-
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const [processing, setProcessing] = useState(false);
 
     const kakaoLoginCallback = async () => {};
 
@@ -206,12 +204,21 @@ export default function LoginPage({navigation, route}: PageProps): JSX.Element {
             Alert.alert('Please fill in all fields');
             return;
         }
-        await AuthManager.set({id, password});
-        await AuthManager.setup();
-        setProcessing(false);
-        setupAndPrepareInitialParams(id)
-            .then(params => {
-                navigation.navigate(PAGES.Tabbar.name, params);
+
+        try {
+            await AuthManager.set({id, password});
+            await AuthManager.setup();
+        } catch (e) {
+            Alert.alert('Failed to login, please try again.');
+            setProcessing(false);
+            return;
+        }
+
+        setUserId(id);
+        fetchMyData(id)
+            .then(() => {
+                navigation.navigate(PAGES.Tabbar.name, myData);
+                setProcessing(false);
             })
             .catch(() => {
                 Alert.alert('Failed to login, please try again.');

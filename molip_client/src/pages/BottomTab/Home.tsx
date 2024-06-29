@@ -7,40 +7,45 @@ import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import TimerScreen from '@components/timer';
 
 import {LoadingSpinner} from '@components/loading_spinner';
-import {Challenge} from '@components/challenge';
 import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
+import {PAGES} from '@pages/PageConfig';
 
 export default function Home({route, navigation}: any) {
-    const {userId, myChallenges} = route.params ?? {};
+    const {myData} = route.params ?? {};
+    if (!myData) {
+        navigation.navigate(PAGES.LoginPage.name);
+        Alert.alert('Failed to get data. Please try again.');
+        return null;
+    }
 
-    const [processing, setProcessing] = React.useState(!!myChallenges);
-    const [challenges, setChallenges] = React.useState<Challenge[]>(
-        myChallenges ?? [],
-    );
+    const {
+        userId,
+        myChallenges: challenges,
+        setMyChallenges: setChallenges,
+    } = myData;
+
+    const [processing, setProcessing] = React.useState(false);
     const [selectedChallenge, setSelectedChallenge] = React.useState(undefined);
 
+    useEffect(() => {
+        console.log('CHANGE: ', challenges);
+    }, [challenges]);
     const refreshMyChallenges = async () => {
         try {
+            setProcessing(true);
             const myChallengesFetched = await ApiManager.selectUserChallenges(
                 userId,
             );
             setChallenges(myChallengesFetched);
+            setProcessing(false);
         } catch (err) {
             Alert.alert('Failed to refresh challenges');
+            setProcessing(false);
         }
     };
 
-    useEffect(() => {
-        console.log('myChallenges', myChallenges);
-        if (myChallenges) {
-            setProcessing(false);
-        } else {
-            setProcessing(true);
-        }
-    }, [myChallenges]);
-
-    if (processing || !myChallenges) {
+    if (processing) {
         return <LoadingSpinner />;
     }
 

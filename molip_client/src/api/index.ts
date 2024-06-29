@@ -47,7 +47,6 @@ class ApiManager {
             query: {email, shouldExist},
         });
         const body = await request.fire();
-        console.log('body: ', body);
         return body;
     }
 
@@ -71,7 +70,6 @@ class ApiManager {
         });
         await request.setAuth();
         const res = await request.fire();
-        console.log(res);
         return res;
     }
 

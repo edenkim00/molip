@@ -13,7 +13,7 @@ import {CircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Space} from './space';
 import _ from 'lodash';
-import {Challenge} from './challenge';
+import {Challenge} from '@pages/Challenge';
 
 const getButtonClassNames: (enable: boolean) => string = (enable: boolean) => {
     return `w-[28%] p-2 justify-center items-center ${

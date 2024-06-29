@@ -35,8 +35,8 @@ export function CreateChallengeModal({
                 imageUrl: imageUrl,
             });
             Alert.alert('Challenge created');
-        } catch (err) {
-            Alert.alert('Failed to create challenge');
+        } catch (err: any) {
+            Alert.alert(err.message ?? 'Failed to create challenge');
         }
 
         onClose();

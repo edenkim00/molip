@@ -3,18 +3,7 @@ import {View, Text, Image, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {PasswordInputModal} from './modals/password_input';
 import ApiManager from '@api';
-
-export interface Challenge {
-    id: number;
-    name: string;
-    description?: string;
-    private: boolean;
-    password?: string;
-    creator_id: string;
-    status: string;
-    image_url?: string;
-    joined_users_count: number;
-}
+import {Challenge} from '@pages/Challenge';
 
 function showCheckAlert({
     title,
@@ -92,7 +81,7 @@ export function ShortChallegeCard({challenge}: {challenge: Challenge}) {
                 challengeId: challenge.id,
             });
             Alert.alert('Successfully joined the challenge');
-        } catch (e) {
+        } catch (e: any) {
             Alert.alert(e.message ?? 'Failed to join the challenge');
         }
     };

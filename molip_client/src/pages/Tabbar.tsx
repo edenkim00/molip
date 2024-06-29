@@ -1,51 +1,26 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
+import {MyDataContext} from '@lib/context';
+
 import {TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Svg, {Path} from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {View, Text, Button} from 'react-native';
-import {PageProps} from './PageConfig';
+import {View, Text, Alert} from 'react-native';
+import {PageProps, RootTabParamList} from './PageConfig';
 import Home from './BottomTab/Home';
 import Discover from './BottomTab/Discover';
-
-function SettingsScreen({navigation, route}) {
-    return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Button
-                title="Logout"
-                onPress={() => navigation.navigate('LoginPage')}
-            />
-            <Text>Settings!</Text>
-        </View>
-    );
-}
-
-interface TabbarInitialParams {
-    userId: string;
-    myChallenges: any;
-    setMyChallenges: any;
-    allChallenges: any;
-    setAllChallenges: any;
-}
-
-type RootTabParamList = {
-    Home: TabbarInitialParams;
-    Discover: TabbarInitialParams;
-    'My Profile': TabbarInitialParams;
-};
+import MyProfile from './BottomTab/MyProfile';
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-function App({navigation, route}: PageProps) {
-    const {
-        userId,
-        refreshChallengeData,
-        myChallenges,
-        setMyChallenges,
-        allChallenges,
-        setAllChallenges,
-    } = route.params ?? {};
+export default function App({navigation}: PageProps) {
+    const myData = useContext(MyDataContext);
+    if (!myData.userId) {
+        navigation.navigate('LoginPage');
+        Alert.alert('Failed to get data. Please try again.');
+        return null;
+    }
 
     return (
         <BottomTab.Navigator
@@ -55,11 +30,7 @@ function App({navigation, route}: PageProps) {
                 name="Home"
                 component={Home}
                 initialParams={{
-                    userId,
-                    myChallenges,
-                    setMyChallenges,
-                    allChallenges,
-                    setAllChallenges,
+                    myData,
                 }}
                 options={{
                     tabBarLabel: 'Home',
@@ -77,11 +48,7 @@ function App({navigation, route}: PageProps) {
                 name="Discover"
                 component={Discover}
                 initialParams={{
-                    userId,
-                    myChallenges,
-                    setMyChallenges,
-                    allChallenges,
-                    setAllChallenges,
+                    myData,
                 }}
                 options={{
                     tabBarLabel: 'Discover',
@@ -96,13 +63,9 @@ function App({navigation, route}: PageProps) {
             />
             <BottomTab.Screen
                 name="My Profile"
-                component={SettingsScreen}
+                component={MyProfile}
                 initialParams={{
-                    userId,
-                    myChallenges,
-                    setMyChallenges,
-                    allChallenges,
-                    setAllChallenges,
+                    myData,
                 }}
                 options={{
                     tabBarLabel: 'My Profile',
@@ -118,8 +81,6 @@ function App({navigation, route}: PageProps) {
         </BottomTab.Navigator>
     );
 }
-
-export default App;
 
 const CustomTabBar = ({
     state,

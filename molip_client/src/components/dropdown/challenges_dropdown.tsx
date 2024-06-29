@@ -1,4 +1,6 @@
+import {Challenge} from '@pages/Challenge';
 import React, {useEffect, useState, useRef} from 'react';
+
 import {
     View,
     Text,
@@ -9,7 +11,6 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Challenge} from '@components/challenge';
 
 export function ChallengesDropdown({
     challenges,

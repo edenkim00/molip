@@ -1,12 +1,6 @@
 interface NavigationProps {
     navigation: any;
     route: any;
-    userId: string;
-    setUserId: (userId: string) => void;
-    myChallenges: any;
-    setMyChallenges: any;
-    allChallenges: any;
-    setAllChallenges: any;
 }
 
 interface LoginPageProps extends NavigationProps {}
@@ -52,4 +46,12 @@ export type PageStackParamList = {
     SignUpPage: SignUpPageProps;
     PasswordResetPage: ForgotPasswordLabelProps;
     Tabbar: TabbarProps;
+};
+
+export interface TabbarInitialParams {}
+
+export type RootTabParamList = {
+    Home: TabbarInitialParams;
+    Discover: TabbarInitialParams;
+    'My Profile': TabbarInitialParams;
 };

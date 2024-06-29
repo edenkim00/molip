@@ -8,16 +8,20 @@ import {
     Keyboard,
     NativeModules,
 } from 'react-native';
+
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
-import PasswordResetPage from './src/pages/PasswordResetPage';
+import LoginPage from '@pages/LoginPage';
+import SignUpPage from '@pages/SignUpPage';
+import PasswordResetPage from '@pages/PasswordResetPage';
+import Tabbar from '@pages/Tabbar';
 
-import LoginPage from './src/pages/LoginPage';
-import SignUpPage from './src/pages/SignUpPage';
-import Tabbar from './src/pages/Tabbar';
-import {PageName, PAGES, PageStackParamList} from './src/pages/PageConfig';
+import {PageName, PAGES, PageStackParamList} from '@pages/PageConfig';
+import {MyDataContext, MyData} from '@lib/context';
+
 import {LoadingSpinner} from '@components/loading_spinner';
+import {Challenge} from '@pages/Challenge';
 
 const {StatusBarManager} = NativeModules;
 
@@ -26,9 +30,20 @@ const PageStack = createStackNavigator<PageStackParamList>();
 
 function MolipApp(): React.ReactElement {
     const [processing, setProcessing] = React.useState(true);
-    const [userId, setUserId] = React.useState<string | undefined>(undefined);
 
+    const [userId, setUserId] = React.useState<string | undefined>(undefined);
+    const [myChallenges, setMyChallenges] = React.useState<Challenge[]>([]);
+    const [allChallenges, setAllChallenges] = React.useState<Challenge[]>([]);
     const [keyboardOffset, setKeyboardOffset] = React.useState(0);
+
+    const MyData: MyData = {
+        userId,
+        myChallenges,
+        allChallenges,
+        setUserId,
+        setMyChallenges,
+        setAllChallenges,
+    };
 
     const avoidKeyboard: () => void = () => {
         Platform.OS === 'ios' &&
@@ -84,28 +99,27 @@ function MolipApp(): React.ReactElement {
                 behavior={IS_IOS_PLATFORM ? 'padding' : 'height'}
                 className="w-full h-full relative">
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <PageStack.Navigator screenOptions={{headerShown: false}}>
-                        <PageStack.Screen
-                            name={PAGES.LoginPage.name as PageName}
-                            component={LoginPage}
-                            initialParams={{
-                                userId,
-                            }}
-                        />
-                        <PageStack.Screen
-                            name={PAGES.SignUpPage.name as PageName}
-                            component={SignUpPage}
-                        />
-                        <PageStack.Screen
-                            name={PAGES.PasswordResetPage.name as PageName}
-                            component={PasswordResetPage}
-                        />
-                        <PageStack.Screen
-                            name={PAGES.Tabbar.name as PageName}
-                            component={Tabbar}
-                            initialParams={{userId}}
-                        />
-                    </PageStack.Navigator>
+                    <MyDataContext.Provider value={MyData}>
+                        <PageStack.Navigator
+                            screenOptions={{headerShown: false}}>
+                            <PageStack.Screen
+                                name={PAGES.LoginPage.name as PageName}
+                                component={LoginPage}
+                            />
+                            <PageStack.Screen
+                                name={PAGES.SignUpPage.name as PageName}
+                                component={SignUpPage}
+                            />
+                            <PageStack.Screen
+                                name={PAGES.PasswordResetPage.name as PageName}
+                                component={PasswordResetPage}
+                            />
+                            <PageStack.Screen
+                                name={PAGES.Tabbar.name as PageName}
+                                component={Tabbar}
+                            />
+                        </PageStack.Navigator>
+                    </MyDataContext.Provider>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
         </NavigationContainer>

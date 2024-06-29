@@ -57,7 +57,6 @@ class Request {
                 ? `?${new URLSearchParams(this.query).toString().trim()}`
                 : ''
             ).replace(/ /g, '');
-        console.log(path);
         const response = await fetch(path, {
             method: this.method,
             headers: this.headers as HeadersInit_,
@@ -68,9 +67,7 @@ class Request {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            console.log(this.body);
             body = await response.json();
-            console.log('body: ', body);
         } catch (error) {
             return null;
         }
