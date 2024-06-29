@@ -17,8 +17,11 @@ export function RefreshButton({
                     await onPress();
                     setRefreshing(false);
                 }}
-                disabled={refreshing}>
-                <Ionicons name="refresh" size={20} color="black" />
+                disabled={refreshing}
+                style={{
+                    opacity: refreshing ? 0.5 : 1,
+                }}>
+                <Ionicons name={'refresh'} size={20} color="black" />
             </TouchableOpacity>
         </View>
     );

@@ -10,7 +10,7 @@ export type RequestParams = {
     endpoint: string;
     method: string | undefined;
     headers?: RequestHeaders | undefined;
-    body?: string | undefined;
+    body?: string | FormData | undefined;
     query?: {[key: string]: any} | undefined;
 };
 
@@ -20,7 +20,7 @@ class Request {
     method?: string;
     headers: RequestHeaders;
     query?: {[key: string]: any};
-    body?: string;
+    body?: string | FormData;
 
     constructor() {
         this.baseUrl = ENDPOINTS.API_SERVER;

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import AuthManager from '@auth';
-import ApiManager from '@api';
 
 import LogoImage from '@assets/molip_logo.png';
 import LearningApplicationBanner from '@assets/language_learning_application.png';
@@ -20,7 +19,11 @@ import {PAGES, PageProps} from '@pages/PageConfig';
 import {KakaoLoginButton} from '@components/buttons/kakao_login';
 import {LoadingSpinner} from '@components/loading_spinner';
 import {MethodDivider} from '@components/divider';
-import {fetchChallengeData, MyDataContext} from '@lib/context';
+import {
+    fetchChallengeData,
+    fetchUserProfile,
+    MyDataContext,
+} from '@lib/context';
 
 function BackgroundImages(): JSX.Element {
     return (
@@ -167,23 +170,40 @@ function LoginButton({
 
 export default function LoginPage({navigation}: PageProps): JSX.Element {
     const myData = useContext(MyDataContext);
-    const {userId, setUserId, setMyChallenges, setAllChallenges} = myData;
+    const {
+        userId,
+        setUserId,
+        setAllChallenges,
+        setMyChallenges,
+        setUserProfile,
+    } = myData;
 
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
+        const fetchData = async (userId: string) => {
+            try {
+                const userProfile = await fetchUserProfile();
+                setUserProfile(userProfile);
+                const {allChallengesFetched, myChallengesFetched} =
+                    await fetchChallengeData(userId);
+                if (allChallengesFetched) {
+                    setAllChallenges(allChallengesFetched);
+                }
+                if (myChallengesFetched) {
+                    setMyChallenges(myChallengesFetched);
+                }
+                navigation.navigate(PAGES.Tabbar.name);
+            } catch (err) {
+                Alert.alert('Failed to login, please try again later.');
+                setProcessing(false);
+            }
+        };
         if (userId) {
             setProcessing(true);
-            fetchChallengeData(userId)
-                .then(() => {
-                    navigation.navigate(PAGES.Tabbar.name);
-                    setProcessing(false);
-                })
-                .catch(() => {
-                    setProcessing(false);
-                });
+            fetchData(userId);
         }
     }, [userId]);
 
@@ -206,15 +226,24 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
         }
 
         setUserId(id);
-        fetchChallengeData(id)
-            .then(() => {
-                navigation.navigate(PAGES.Tabbar.name, myData);
-                setProcessing(false);
-            })
-            .catch(() => {
-                Alert.alert('Failed to login, please try again.');
-                setProcessing(false);
-            });
+
+        try {
+            const userProfile = await fetchUserProfile();
+            setUserProfile(userProfile);
+
+            const {allChallengesFetched, myChallengesFetched} =
+                await fetchChallengeData(id);
+            if (allChallengesFetched) {
+                setAllChallenges(allChallengesFetched);
+            }
+            if (myChallengesFetched) {
+                setMyChallenges(myChallengesFetched);
+            }
+            navigation.navigate(PAGES.Tabbar.name);
+        } catch (e) {
+            Alert.alert('Failed to login, please try again later.');
+            setProcessing(false);
+        }
     };
 
     if (processing) {

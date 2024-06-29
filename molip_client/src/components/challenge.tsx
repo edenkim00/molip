@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {PasswordInputModal} from './modals/password_input';
 import ApiManager from '@api';
 import {Challenge} from '@pages/Challenge';
+import {fetchChallengeData} from '@lib/context';
 
 function showCheckAlert({
     title,
@@ -52,7 +53,15 @@ function ChallengeCardImage({imageUrl}: {imageUrl?: string}) {
     );
 }
 
-export function ShortChallegeCard({challenge}: {challenge: Challenge}) {
+export function ShortChallegeCard({
+    userId,
+    challenge,
+    setMyChallenges,
+}: {
+    userId: string;
+    challenge: Challenge;
+    setMyChallenges: (challenges: Challenge[]) => void;
+}) {
     const [showPasswordInput, setShowPasswordInput] = useState<boolean>(false);
     const [passwordInput, setPasswordInput] = useState<string>('');
 
@@ -80,6 +89,14 @@ export function ShortChallegeCard({challenge}: {challenge: Challenge}) {
             await ApiManager.requestJoinChallenge({
                 challengeId: challenge.id,
             });
+            const {myChallengesFetched} = await fetchChallengeData(
+                userId,
+                'MyChallenges',
+            );
+            if (myChallengesFetched) {
+                setMyChallenges(myChallengesFetched);
+            }
+
             Alert.alert('Successfully joined the challenge');
         } catch (e: any) {
             Alert.alert(e.message ?? 'Failed to join the challenge');

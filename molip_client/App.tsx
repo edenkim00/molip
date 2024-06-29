@@ -18,7 +18,12 @@ import PasswordResetPage from '@pages/PasswordResetPage';
 import Tabbar from '@pages/Tabbar';
 
 import {PageName, PAGES, PageStackParamList} from '@pages/PageConfig';
-import {MyDataContext, MyData} from '@lib/context';
+import {
+    MyDataContext,
+    MyData,
+    UserProfile,
+    fetchUserProfile,
+} from '@lib/context';
 
 import {LoadingSpinner} from '@components/loading_spinner';
 import {Challenge} from '@pages/Challenge';
@@ -35,6 +40,9 @@ function MolipApp(): React.ReactElement {
     const [myChallenges, setMyChallenges] = React.useState<Challenge[]>([]);
     const [allChallenges, setAllChallenges] = React.useState<Challenge[]>([]);
     const [keyboardOffset, setKeyboardOffset] = React.useState(0);
+    const [userProfile, setUserProfile] = React.useState<
+        UserProfile | undefined
+    >(undefined);
 
     const MyData: MyData = {
         userId,
@@ -43,6 +51,8 @@ function MolipApp(): React.ReactElement {
         setUserId,
         setMyChallenges,
         setAllChallenges,
+        userProfile,
+        setUserProfile,
     };
 
     const avoidKeyboard: () => void = () => {
@@ -98,29 +108,35 @@ function MolipApp(): React.ReactElement {
                 keyboardVerticalOffset={keyboardOffset}
                 behavior={IS_IOS_PLATFORM ? 'padding' : 'height'}
                 className="w-full h-full relative">
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <MyDataContext.Provider value={MyData}>
-                        <PageStack.Navigator
-                            screenOptions={{headerShown: false}}>
-                            <PageStack.Screen
-                                name={PAGES.LoginPage.name as PageName}
-                                component={LoginPage}
-                            />
-                            <PageStack.Screen
-                                name={PAGES.SignUpPage.name as PageName}
-                                component={SignUpPage}
-                            />
-                            <PageStack.Screen
-                                name={PAGES.PasswordResetPage.name as PageName}
-                                component={PasswordResetPage}
-                            />
-                            <PageStack.Screen
-                                name={PAGES.Tabbar.name as PageName}
-                                component={Tabbar}
-                            />
-                        </PageStack.Navigator>
-                    </MyDataContext.Provider>
-                </TouchableWithoutFeedback>
+                {processing ? (
+                    <LoadingSpinner />
+                ) : (
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <MyDataContext.Provider value={MyData}>
+                            <PageStack.Navigator
+                                screenOptions={{headerShown: false}}>
+                                <PageStack.Screen
+                                    name={PAGES.LoginPage.name as PageName}
+                                    component={LoginPage}
+                                />
+                                <PageStack.Screen
+                                    name={PAGES.SignUpPage.name as PageName}
+                                    component={SignUpPage}
+                                />
+                                <PageStack.Screen
+                                    name={
+                                        PAGES.PasswordResetPage.name as PageName
+                                    }
+                                    component={PasswordResetPage}
+                                />
+                                <PageStack.Screen
+                                    name={PAGES.Tabbar.name as PageName}
+                                    component={Tabbar}
+                                />
+                            </PageStack.Navigator>
+                        </MyDataContext.Provider>
+                    </TouchableWithoutFeedback>
+                )}
             </KeyboardAvoidingView>
         </NavigationContainer>
     );

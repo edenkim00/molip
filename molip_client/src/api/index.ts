@@ -36,6 +36,46 @@ class ApiManager {
         // request.set({});
     }
 
+    static async getUserProfile(): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.GET_USER_PROFILE,
+            method: 'GET',
+        });
+        await request.setAuth();
+        return await request.fire();
+    }
+
+    static async uploadImage({file}: {file: FormData}): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.UPLOAD_IMAGE,
+            method: 'POST',
+            headers: {
+                'Content-Type': `multipart/form-data`,
+            },
+            body: file,
+        });
+        return await request.fire();
+    }
+
+    static async updateUserProfile({
+        imageUrl,
+    }: {
+        imageUrl: string;
+    }): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.UPDATE_USER_PROFILE_IMAGE,
+            method: 'PATCH',
+            body: JSON.stringify({
+                image_url: imageUrl,
+            }),
+        });
+        await request.setAuth();
+        return await request.fire();
+    }
+
     static async requestEmailAuthCode(
         email: string,
         shouldExist: boolean = false,
@@ -115,6 +155,16 @@ class ApiManager {
                 password,
                 image_url: imageUrl,
             }),
+        });
+        await request.setAuth();
+        return await request.fire();
+    }
+
+    static async deleteAccount(): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.DELETE_ACCOUNT,
+            method: 'DELETE',
         });
         await request.setAuth();
         return await request.fire();

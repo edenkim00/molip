@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {fetchChallengeData, MyDataContext} from '@lib/context';
 
 import Bubble from '@components/bubble';
@@ -14,16 +14,33 @@ import {LoadingSpinner} from '@components/loading_spinner';
 import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
 import {PAGES} from '@pages/PageConfig';
+import {set} from 'lodash';
 
 export default function Discover({navigation}: any) {
     const myData = useContext(MyDataContext);
-    const {userId, allChallenges: challenges} = myData;
+    const {
+        userId,
+        myChallenges,
+        allChallenges,
+        setAllChallenges,
+        setMyChallenges,
+    } = myData;
 
     if (!userId) {
         navigation.navigate(PAGES.LoginPage.name);
         Alert.alert('Failed to get data. Please try again.');
         return null;
     }
+    const filter = (all: Challenge[]) => {
+        const my = myChallenges.map(mc => mc.id);
+        return all.filter(c => !my.includes(c.id));
+    };
+
+    const [challenges, setChallenges] = React.useState(filter(allChallenges));
+
+    useEffect(() => {
+        setChallenges(filter(allChallenges));
+    }, [allChallenges, myChallenges]);
 
     const [filteredChalleges, setFilteredChallenges] =
         React.useState(challenges);
@@ -43,9 +60,17 @@ export default function Discover({navigation}: any) {
                         <View className="flex-row justify-between w-[80%]">
                             <HeaderText text="Discover Challenges" />
                             <RefreshButton
-                                onPress={() =>
-                                    fetchChallengeData(userId, 'AllChallenges')
-                                }
+                                onPress={async () => {
+                                    const {allChallengesFetched} =
+                                        await fetchChallengeData(
+                                            userId,
+                                            'AllChallenges',
+                                        );
+
+                                    if (allChallengesFetched) {
+                                        setAllChallenges(allChallengesFetched);
+                                    }
+                                }}
                             />
                         </View>
                         <Space heightClassName={'h-2'} />
@@ -81,7 +106,11 @@ export default function Discover({navigation}: any) {
                                                     className="w-full flex-row justify-center"
                                                     key={index}>
                                                     <ShortChallegeCard
+                                                        userId={userId}
                                                         challenge={challenge}
+                                                        setMyChallenges={
+                                                            setMyChallenges
+                                                        }
                                                     />
                                                 </View>
                                             ),
@@ -109,8 +138,15 @@ export default function Discover({navigation}: any) {
             {showCreateChallengeModal && (
                 <CreateChallengeModal
                     visible={showCreateChallengeModal}
-                    onClose={() => {
-                        fetchChallengeData(userId, 'AllChallenges');
+                    onClose={async () => {
+                        const {allChallengesFetched, myChallengesFetched} =
+                            await fetchChallengeData(userId, 'AllChallenges');
+                        if (allChallengesFetched) {
+                            setAllChallenges(allChallengesFetched);
+                        }
+                        if (myChallengesFetched) {
+                            setMyChallenges(myChallengesFetched);
+                        }
                         setShowCreateChallengeModal(false);
                     }}
                 />
@@ -124,7 +160,10 @@ function CreateChallengeBackground() {
         <View className="flex-col justify-betwen items-center w-full h-full bg-white ">
             <View className="flex-col justify-start items-center w-full relative h-full bg-white max-h-[90%] overflow-hidden">
                 <Bubble />
-                <HeaderText text="Create Challenge" />
+                <Space heightClassName={'h-24'} />
+                <View className="flex-row justify-between w-[80%]">
+                    <HeaderText text="Create Challenge" />
+                </View>
             </View>
         </View>
     );

@@ -126,6 +126,10 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
                     },
                 },
             ]);
+        } else {
+            setIsActive(false);
+            setSeconds(0);
+            setLapRecords([]);
         }
     }
 

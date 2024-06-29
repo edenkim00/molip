@@ -1,6 +1,7 @@
 import {createContext, useContext} from 'react';
 import {Challenge} from '@pages/Challenge';
 import ApiManager from '@api';
+import {shuffleChallengeList} from './utils';
 
 export const MyDataContext = createContext<MyData>({
     userId: undefined,
@@ -9,8 +10,14 @@ export const MyDataContext = createContext<MyData>({
     setMyChallenges: () => {},
     allChallenges: [],
     setAllChallenges: () => {},
+    userProfile: undefined,
+    setUserProfile: () => {},
 });
 
+export interface UserProfile {
+    id: string;
+    profile_image_url?: string;
+}
 export interface MyData {
     userId?: string;
     setUserId: (userId: string) => void;
@@ -18,6 +25,8 @@ export interface MyData {
     setMyChallenges: (challenges: Challenge[]) => void;
     allChallenges: Challenge[];
     setAllChallenges: (challenges: Challenge[]) => void;
+    userProfile?: UserProfile;
+    setUserProfile: (userProfile: UserProfile) => void;
 }
 
 export type FetchChallengeCommand =
@@ -28,14 +37,32 @@ export type FetchChallengeCommand =
 export async function fetchChallengeData(
     uid: string,
     command: FetchChallengeCommand = undefined,
-) {
-    const {setAllChallenges, setMyChallenges} = useContext(MyDataContext);
+): Promise<{
+    allChallengesFetched: Challenge[] | undefined;
+    myChallengesFetched: Challenge[] | undefined;
+}> {
+    const res: {
+        allChallengesFetched: Challenge[] | undefined;
+        myChallengesFetched: Challenge[] | undefined;
+    } = {
+        allChallengesFetched: undefined,
+        myChallengesFetched: undefined,
+    };
+
     if (!command || command === 'AllChallenges') {
         const allChallengesFetched = await ApiManager.selectChallenges();
-        setAllChallenges(allChallengesFetched);
+        res.allChallengesFetched = shuffleChallengeList(allChallengesFetched);
     }
     if (!command || command === 'MyChallenges') {
         const myChallengesFetched = await ApiManager.selectUserChallenges(uid);
-        setMyChallenges(myChallengesFetched);
+        res.myChallengesFetched = shuffleChallengeList(myChallengesFetched);
     }
+    return res;
+}
+
+export async function fetchUserProfile(): Promise<{
+    id: string;
+    profile_image_url?: string;
+}> {
+    return await ApiManager.getUserProfile();
 }

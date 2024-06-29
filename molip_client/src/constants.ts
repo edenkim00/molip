@@ -11,7 +11,7 @@ export const ENDPOINTS: Endpoints = {
     PATH: {
         SIGN_IN: '/app/user/sign-in',
         SIGN_UP: '/app/user',
-        DELETE_USER: '/app/user',
+        DELETE_ACCOUNT: '/app/user',
         GET_USER_PROFILE: '/app/user',
         CHANGE_PASSWORD: '/app/user-password',
         REQUEST_EMAIL_VERIFICATION: '/app/user/email-verification',
@@ -20,6 +20,8 @@ export const ENDPOINTS: Endpoints = {
         SELECT_USER_CHALLENGES: '/app/user/challenge',
         CONNECT_USER_CHALLENGE: '/app/challenge-join',
         DISCONNECT_USER_CHALLENGE: '/app/challenge-join',
+        UPLOAD_IMAGE: '/app/image',
+        UPDATE_USER_PROFILE_IMAGE: '/app/user/profile-image',
     },
 };
 

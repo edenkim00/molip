@@ -67,6 +67,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>앱에서 파일 업로드를 위한 카메라 권한을 요청드립니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>앱에서 이미지 저장을 위해 앨범 권한을 요청드립니다.</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
 </dict>
 </plist>
 

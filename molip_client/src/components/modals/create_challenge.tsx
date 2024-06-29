@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {LinearGradient} from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {openImagePicker} from './upload_image_modal';
 
 export function CreateChallengeModal({
     visible,
@@ -25,14 +26,34 @@ export function CreateChallengeModal({
     const [isPrivate, setIsPrivate] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState('');
 
+    const validate = () => {
+        if (!challengeName) {
+            Alert.alert('Please enter challenge name');
+            return false;
+        }
+        if (!challengeDescription) {
+            Alert.alert('Please enter challenge description');
+            return false;
+        }
+        if (isPrivate && !password) {
+            Alert.alert('Please enter password');
+            return false;
+        }
+        return true;
+    };
+
     const saveChallenge = async () => {
         try {
+            if (!validate()) {
+                return;
+            }
+
             await ApiManager.createChallenge({
                 name: challengeName,
                 description: challengeDescription,
                 isPrivate: isPrivate,
                 password: isPrivate ? password : undefined,
-                imageUrl: imageUrl,
+                imageUrl: imageUrl || undefined,
             });
             Alert.alert('Challenge created');
         } catch (err: any) {
@@ -41,6 +62,25 @@ export function CreateChallengeModal({
 
         onClose();
     };
+
+    async function selectImageAndUpload(imageUri?: string) {
+        if (!imageUri) {
+            return;
+        }
+        try {
+            const formData = new FormData();
+            formData.append('file', {
+                uri: imageUri,
+                type: 'image/jpeg',
+                name: 'photo.jpg',
+            });
+            const res = await ApiManager.uploadImage({file: formData});
+            const imageUrl = res.image_url;
+            setImageUrl(imageUrl);
+        } catch (err) {
+            Alert.alert('Failed to upload your image');
+        }
+    }
 
     useEffect(() => {
         if (password?.length == 0) {
@@ -67,11 +107,23 @@ export function CreateChallengeModal({
                     </View>
                     <View className="items-center my-4 space-y-1">
                         <View className="w-24 h-24 rounded-full bg-gray-100 justify-center items-center">
-                            <Ionicons
-                                name="camera-outline"
-                                size={30}
-                                color="black"
-                            />
+                            <TouchableOpacity
+                                onPress={() => {
+                                    openImagePicker(selectImageAndUpload);
+                                }}>
+                                {imageUrl ? (
+                                    <Image
+                                        source={{uri: imageUrl}}
+                                        className="w-24 h-24 rounded-full"
+                                    />
+                                ) : (
+                                    <Ionicons
+                                        name="camera-outline"
+                                        size={30}
+                                        color="black"
+                                    />
+                                )}
+                            </TouchableOpacity>
                         </View>
                         <Text className="text-[#5F5757] tracking-tight text-sm">
                             Challenge Image

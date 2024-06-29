@@ -57,12 +57,19 @@ export function ChallengesDropdown({
         setQuery(text);
         refreshFilteredData(text);
         setSelectedChallenge(null);
+
         if (!text) {
             setIsDropdownVisible(false);
         } else {
             setIsDropdownVisible(true);
         }
     };
+
+    useEffect(() => {
+        if (!query) {
+            setSelectedChallenge(null);
+        }
+    }, [query]);
 
     const handleDropdownToggle = () => {
         setIsDropdownVisible(!isDropdownVisible);
@@ -114,6 +121,10 @@ export function ChallengesDropdown({
         onFilteredChange(filteredData);
     }, [filteredData]);
 
+    useEffect(() => {
+        refreshFilteredData(query);
+    }, [challenges]);
+
     return (
         <TouchableWithoutFeedback onPress={handleOutsidePress}>
             <View className="flex w-full items-center justify-center max-h-24">
@@ -129,13 +140,20 @@ export function ChallengesDropdown({
                                     ? 'No challenges'
                                     : 'Enter your challenge name'
                             }
-                            readOnly={noChallenges}
                             ref={inputRef}
                         />
                         <View className="space-x-1 flex-row items-center justify-center absolute right-3">
                             {!!selectedChallenge && (
                                 <Icon name={'lock-closed-outline'} size={18} />
                             )}
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setQuery('');
+                                }}
+                                disabled={noChallenges}>
+                                <Icon name={'close-outline'} size={18} />
+                            </TouchableOpacity>
+
                             <TouchableOpacity
                                 onPress={handleDropdownToggle}
                                 disabled={noChallenges}>

@@ -42,6 +42,19 @@ class AuthManager {
         return body.result;
     }
 
+    static async clear() {
+        new AuthManager();
+        const main = AuthManager.main;
+        if (!main) {
+            throw new Error('AuthManager is not initialized');
+        }
+        main._cached = undefined;
+        main._id = undefined;
+        main._password = undefined;
+        await Storage.remove(STORAGE_KEYS.AUTH);
+        await Storage.remove(STORAGE_KEYS.LOGIN_INFO);
+    }
+
     static async set({id, password}: LoginInfo) {
         new AuthManager();
         if (id && password) {

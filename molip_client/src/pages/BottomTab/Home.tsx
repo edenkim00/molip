@@ -6,8 +6,6 @@ import Bubble from '@components/bubble';
 import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import TimerScreen from '@components/timer';
 
-import {LoadingSpinner} from '@components/loading_spinner';
-import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
 import {PAGES} from '@pages/PageConfig';
 import {fetchChallengeData, MyDataContext} from '@lib/context';
@@ -35,7 +33,15 @@ export default function Home({navigation}: any) {
             <View className="flex-row justify-between w-[80%]">
                 <HeaderText text="Start Challenge!" />
                 <RefreshButton
-                    onPress={() => fetchChallengeData(userId, 'MyChallenges')}
+                    onPress={async () => {
+                        const {myChallengesFetched} = await fetchChallengeData(
+                            userId,
+                            'MyChallenges',
+                        );
+                        if (myChallengesFetched) {
+                            setChallenges(myChallengesFetched);
+                        }
+                    }}
                 />
             </View>
             <Space heightClassName={'h-2'} />
