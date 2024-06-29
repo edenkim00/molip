@@ -13,7 +13,7 @@ function SettingsScreen({navigation, route}) {
     return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Button
-                title="Go to Details"
+                title="Logout"
                 onPress={() => navigation.navigate('LoginPage')}
             />
             <Text>Settings!</Text>
