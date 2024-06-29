@@ -7,11 +7,6 @@ require("dotenv").config();
 
 async function createChallenge(data, verifiedToken) {
   const userIdFromToken = verifiedToken.userId;
-  // Validation
-  // 0. 필요한 정보가 빠지지는 않았는지
-  // 1. 챌린지 이름 20글자 이내
-  // 2. 챌린지 설명 150글자 이내
-  // 3. 비밀번호 4글자 이상 10글자 이하
   const { name, description, private, password, image_url: imageUrl } = data;
   const createrId = userIdFromToken;
 
@@ -33,13 +28,12 @@ async function createChallenge(data, verifiedToken) {
     return errResponse(baseResponse.CHALLENGE_CREATION_PASSWORD_LENGTH_ERROR);
   }
 
-  const doesExist = await Provider.checkChallengeName(name);
-  if (doesExist) {
-    return errResponse(baseResponse.ALREADY_EXISTING_CHALLENGE);
-  }
-
   // Provider or Service
   try {
+    const doesExist = await Provider.checkChallengeName(name);
+    if (doesExist) {
+      return errResponse(baseResponse.ALREADY_EXISTING_CHALLENGE);
+    }
     await Service.createChallenge(
       name,
       description,

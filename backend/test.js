@@ -1,16 +1,17 @@
 /* */
-const { requestEmailVerification } = require("./src/app/Controller.js");
+const { createChallenge } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = requestEmailVerification;
+const testFunction = createChallenge;
 //id, password, email
 /* API INPUT */
 const userId = "11234"; // only authorzation required
 const data = {
-  shouldExist: true,
-  email: "eotjd0986@gmail.com",
-  // user_id: "11234",
-  // challenge_id: 1,
+  name: "te12313st",
+  description: "te222st",
+  private: false,
+  password: "te2st",
+  createrId: "11234",
 };
 
 /* API CALL */
