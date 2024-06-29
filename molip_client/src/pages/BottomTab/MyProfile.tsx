@@ -27,7 +27,7 @@ function MyPageButtonGroup({
     handleDeleteAccount: () => void;
 }) {
     return (
-        <View className="flex-row justify-center w-[80%] space-x-2 mb-[5%]">
+        <View className="flex-row justify-center w-[80%] space-x-2 pb-5">
             <TouchableOpacity
                 onPress={handleDeleteAccount}
                 className="bg-[#342D60] rounded py-3 w-[50%]">
