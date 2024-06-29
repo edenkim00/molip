@@ -10,11 +10,6 @@ var smtpTransport = require("nodemailer-smtp-transport");
 require("dotenv").config();
 
 async function signUp(data) {
-  // Validation
-  // 1. 값이 다 있는지
-  // 2. 아이디 길이 (5글자 이상 30자 이하)
-  // 3. 비밀번호 길이 (8자 이상 20자 이하)
-  // 4. 이메일 형식
   const { id, password, email } = data;
 
   if (!id || !password || !email) {
@@ -28,8 +23,8 @@ async function signUp(data) {
   if (password.length < 8 || password.length > 20) {
     return errResponse(baseResponse.WRONG_PASSWORD_LENGTH);
   }
-  const wowie = await Provider.checkId(id);
-  if (!wowie) {
+  const alreadyExist = await Provider.checkId(id);
+  if (!alreadyExist) {
     return errResponse(baseResponse.ALREADY_EXISTING_ID);
   }
   // Provider or Service
@@ -57,7 +52,7 @@ async function deleteUser(data, verifiedToken) {
   return response(baseResponse.SUCCESS);
 }
 
-async function getUserProfile(data, verifiedToken) {
+async function getUserProfile(_, verifiedToken) {
   const userId = verifiedToken.userId;
   const result = await Provider.getUserProfile(userId);
   if (result.length < 1) {
@@ -66,6 +61,23 @@ async function getUserProfile(data, verifiedToken) {
 
   // Return - Response
   return response(baseResponse.SUCCESS, result[0]);
+}
+
+async function updateUserProfile(data, verifiedToken) {
+  const userId = verifiedToken.userId;
+  const { image_url: imageUrl } = data;
+  if (!imageUrl) {
+    return errResponse(baseResponse.WRONG_BODY);
+  }
+
+  try {
+    await Service.updateUserProfile(userId, imageUrl);
+  } catch (err) {
+    console.error(err);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+
+  return response(baseResponse.SUCCESS);
 }
 
 async function signIn(data) {
@@ -167,4 +179,5 @@ module.exports = {
   signIn,
   changePassword,
   requestEmailVerification,
+  updateUserProfile,
 };

@@ -5,6 +5,7 @@ const {
   signIn,
   changePassword,
   requestEmailVerification,
+  updateUserProfile,
 } = require("./lib/user");
 const {
   createChallenge,
@@ -22,6 +23,7 @@ exports.signIn = signIn;
 exports.getUserProfile = getUserProfile;
 exports.changePassword = changePassword;
 exports.requestEmailVerification = requestEmailVerification;
+exports.updateUserProfile = updateUserProfile;
 
 exports.getChallenges = getChallenges;
 exports.record = record;

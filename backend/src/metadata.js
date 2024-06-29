@@ -37,6 +37,12 @@ const ENDPOINT_METADATA = [
     tokenRequired: false,
     next: Controller.requestEmailVerification,
   },
+  {
+    endpoint: "/app/user/profile-image",
+    method: "PATCH",
+    tokenRequired: true,
+    next: Controller.updateUserProfile,
+  },
 
   {
     endpoint: "/app/challenge",

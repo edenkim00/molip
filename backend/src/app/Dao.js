@@ -116,6 +116,11 @@ async function checkChallengeName(connection, name) {
   return result[0];
 }
 
+async function updateUserProfile(connection, params) {
+  const Query = "UPDATE Molip_Users SET profile_image_url = ? WHERE id = ?";
+  await connection.query(Query, params);
+}
+
 module.exports = {
   signUp,
   createChallenge,
@@ -132,4 +137,5 @@ module.exports = {
   doesExistUserHaving,
   doesExistConnection,
   checkChallengeName,
+  updateUserProfile,
 };
