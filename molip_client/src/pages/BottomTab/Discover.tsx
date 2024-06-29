@@ -26,11 +26,6 @@ export default function Discover({navigation}: any) {
         setMyChallenges,
     } = myData;
 
-    if (!userId) {
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Failed to get data. Please try again.');
-        return null;
-    }
     const filter = (all: Challenge[]) => {
         const my = myChallenges.map(mc => mc.id);
         return all.filter(c => !my.includes(c.id));

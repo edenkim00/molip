@@ -39,7 +39,7 @@ function MolipApp(): React.ReactElement {
     const [userId, setUserId] = React.useState<string | undefined>(undefined);
     const [myChallenges, setMyChallenges] = React.useState<Challenge[]>([]);
     const [allChallenges, setAllChallenges] = React.useState<Challenge[]>([]);
-    const [keyboardOffset, setKeyboardOffset] = React.useState(0);
+    // const [keyboardOffset, setKeyboardOffset] = React.useState(0);
     const [userProfile, setUserProfile] = React.useState<
         UserProfile | undefined
     >(undefined);
@@ -55,12 +55,12 @@ function MolipApp(): React.ReactElement {
         setUserProfile,
     };
 
-    const avoidKeyboard: () => void = () => {
-        Platform.OS === 'ios' &&
-            StatusBarManager.getHeight((data: {height: number}) => {
-                setKeyboardOffset(data.height || 0);
-            });
-    };
+    // const avoidKeyboard: () => void = () => {
+    //     Platform.OS === 'ios' &&
+    //         StatusBarManager.getHeight((data: {height: number}) => {
+    //             setKeyboardOffset(0);
+    //         });
+    // };
 
     async function tryAutoLoginAndSelectUserId() {
         try {
@@ -78,7 +78,7 @@ function MolipApp(): React.ReactElement {
     }
 
     useEffect(() => {
-        avoidKeyboard();
+        // avoidKeyboard();
         try {
             tryAutoLoginAndSelectUserId()
                 .then(() => {
@@ -105,7 +105,7 @@ function MolipApp(): React.ReactElement {
     return (
         <NavigationContainer independent={true}>
             <KeyboardAvoidingView
-                keyboardVerticalOffset={keyboardOffset}
+                // keyboardVerticalOffset={keyboardOffset}
                 behavior={IS_IOS_PLATFORM ? 'padding' : 'height'}
                 className="w-full h-full relative">
                 {processing ? (

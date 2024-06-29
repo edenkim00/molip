@@ -24,10 +24,12 @@ import {
     fetchUserProfile,
     MyDataContext,
 } from '@lib/context';
+import {Space} from '@components/space';
+import {set} from 'lodash';
 
 function BackgroundImages(): JSX.Element {
     return (
-        <View className="flex w-full flex-col items-center top-[10%] absolute">
+        <View className="flex w-full flex-col justify-start items-center">
             <Image
                 source={LogoImage}
                 alt="Logo"
@@ -181,7 +183,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [processing, setProcessing] = useState(false);
-
+    console.log('LOGIN');
     useEffect(() => {
         const fetchData = async (userId: string) => {
             try {
@@ -200,6 +202,10 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
                 Alert.alert('Failed to login, please try again later.');
                 setProcessing(false);
             }
+
+            setTimeout(() => {
+                setProcessing(false);
+            }, 2000);
         };
         if (userId) {
             setProcessing(true);
@@ -251,18 +257,27 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
     }
 
     return (
-        <View className="w-full h-full flex-col justify-end items-center bg-white overflow-hidden relative pb-8">
+        <View className="w-full h-full flex-col justify-between items-center bg-white overflow-hidden relative pb-8">
+            <Space heightClassName={'h-24'} />
             <BackgroundImages />
-            <WelcomeText />
-            <InputTypeSelector navigation={navigation} />
-            <LoginInput
-                id={id}
-                setId={setId}
-                password={password}
-                setPassword={setPassword}
-            />
-            <ForgotPasswordLabel navigation={navigation} />
-            <LoginButton handleLogin={handleLogin} processing={processing} />
+            <Space heightClassName={'h-4'} />
+            <View className="w-full justify-center items-center flex-col">
+                <WelcomeText />
+                <InputTypeSelector navigation={navigation} />
+                <LoginInput
+                    id={id}
+                    setId={setId}
+                    password={password}
+                    setPassword={setPassword}
+                />
+
+                <ForgotPasswordLabel navigation={navigation} />
+                <LoginButton
+                    handleLogin={handleLogin}
+                    processing={processing}
+                />
+            </View>
+
             <MethodDivider />
             <KakaoLoginButton callback={kakaoLoginCallback} />
         </View>

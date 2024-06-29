@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
     View,
     Alert,
@@ -19,18 +19,13 @@ import {openImagePicker} from '@components/modals/upload_image_modal';
 import ApiManager from '@api';
 import AuthManager from '@auth';
 
-function MyPageButtonGroup({navigation}: {navigation: any}) {
-    const handleLogout = async () => {
-        await AuthManager.clear();
-        navigation.navigate(PAGES.LoginPage.name);
-    };
-    
-    const handleDeleteAccount = async () => {
-        await ApiManager.deleteAccount();
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Account deleted successfully');
-    };
-
+function MyPageButtonGroup({
+    handleLogout,
+    handleDeleteAccount,
+}: {
+    handleLogout: () => void;
+    handleDeleteAccount: () => void;
+}) {
     return (
         <View className="flex-row justify-center w-[80%] space-x-2 mb-[5%]">
             <TouchableOpacity
@@ -53,19 +48,38 @@ export default function MyProfile({navigation}: any) {
     const myData = useContext(MyDataContext);
     const {
         userId,
+        setUserId,
+        setMyChallenges,
         allChallenges: challenges,
         setAllChallenges: setChallenges,
         userProfile,
         setUserProfile,
     } = myData;
 
-    if (!userId || !userProfile) {
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Failed to get data. Please try again.');
-        return null;
-    }
+    const {id, profile_image_url} = userProfile || {};
+    const handleLogout = async () => {
+        await AuthManager.clear();
+        clearMyData();
+        setUserId(undefined);
+    };
 
-    const {id, profile_image_url} = userProfile;
+    useEffect(() => {
+        if (!userId) {
+            navigation.navigate(PAGES.LoginPage.name);
+        }
+    }, [userId]);
+
+    const clearMyData = () => {
+        setChallenges([]);
+        setMyChallenges([]);
+        setUserProfile(undefined);
+    };
+
+    const handleDeleteAccount = async () => {
+        await ApiManager.deleteAccount();
+        await handleLogout();
+        Alert.alert('Account deleted successfully');
+    };
 
     async function selectImageAndUploadUserProfileImage(imageUri?: string) {
         if (!imageUri) {
@@ -132,7 +146,10 @@ export default function MyProfile({navigation}: any) {
                     </GradientText>
                 </View>
             </View>
-            <MyPageButtonGroup navigation={navigation} />
+            <MyPageButtonGroup
+                handleLogout={handleLogout}
+                handleDeleteAccount={handleDeleteAccount}
+            />
         </View>
     );
 }

@@ -20,13 +20,13 @@ export interface UserProfile {
 }
 export interface MyData {
     userId?: string;
-    setUserId: (userId: string) => void;
+    setUserId: (userId?: string) => void;
     myChallenges: Challenge[];
     setMyChallenges: (challenges: Challenge[]) => void;
     allChallenges: Challenge[];
     setAllChallenges: (challenges: Challenge[]) => void;
     userProfile?: UserProfile;
-    setUserProfile: (userProfile: UserProfile) => void;
+    setUserProfile: (userProfile: UserProfile | undefined) => void;
 }
 
 export type FetchChallengeCommand =

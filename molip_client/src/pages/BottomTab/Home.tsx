@@ -18,12 +18,6 @@ export default function Home({navigation}: any) {
         setMyChallenges: setChallenges,
     } = myData;
 
-    if (!userId) {
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Failed to get data. Please try again.');
-        return null;
-    }
-
     const [selectedChallenge, setSelectedChallenge] = React.useState(undefined);
 
     return (

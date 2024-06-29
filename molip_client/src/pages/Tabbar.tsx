@@ -14,14 +14,7 @@ import MyProfile from './BottomTab/MyProfile';
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-export default function App({navigation}: PageProps) {
-    const myData = useContext(MyDataContext);
-    if (!myData.userId) {
-        navigation.navigate(PAGES.LoginPage.name);
-        Alert.alert('Failed to get data. Please try again.');
-        return null;
-    }
-
+export default function App() {
     return (
         <BottomTab.Navigator
             screenOptions={{headerShown: false}}
