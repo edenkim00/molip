@@ -4,14 +4,18 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Svg, {Path} from 'react-native-svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import {PageProps} from './PageConfig';
 import Home from './BottomTab/Home';
 import Discover from './BottomTab/Discover';
 
-function SettingsScreen() {
+function SettingsScreen({navigation, route}) {
     return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Button
+                title="Go to Details"
+                onPress={() => navigation.navigate('LoginPage')}
+            />
             <Text>Settings!</Text>
         </View>
     );
@@ -36,6 +40,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function App({navigation, route}: PageProps) {
     const {
         userId,
+        refreshChallengeData,
         myChallenges,
         setMyChallenges,
         allChallenges,

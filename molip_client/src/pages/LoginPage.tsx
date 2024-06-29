@@ -169,14 +169,6 @@ function LoginButton({
 
 export default function LoginPage({navigation, route}: PageProps): JSX.Element {
     const userId = route.params?.userId;
-    const [myChallenges, setMyChallenges] = React.useState<
-        Challenge[] | undefined
-    >(undefined);
-
-    const [allChallenges, setAllChallenges] = React.useState<
-        Challenge[] | undefined
-    >(undefined);
-
     useEffect(() => {
         if (userId) {
             setProcessing(true);

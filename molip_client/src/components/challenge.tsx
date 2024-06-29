@@ -93,7 +93,7 @@ export function ShortChallegeCard({challenge}: {challenge: Challenge}) {
             });
             Alert.alert('Successfully joined the challenge');
         } catch (e) {
-            Alert.alert('Failed to join the challenge');
+            Alert.alert(e.message ?? 'Failed to join the challenge');
         }
     };
 

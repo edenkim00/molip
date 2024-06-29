@@ -1,5 +1,7 @@
+import ApiManager from '@api';
 import React, {useEffect, useState} from 'react';
 import {
+    Alert,
     Modal,
     View,
     Text,
@@ -23,8 +25,20 @@ export function CreateChallengeModal({
     const [isPrivate, setIsPrivate] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState('');
 
-    const saveChallenge = () => {
-        // Save challenge action
+    const saveChallenge = async () => {
+        try {
+            await ApiManager.createChallenge({
+                name: challengeName,
+                description: challengeDescription,
+                isPrivate: isPrivate,
+                password: isPrivate ? password : undefined,
+                imageUrl: imageUrl,
+            });
+            Alert.alert('Challenge created');
+        } catch (err) {
+            Alert.alert('Failed to create challenge');
+        }
+
         onClose();
     };
 

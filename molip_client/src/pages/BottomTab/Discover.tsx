@@ -3,15 +3,17 @@ import Bubble from '@components/bubble';
 import {Challenge, ShortChallegeCard} from '@components/challenge';
 import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import {Space} from '@components/space';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CreateChallengeModal} from '@components/modals/create_challenge';
 import {HeaderText} from '@components/header_text';
 import {LoadingSpinner} from '@components/loading_spinner';
+import ApiManager from '@api';
+import {RefreshButton} from '@components/refresh_button';
 
 export default function Discover({navigation, route}: any) {
     const {userId, allChallenges} = route.params ?? {};
-    const [Challenges, setChallenges] = React.useState<Challenge[]>(
+    const [challenges, setChallenges] = React.useState<Challenge[]>(
         allChallenges ?? [],
     );
     const [processing, setProcessing] = React.useState(!!allChallenges);
@@ -22,10 +24,19 @@ export default function Discover({navigation, route}: any) {
         allChallenges ?? [],
     );
 
+    const refreshAllChallenges = async () => {
+        try {
+            const allChallengesFetched = await ApiManager.selectChallenges();
+            setChallenges(allChallengesFetched);
+        } catch (err) {
+            Alert.alert('Failed to refresh challenges');
+        }
+    };
+
     useEffect(() => {
-        console.log('allChallenges', allChallenges);
         if (allChallenges) {
             setProcessing(false);
+            setChallenges(allChallenges);
         } else {
             setProcessing(true);
         }
@@ -43,12 +54,16 @@ export default function Discover({navigation, route}: any) {
                 <View className="flex-col justify-betwen items-center w-full h-full bg-white ">
                     <View className="flex-col justify-start items-center w-full relative h-full bg-white max-h-[90%] overflow-hidden">
                         <Bubble />
-                        <HeaderText text="Discover Challenges" />
+                        <Space heightClassName={'h-24'} />
+                        <View className="flex-row justify-between w-[80%]">
+                            <HeaderText text="Discover Challenges" />
+                            <RefreshButton onPress={refreshAllChallenges} />
+                        </View>
                         <Space heightClassName={'h-2'} />
                         <View className="flex-row justify-center w-full z-50">
                             <View className="flex-row w-[85%] justify-center">
                                 <ChallengesDropdown
-                                    challenges={Challenges}
+                                    challenges={challenges}
                                     onFilteredChange={setFilteredChallenges}
                                 />
                             </View>
@@ -105,7 +120,10 @@ export default function Discover({navigation, route}: any) {
             {showCreateChallengeModal && (
                 <CreateChallengeModal
                     visible={showCreateChallengeModal}
-                    onClose={() => setShowCreateChallengeModal(false)}
+                    onClose={() => {
+                        refreshAllChallenges();
+                        setShowCreateChallengeModal(false);
+                    }}
                 />
             )}
         </>

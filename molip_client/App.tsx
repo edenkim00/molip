@@ -7,9 +7,6 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     NativeModules,
-    Text,
-    View,
-    ActivityIndicator,
 } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -20,8 +17,6 @@ import LoginPage from './src/pages/LoginPage';
 import SignUpPage from './src/pages/SignUpPage';
 import Tabbar from './src/pages/Tabbar';
 import {PageName, PAGES, PageStackParamList} from './src/pages/PageConfig';
-import {Challenge} from '@components/challenge';
-import ApiManager from '@api';
 import {LoadingSpinner} from '@components/loading_spinner';
 
 const {StatusBarManager} = NativeModules;

@@ -110,10 +110,23 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
         handleRefresh();
     }
 
-    function handleRefresh() {
-        setIsActive(false);
-        setSeconds(0);
-        setLapRecords([]);
+    function handleRefresh(check = false) {
+        if (check) {
+            Alert.alert('Are you sure you want to refresh the timer?', '', [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        setIsActive(false);
+                        setSeconds(0);
+                        setLapRecords([]);
+                    },
+                },
+            ]);
+        }
     }
 
     return (
@@ -149,7 +162,7 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
                         if (!checkChallengeSelected()) {
                             return;
                         }
-                        handleRefresh();
+                        handleRefresh(true);
                     }}>
                     <Icon name="refresh" size={18} color="white" />
                 </TouchableOpacity>

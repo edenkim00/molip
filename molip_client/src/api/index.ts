@@ -98,11 +98,13 @@ class ApiManager {
         description,
         isPrivate = false,
         password,
+        imageUrl,
     }: {
         name: string;
         description: string;
         isPrivate: boolean;
         password?: string;
+        imageUrl?: string;
     }): Promise<any> {
         const request = new Request();
         request.set({
@@ -113,6 +115,7 @@ class ApiManager {
                 description,
                 private: isPrivate,
                 password,
+                image_url: imageUrl,
             }),
         });
         await request.setAuth();
