@@ -68,4 +68,10 @@ module.exports = {
     code: 6002,
     message: "Email sending error. Please try again.",
   },
+
+  ALREADY_EXISTING_CONNECTION: {
+    isSuccess: false,
+    code: 7001,
+    message: "Already Joined.",
+  },
 };

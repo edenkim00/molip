@@ -105,7 +105,7 @@ async function connectUserChallenge(data, verifiedToken) {
   }
   const suc = await Service.connectUserChallenge(user_id, challenge_id);
   if (!suc) {
-    return errResponse(baseResponse.DB_ERROR);
+    return errResponse(baseResponse.ALREADY_EXISTING_CONNECTION);
   }
   return response(baseResponse.SUCCESS);
 }

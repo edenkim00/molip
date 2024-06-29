@@ -89,6 +89,13 @@ async function disconnectUserChallenge(connection, params) {
   await connection.query(Query, params);
 }
 
+async function doesExistConnection(connection, params) {
+  const Query =
+    "SELECT id FROM Molip_User_Challenge_Connections WHERE user_id = ? AND challenge_id = ? AND status = 'active'";
+  const result = await connection.query(Query, params);
+  return result[0];
+}
+
 async function doesExistUserHaving(connection, email) {
   const Query =
     "SELECT id FROM Molip_Users WHERE email = ? AND status = 'active'";
@@ -116,4 +123,5 @@ module.exports = {
   connectUserChallenge,
   disconnectUserChallenge,
   doesExistUserHaving,
+  doesExistConnection,
 };

@@ -97,6 +97,13 @@ async function connectUserChallenge(user_id, challenge_id) {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     connection.beginTransaction(); // BACKUP
+    const exist = await Dao.doesExistConnection(connection, [
+      user_id,
+      challenge_id,
+    ]);
+    if (exist[0]?.length > 0) {
+      return false;
+    }
     await Dao.connectUserChallenge(connection, [user_id, challenge_id]);
     connection.commit(); // COMMIT
     return true;
