@@ -109,6 +109,13 @@ async function deleteUser(connection, userId) {
   return;
 }
 
+async function checkChallengeName(connection, name) {
+  const Query =
+    "SELECT id FROM Molip_Challenges WHERE name = ? AND status = 'active'";
+  const result = await connection.query(Query, [name]);
+  return result[0];
+}
+
 module.exports = {
   signUp,
   createChallenge,
@@ -124,4 +131,5 @@ module.exports = {
   disconnectUserChallenge,
   doesExistUserHaving,
   doesExistConnection,
+  checkChallengeName,
 };

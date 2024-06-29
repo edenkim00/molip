@@ -74,4 +74,32 @@ module.exports = {
     code: 7001,
     message: "Already Joined.",
   },
+
+  // CREATE CHALLENGE
+  CHALLENGE_CREATION_NAME_LENGTH_ERROR: {
+    isSuccess: false,
+    code: 8001,
+    message: "Challenge name should be less than 20 characters.",
+  },
+
+  // description < 150
+  CHALLENGE_CREATION_DESCRIPTION_LENGTH_ERROR: {
+    isSuccess: false,
+    code: 8002,
+    message: "Challenge description should be less than 150 characters.",
+  },
+
+  // password 4~20
+  CHALLENGE_CREATION_PASSWORD_LENGTH_ERROR: {
+    isSuccess: false,
+    code: 8003,
+    message: "Challenge password should be 4~20 characters.",
+  },
+
+  // ALERTEADY EXISTING CHALLENGE
+  ALREADY_EXISTING_CHALLENGE: {
+    isSuccess: false,
+    code: 8004,
+    message: "Already existing challenge name.",
+  },
 };

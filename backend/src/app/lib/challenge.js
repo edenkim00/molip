@@ -14,10 +14,6 @@ async function createChallenge(data, verifiedToken) {
   // 3. 비밀번호 4글자 이상 10글자 이하
   const { name, description, private, password } = data;
   const createrId = userIdFromToken;
-  console.log("name", name);
-  console.log("description", description);
-  console.log("private", private);
-  console.log("password", password);
 
   if (
     !name ||
@@ -29,19 +25,24 @@ async function createChallenge(data, verifiedToken) {
     return errResponse(baseResponse.WRONG_BODY);
   }
 
-  if (name.length > 20) {
-    return errResponse(baseResponse.WRONG_BODY);
+  if (name.length >= 20) {
+    return errResponse(baseResponse.CHALLENGE_CREATION_NAME_LENGTH_ERROR);
   }
 
-  if (description.length > 150) {
-    return errResponse(baseResponse.WRONG_BODY);
+  if (description.length >= 150) {
+    return errResponse(
+      baseResponse.CHALLENGE_CREATION_DESCRIPTION_LENGTH_ERROR
+    );
   }
 
   if (password.length < 4 || password.length > 20) {
-    return errResponse(baseResponse.WRONG_BODY);
+    return errResponse(baseResponse.CHALLENGE_CREATION_PASSWORD_LENGTH_ERROR);
   }
 
-  // 이름 중복확인
+  const doesExist = await Provider.checkChallengeName(name);
+  if (doesExist) {
+    return errResponse(baseResponse.ALREADY_EXISTING_CHALLENGE);
+  }
 
   // Provider or Service
   try {
