@@ -27,19 +27,25 @@ function MyPageButtonGroup({
     handleDeleteAccount: () => void;
 }) {
     return (
-        <View className="flex-row justify-center w-[80%] space-x-2 pb-5">
-            <TouchableOpacity
-                onPress={handleDeleteAccount}
-                className="bg-[#342D60] rounded py-3 w-[50%]">
-                <Text className="text-white font-bold text-center">
-                    Delete Account
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={handleLogout}
-                className="bg-[#342D60] rounded py-3 w-[50%]">
-                <Text className="text-white font-bold text-center">Logout</Text>
-            </TouchableOpacity>
+        <View className="flex-row justify-center items-end w-[80%] min-h-[10%] space-x-2 pb-2">
+            <View className="w-1/2">
+                <TouchableOpacity
+                    onPress={handleDeleteAccount}
+                    className="bg-[#342D60] rounded py-3 w-full">
+                    <Text className="text-white font-bold text-center">
+                        Delete Account
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View className="w-1/2">
+                <TouchableOpacity
+                    onPress={handleLogout}
+                    className="bg-[#342D60] rounded py-3 w-full">
+                    <Text className="text-white font-bold text-center">
+                        Logout
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -50,7 +56,6 @@ export default function MyProfile({navigation}: any) {
         userId,
         setUserId,
         setMyChallenges,
-        allChallenges: challenges,
         setAllChallenges: setChallenges,
         userProfile,
         setUserProfile,

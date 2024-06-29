@@ -119,13 +119,13 @@ export default function Discover({navigation}: any) {
                             )}
                         </View>
                     </View>
-                    <View className="w-full flex-row justify-center items-start min-h-[10%] pb-2">
-                        <View className="w-[80%] mt-2">
+                    <View className="w-full flex-row justify-center items-end min-h-[10%] pb-4 mt-2">
+                        <View className="w-[80%]">
                             <TouchableOpacity
                                 onPress={() => {
                                     setShowCreateChallengeModal(true);
                                 }}
-                                className="bg-[#342D60] rounded py-3">
+                                className="bg-[#342D60] rounded py-3 w-full">
                                 <Text className="text-white font-bold text-center">
                                     Create a New Challenge
                                 </Text>
