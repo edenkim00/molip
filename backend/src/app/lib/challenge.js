@@ -23,9 +23,10 @@ async function createChallenge(data, verifiedToken) {
       baseResponse.CHALLENGE_CREATION_DESCRIPTION_LENGTH_ERROR
     );
   }
-
-  if (password.length < 4 || password.length > 20) {
-    return errResponse(baseResponse.CHALLENGE_CREATION_PASSWORD_LENGTH_ERROR);
+  if (password) {
+    if (password.length < 4 || password.length > 20) {
+      return errResponse(baseResponse.CHALLENGE_CREATION_PASSWORD_LENGTH_ERROR);
+    }
   }
 
   // Provider or Service
