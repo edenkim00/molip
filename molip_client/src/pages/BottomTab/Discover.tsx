@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {MyDataContext} from '@lib/context';
+import {fetchChallengeData, MyDataContext} from '@lib/context';
 
 import Bubble from '@components/bubble';
 import {ShortChallegeCard} from '@components/challenge';
@@ -17,11 +17,7 @@ import {PAGES} from '@pages/PageConfig';
 
 export default function Discover({navigation}: any) {
     const myData = useContext(MyDataContext);
-    const {
-        userId,
-        allChallenges: challenges,
-        setAllChallenges: setChallenges,
-    } = myData;
+    const {userId, allChallenges: challenges} = myData;
 
     if (!userId) {
         navigation.navigate(PAGES.LoginPage.name);
@@ -29,28 +25,11 @@ export default function Discover({navigation}: any) {
         return null;
     }
 
-    const [processing, setProcessing] = React.useState(false);
+    const [filteredChalleges, setFilteredChallenges] =
+        React.useState(challenges);
+
     const [showCreateChallengeModal, setShowCreateChallengeModal] =
         useState<boolean>(false);
-    const [filteredChalleges, setFilteredChallenges] = React.useState(
-        challenges ?? [],
-    );
-
-    const refreshAllChallenges = async () => {
-        try {
-            setProcessing(true);
-            const allChallengesFetched = await ApiManager.selectChallenges();
-            setChallenges(allChallengesFetched);
-            setProcessing(false);
-        } catch (err) {
-            Alert.alert('Failed to refresh challenges');
-            setProcessing(false);
-        }
-    };
-
-    if (processing) {
-        return <LoadingSpinner />;
-    }
 
     return (
         <>
@@ -63,7 +42,11 @@ export default function Discover({navigation}: any) {
                         <Space heightClassName={'h-24'} />
                         <View className="flex-row justify-between w-[80%]">
                             <HeaderText text="Discover Challenges" />
-                            <RefreshButton onPress={refreshAllChallenges} />
+                            <RefreshButton
+                                onPress={() =>
+                                    fetchChallengeData(userId, 'AllChallenges')
+                                }
+                            />
                         </View>
                         <Space heightClassName={'h-2'} />
                         <View className="flex-row justify-center w-full z-50">
@@ -127,7 +110,7 @@ export default function Discover({navigation}: any) {
                 <CreateChallengeModal
                     visible={showCreateChallengeModal}
                     onClose={() => {
-                        refreshAllChallenges();
+                        fetchChallengeData(userId, 'AllChallenges');
                         setShowCreateChallengeModal(false);
                     }}
                 />

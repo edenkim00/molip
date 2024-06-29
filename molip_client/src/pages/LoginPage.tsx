@@ -20,7 +20,7 @@ import {PAGES, PageProps} from '@pages/PageConfig';
 import {KakaoLoginButton} from '@components/buttons/kakao_login';
 import {LoadingSpinner} from '@components/loading_spinner';
 import {MethodDivider} from '@components/divider';
-import {MyDataContext} from '@lib/context';
+import {fetchChallengeData, MyDataContext} from '@lib/context';
 
 function BackgroundImages(): JSX.Element {
     return (
@@ -176,7 +176,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
     useEffect(() => {
         if (userId) {
             setProcessing(true);
-            fetchMyData(userId)
+            fetchChallengeData(userId)
                 .then(() => {
                     navigation.navigate(PAGES.Tabbar.name);
                     setProcessing(false);
@@ -186,13 +186,6 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
                 });
         }
     }, [userId]);
-
-    async function fetchMyData(uid: string) {
-        const allChallengesFetched = await ApiManager.selectChallenges();
-        const myChallengesFetched = await ApiManager.selectUserChallenges(uid);
-        setAllChallenges(allChallengesFetched);
-        setMyChallenges(myChallengesFetched);
-    }
 
     const kakaoLoginCallback = async () => {};
 
@@ -213,7 +206,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
         }
 
         setUserId(id);
-        fetchMyData(id)
+        fetchChallengeData(id)
             .then(() => {
                 navigation.navigate(PAGES.Tabbar.name, myData);
                 setProcessing(false);

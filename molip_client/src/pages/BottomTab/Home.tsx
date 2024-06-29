@@ -10,7 +10,7 @@ import {LoadingSpinner} from '@components/loading_spinner';
 import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
 import {PAGES} from '@pages/PageConfig';
-import {MyDataContext} from '@lib/context';
+import {fetchChallengeData, MyDataContext} from '@lib/context';
 
 export default function Home({navigation}: any) {
     const myData = useContext(MyDataContext);
@@ -26,26 +26,7 @@ export default function Home({navigation}: any) {
         return null;
     }
 
-    const [processing, setProcessing] = React.useState(false);
     const [selectedChallenge, setSelectedChallenge] = React.useState(undefined);
-
-    const refreshMyChallenges = async () => {
-        try {
-            setProcessing(true);
-            const myChallengesFetched = await ApiManager.selectUserChallenges(
-                userId,
-            );
-            setChallenges(myChallengesFetched);
-            setProcessing(false);
-        } catch (err) {
-            Alert.alert('Failed to refresh challenges');
-            setProcessing(false);
-        }
-    };
-
-    if (processing) {
-        return <LoadingSpinner />;
-    }
 
     return (
         <View className="flex-col justify-start items-center w-full relative h-full bg-white">
@@ -53,7 +34,9 @@ export default function Home({navigation}: any) {
             <Space heightClassName={'h-24'} />
             <View className="flex-row justify-between w-[80%]">
                 <HeaderText text="Start Challenge!" />
-                <RefreshButton onPress={refreshMyChallenges} />
+                <RefreshButton
+                    onPress={() => fetchChallengeData(userId, 'MyChallenges')}
+                />
             </View>
             <Space heightClassName={'h-2'} />
             <View className="flex-row justify-center w-full z-50">
