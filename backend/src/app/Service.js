@@ -101,7 +101,7 @@ async function connectUserChallenge(user_id, challenge_id) {
       user_id,
       challenge_id,
     ]);
-    if (exist[0]?.length > 0) {
+    if (exist?.length > 0) {
       return false;
     }
     await Dao.connectUserChallenge(connection, [user_id, challenge_id]);
