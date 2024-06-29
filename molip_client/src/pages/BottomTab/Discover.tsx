@@ -119,7 +119,7 @@ export default function Discover({navigation}: any) {
                             )}
                         </View>
                     </View>
-                    <View className="w-full flex-row justify-center items-end min-h-[10%] pb-4 mt-2">
+                    <View className="w-full flex-row justify-center items-end min-h-[10%] pb-3 mt-2">
                         <View className="w-[80%]">
                             <TouchableOpacity
                                 onPress={() => {
