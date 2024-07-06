@@ -169,6 +169,18 @@ class ApiManager {
         await request.setAuth();
         return await request.fire();
     }
+
+    static async track(challengeRecord: any): Promise<any> {
+        console.log(challengeRecord);
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.TRACK_RECORD,
+            method: 'POST',
+            body: JSON.stringify(challengeRecord),
+        });
+        await request.setAuth();
+        return await request.fire();
+    }
 }
 
 export default ApiManager;

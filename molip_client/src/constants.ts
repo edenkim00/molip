@@ -22,6 +22,7 @@ export const ENDPOINTS: Endpoints = {
         DISCONNECT_USER_CHALLENGE: '/app/challenge-join',
         UPLOAD_IMAGE: '/app/image',
         UPDATE_USER_PROFILE_IMAGE: '/app/user/profile-image',
+        TRACK_RECORD: '/app/record',
     },
 };
 

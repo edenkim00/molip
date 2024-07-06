@@ -13,7 +13,8 @@ import {CircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Space} from './space';
 import _ from 'lodash';
-import {Challenge} from '@pages/Challenge';
+import {Challenge, ChallengeRecrod} from '@pages/Challenge';
+import ApiManager from '@api';
 
 const getButtonClassNames: (enable: boolean) => string = (enable: boolean) => {
     return `w-[28%] p-2 justify-center items-center ${
@@ -68,6 +69,10 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
     const [lapRecords, setLapRecords] = useState<number[]>([]);
     const [timeDisplay, setTimeDisplay] = useState('00:00:00');
 
+    const [challengeRecord, setChallengeRecord] = useState<
+        ChallengeRecrod | undefined
+    >(undefined);
+
     useEffect(() => {
         handleRefresh();
     }, [selectedChallenge]);
@@ -105,6 +110,11 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
 
     async function handleSubmit() {
         //TODO : Implement this function
+        try {
+            await ApiManager.track(challengeRecord);
+        } catch (error) {
+            // console.error('Error while submitting challenge record', error);
+        }
 
         //MARK: LAST TASK
         handleRefresh();
@@ -123,6 +133,7 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
                         setIsActive(false);
                         setSeconds(0);
                         setLapRecords([]);
+                        setChallengeRecord(undefined);
                     },
                 },
             ]);
@@ -130,8 +141,27 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
             setIsActive(false);
             setSeconds(0);
             setLapRecords([]);
+            setChallengeRecord(undefined);
         }
     }
+
+    useEffect(() => {
+        if (!selectedChallenge?.id) {
+            return;
+        }
+
+        if (isActive) {
+            setChallengeRecord({
+                challengeId: selectedChallenge?.id,
+                start: Date.now(),
+            });
+        } else {
+            setChallengeRecord({
+                ...challengeRecord,
+                end: Date.now(),
+            } as ChallengeRecrod);
+        }
+    }, [isActive]);
 
     return (
         <View className="flex-col justify-between items-center z-10 w-full">

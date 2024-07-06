@@ -9,3 +9,9 @@ export interface Challenge {
     image_url?: string;
     joined_users_count: number;
 }
+
+export interface ChallengeRecrod {
+    challengeId: number;
+    start: number;
+    end?: number;
+}

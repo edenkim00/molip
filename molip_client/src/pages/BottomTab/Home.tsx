@@ -7,7 +7,6 @@ import {ChallengesDropdown} from '@components/dropdown/challenges_dropdown';
 import TimerScreen from '@components/timer';
 
 import {RefreshButton} from '@components/refresh_button';
-import {PAGES} from '@pages/PageConfig';
 import {fetchChallengeData, MyDataContext} from '@lib/context';
 
 export default function Home({navigation}: any) {
