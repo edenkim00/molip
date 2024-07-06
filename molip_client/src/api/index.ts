@@ -176,7 +176,10 @@ class ApiManager {
         request.set({
             endpoint: ENDPOINTS.PATH.TRACK_RECORD,
             method: 'POST',
-            body: JSON.stringify(challengeRecord),
+            body: JSON.stringify({
+                ...challengeRecord,
+                challenge_id: challengeRecord.challengeId,
+            }),
         });
         await request.setAuth();
         return await request.fire();
