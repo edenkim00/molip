@@ -130,7 +130,7 @@ async function changePassword(data) {
 
 async function requestEmailVerification(data) {
   const { email, shouldExist } = data;
-  if (shouldExist) {
+  if (shouldExist === "true" || shouldExist === true) {
     const exist = await Provider.doesExistUserHaving(email);
     if (!exist) {
       // 6001
