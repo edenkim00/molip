@@ -75,15 +75,18 @@ async function getChallenges(data, verifiedToken) {
 }
 
 async function record(data, verifiedToken) {
-  const { user_id, start, end, challenge_id } = data;
+  const { start, end, challenge_id } = data;
   const userIdFromToken = verifiedToken?.userId;
-  if (!user_id || !start || !end || !challenge_id) {
+  if (!start || !end || !challenge_id) {
     return errResponse(baseResponse.WRONG_BODY);
   }
-  if (userIdFromToken != user_id) {
-    return errResponse(baseResponse.AUTHORIZATION_FAILED);
-  }
-  const result = await Service.record(user_id, start, end, challenge_id);
+
+  const result = await Service.record(
+    userIdFromToken,
+    start,
+    end,
+    challenge_id
+  );
   return response(baseResponse.SUCCESS);
 }
 
