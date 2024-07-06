@@ -10,7 +10,7 @@ const {
 const {
   createChallenge,
   getChallenges,
-  record,
+  trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
 } = require("./lib/challenge");
@@ -26,7 +26,7 @@ exports.requestEmailVerification = requestEmailVerification;
 exports.updateUserProfile = updateUserProfile;
 
 exports.getChallenges = getChallenges;
-exports.record = record;
+exports.trackRecord = trackRecord;
 exports.createChallenge = createChallenge;
 exports.connectUserChallenge = connectUserChallenge;
 exports.disconnectUserChallenge = disconnectUserChallenge;

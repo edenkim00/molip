@@ -73,7 +73,7 @@ async function getChallengesWithUser(connection, params) {
   return result[0];
 }
 
-async function record(connection, params) {
+async function trackRecord(connection, params) {
   const Query =
     "INSERT INTO Molip_Records (user_id, start, end, challenge_id) VALUES(?,?,?,?);";
   const result = await connection.query(Query, params);
@@ -134,7 +134,7 @@ module.exports = {
   checkId,
   getAllChallenges,
   getChallengesWithUser,
-  record,
+  trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
   doesExistUserHaving,

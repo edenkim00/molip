@@ -79,16 +79,16 @@ async function changePassword(id, newPassword) {
   }
 }
 
-async function record(userId, start, end, challengeId) {
+async function trackRecord(userId, start, end, challengeId) {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     connection.beginTransaction(); // BACKUP
-    await Dao.record(connection, [userId, start, end, challengeId]);
+    await Dao.trackRecord(connection, [userId, start, end, challengeId]);
     connection.commit(); // COMMIT
     return true;
   } catch (err) {
     connection.rollback();
-    console.error("[record]", err);
+    console.error("[trackRecord]", err);
     throw err;
   } finally {
     connection.release();
@@ -155,7 +155,7 @@ module.exports = {
   createChallenge,
   deleteUser,
   changePassword,
-  record,
+  trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
   updateUserProfile,

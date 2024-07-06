@@ -74,14 +74,14 @@ async function getChallenges(data, verifiedToken) {
   }
 }
 
-async function record(data, verifiedToken) {
+async function trackRecord(data, verifiedToken) {
   const { start, end, challenge_id } = data;
   const userIdFromToken = verifiedToken?.userId;
   if (!start || !end || !challenge_id) {
     return errResponse(baseResponse.WRONG_BODY);
   }
 
-  const result = await Service.record(
+  const result = await Service.trackRecord(
     userIdFromToken,
     start,
     end,
@@ -125,7 +125,7 @@ async function disconnectUserChallenge(data, verifiedToken) {
 module.exports = {
   createChallenge,
   getChallenges,
-  record,
+  trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
 };
