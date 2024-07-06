@@ -81,6 +81,13 @@ const ENDPOINT_METADATA = [
     next: Controller.disconnectUserChallenge,
   },
 
+  {
+    endpoint: "/app/record",
+    method: "POST",
+    tokenRequired: true,
+    next: Controller.trackRecord,
+  },
+
   // util
   {
     endpoint: "/app/image",
