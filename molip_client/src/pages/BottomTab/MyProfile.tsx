@@ -18,6 +18,7 @@ import GradientText from '@components/gradient_text';
 import {openImagePicker} from '@components/modals/upload_image_modal';
 import ApiManager from '@api';
 import AuthManager from '@auth';
+import {RankingLineChart, sampleData} from '@components/charts/analytics';
 
 function MyPageButtonGroup({
     handleLogout,
@@ -80,10 +81,21 @@ export default function MyProfile({navigation}: any) {
         setUserProfile(undefined);
     };
 
-    const handleDeleteAccount = async () => {
-        await ApiManager.deleteAccount();
-        await handleLogout();
-        Alert.alert('Account deleted successfully');
+    const handleDeleteAccount = () => {
+        Alert.alert('Are you sure you want to delete the account?', '', [
+            {
+                text: 'Delete',
+                onPress: async () => {
+                    await ApiManager.deleteAccount();
+                    await handleLogout();
+                    Alert.alert('Account deleted successfully');
+                },
+            },
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+        ]);
     };
 
     async function selectImageAndUploadUserProfileImage(imageUri?: string) {
@@ -150,6 +162,9 @@ export default function MyProfile({navigation}: any) {
                         {`Welcome, ${id}!`}
                     </GradientText>
                 </View>
+            </View>
+            <View className="flex-col justify-center items-center w-full">
+                <RankingLineChart rankings={sampleData} />
             </View>
             <MyPageButtonGroup
                 handleLogout={handleLogout}

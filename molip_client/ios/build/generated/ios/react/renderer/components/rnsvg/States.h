@@ -91,6 +91,36 @@ public:
 #endif
 };
 
+class RNSVGFeColorMatrixState {
+public:
+  RNSVGFeColorMatrixState() = default;
+
+#ifdef ANDROID
+  RNSVGFeColorMatrixState(RNSVGFeColorMatrixState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+  MapBuffer getMapBuffer() const {
+    return MapBufferBuilder::EMPTY();
+  };
+#endif
+};
+
+class RNSVGFilterState {
+public:
+  RNSVGFilterState() = default;
+
+#ifdef ANDROID
+  RNSVGFilterState(RNSVGFilterState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+  MapBuffer getMapBuffer() const {
+    return MapBufferBuilder::EMPTY();
+  };
+#endif
+};
+
 class RNSVGForeignObjectState {
 public:
   RNSVGForeignObjectState() = default;

@@ -124,10 +124,6 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
         if (check) {
             Alert.alert('Are you sure you want to refresh the timer?', '', [
                 {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-                {
                     text: 'OK',
                     onPress: () => {
                         setIsActive(false);
@@ -135,6 +131,10 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
                         setLapRecords([]);
                         setChallengeRecord(undefined);
                     },
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
                 },
             ]);
         } else {

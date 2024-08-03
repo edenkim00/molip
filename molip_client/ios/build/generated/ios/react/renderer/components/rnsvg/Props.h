@@ -256,6 +256,7 @@ class RNSVGCircleProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic cx{};
   folly::dynamic cy{};
   folly::dynamic r{};
@@ -346,6 +347,7 @@ class RNSVGClipPathProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -457,10 +459,95 @@ class RNSVGEllipseProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic cx{};
   folly::dynamic cy{};
   folly::dynamic rx{};
   folly::dynamic ry{};
+};
+
+enum class RNSVGFeColorMatrixType { Matrix, Saturate, HueRotate, LuminanceToAlpha };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNSVGFeColorMatrixType &result) {
+  auto string = (std::string)value;
+  if (string == "matrix") { result = RNSVGFeColorMatrixType::Matrix; return; }
+  if (string == "saturate") { result = RNSVGFeColorMatrixType::Saturate; return; }
+  if (string == "hueRotate") { result = RNSVGFeColorMatrixType::HueRotate; return; }
+  if (string == "luminanceToAlpha") { result = RNSVGFeColorMatrixType::LuminanceToAlpha; return; }
+  abort();
+}
+
+static inline std::string toString(const RNSVGFeColorMatrixType &value) {
+  switch (value) {
+    case RNSVGFeColorMatrixType::Matrix: return "matrix";
+    case RNSVGFeColorMatrixType::Saturate: return "saturate";
+    case RNSVGFeColorMatrixType::HueRotate: return "hueRotate";
+    case RNSVGFeColorMatrixType::LuminanceToAlpha: return "luminanceToAlpha";
+  }
+}
+
+class RNSVGFeColorMatrixProps final : public ViewProps {
+ public:
+  RNSVGFeColorMatrixProps() = default;
+  RNSVGFeColorMatrixProps(const PropsParserContext& context, const RNSVGFeColorMatrixProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  folly::dynamic x{};
+  folly::dynamic y{};
+  folly::dynamic width{};
+  folly::dynamic height{};
+  std::string result{};
+  std::string in1{};
+  RNSVGFeColorMatrixType type{RNSVGFeColorMatrixType::Matrix};
+  std::vector<Float> values{};
+};
+
+enum class RNSVGFilterFilterUnits { UserSpaceOnUse, ObjectBoundingBox };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNSVGFilterFilterUnits &result) {
+  auto string = (std::string)value;
+  if (string == "userSpaceOnUse") { result = RNSVGFilterFilterUnits::UserSpaceOnUse; return; }
+  if (string == "objectBoundingBox") { result = RNSVGFilterFilterUnits::ObjectBoundingBox; return; }
+  abort();
+}
+
+static inline std::string toString(const RNSVGFilterFilterUnits &value) {
+  switch (value) {
+    case RNSVGFilterFilterUnits::UserSpaceOnUse: return "userSpaceOnUse";
+    case RNSVGFilterFilterUnits::ObjectBoundingBox: return "objectBoundingBox";
+  }
+}
+enum class RNSVGFilterPrimitiveUnits { UserSpaceOnUse, ObjectBoundingBox };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNSVGFilterPrimitiveUnits &result) {
+  auto string = (std::string)value;
+  if (string == "userSpaceOnUse") { result = RNSVGFilterPrimitiveUnits::UserSpaceOnUse; return; }
+  if (string == "objectBoundingBox") { result = RNSVGFilterPrimitiveUnits::ObjectBoundingBox; return; }
+  abort();
+}
+
+static inline std::string toString(const RNSVGFilterPrimitiveUnits &value) {
+  switch (value) {
+    case RNSVGFilterPrimitiveUnits::UserSpaceOnUse: return "userSpaceOnUse";
+    case RNSVGFilterPrimitiveUnits::ObjectBoundingBox: return "objectBoundingBox";
+  }
+}
+
+class RNSVGFilterProps final : public ViewProps {
+ public:
+  RNSVGFilterProps() = default;
+  RNSVGFilterProps(const PropsParserContext& context, const RNSVGFilterProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  std::string name{};
+  folly::dynamic x{};
+  folly::dynamic y{};
+  folly::dynamic height{};
+  folly::dynamic width{};
+  RNSVGFilterFilterUnits filterUnits{RNSVGFilterFilterUnits::ObjectBoundingBox};
+  RNSVGFilterPrimitiveUnits primitiveUnits{RNSVGFilterPrimitiveUnits::UserSpaceOnUse};
 };
 
 struct RNSVGForeignObjectFillStruct {
@@ -548,6 +635,7 @@ class RNSVGForeignObjectProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -642,6 +730,7 @@ class RNSVGGroupProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -732,6 +821,7 @@ class RNSVGImageProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic x{};
   folly::dynamic y{};
   folly::dynamic width{};
@@ -874,6 +964,7 @@ class RNSVGLineProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic x1{};
   folly::dynamic y1{};
   folly::dynamic x2{};
@@ -965,6 +1056,7 @@ class RNSVGMarkerProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1067,6 +1159,7 @@ class RNSVGMaskProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1076,6 +1169,7 @@ class RNSVGMaskProps final : public ViewProps {
   folly::dynamic width{};
   int maskUnits{0};
   int maskContentUnits{0};
+  int maskType{0};
 };
 
 struct RNSVGPathFillStruct {
@@ -1163,6 +1257,7 @@ class RNSVGPathProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   std::string d{};
 };
 
@@ -1251,6 +1346,7 @@ class RNSVGPatternProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1384,6 +1480,7 @@ class RNSVGRectProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic x{};
   folly::dynamic y{};
   folly::dynamic height{};
@@ -1477,6 +1574,7 @@ class RNSVGSymbolProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1573,6 +1671,7 @@ class RNSVGTextProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1674,6 +1773,7 @@ class RNSVGTextPathProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1781,6 +1881,7 @@ class RNSVGTSpanProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   folly::dynamic fontSize{};
   folly::dynamic fontWeight{};
   folly::dynamic font{};
@@ -1883,6 +1984,7 @@ class RNSVGUseProps final : public ViewProps {
   Float strokeMiterlimit{0.0};
   int vectorEffect{0};
   std::vector<std::string> propList{};
+  std::string filter{};
   std::string href{};
   folly::dynamic x{};
   folly::dynamic y{};

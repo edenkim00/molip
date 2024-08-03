@@ -25,7 +25,16 @@ import {
     MyDataContext,
 } from '@lib/context';
 import {Space} from '@components/space';
-import {set} from 'lodash';
+
+
+import {
+    login,
+    logout,
+    getProfile as getKakaoProfile,
+    shippingAddresses as getKakaoShippingAddresses,
+    unlink,
+  } from "@react-native-seoul/kakao-login";
+  
 
 function BackgroundImages(): JSX.Element {
     return (

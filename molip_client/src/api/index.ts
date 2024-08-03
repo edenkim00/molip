@@ -177,8 +177,9 @@ class ApiManager {
             endpoint: ENDPOINTS.PATH.TRACK_RECORD,
             method: 'POST',
             body: JSON.stringify({
-                ...challengeRecord,
                 challenge_id: challengeRecord.challengeId,
+                start: Math.floor(challengeRecord.start / 1000),
+                end: Math.floor(challengeRecord.end / 1000),
             }),
         });
         await request.setAuth();

@@ -73,6 +73,28 @@ using RNSVGEllipseShadowNode = ConcreteViewShadowNode<
     RNSVGEllipseEventEmitter,
     RNSVGEllipseState>;
 
+JSI_EXPORT extern const char RNSVGFeColorMatrixComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeColorMatrix> component.
+ */
+using RNSVGFeColorMatrixShadowNode = ConcreteViewShadowNode<
+    RNSVGFeColorMatrixComponentName,
+    RNSVGFeColorMatrixProps,
+    RNSVGFeColorMatrixEventEmitter,
+    RNSVGFeColorMatrixState>;
+
+JSI_EXPORT extern const char RNSVGFilterComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFilter> component.
+ */
+using RNSVGFilterShadowNode = ConcreteViewShadowNode<
+    RNSVGFilterComponentName,
+    RNSVGFilterProps,
+    RNSVGFilterEventEmitter,
+    RNSVGFilterState>;
+
 JSI_EXPORT extern const char RNSVGForeignObjectComponentName[];
 
 /*

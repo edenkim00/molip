@@ -48,6 +48,20 @@ class RNSVGEllipseEventEmitter : public ViewEventEmitter {
   
   
 };
+class RNSVGFeColorMatrixEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  
+  
+};
+class RNSVGFilterEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  
+  
+};
 class RNSVGForeignObjectEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
@@ -66,8 +80,16 @@ class RNSVGImageEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
 
-  
-  
+  struct OnLoadSource {
+      Float width;
+    Float height;
+    std::string uri;
+    };
+
+  struct OnLoad {
+      OnLoadSource source;
+    };
+  void onLoad(OnLoad value) const;
 };
 class RNSVGSvgViewEventEmitter : public ViewEventEmitter {
  public:
