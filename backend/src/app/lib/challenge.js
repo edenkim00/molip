@@ -125,7 +125,7 @@ async function disconnectUserChallenge(data, verifiedToken) {
 // CONTROLLER
 async function getRanking(data, verifiedToken) {
   const { challenge_id } = data;
-  const userIdFromToken = verifiedToken.userId;
+  // const userIdFromToken = verifiedToken.userId;
   if (!challenge_id) {
     return errResponse(baseResponse.WRONG_BODY);
   }
