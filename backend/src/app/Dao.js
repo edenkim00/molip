@@ -124,6 +124,18 @@ async function updateUserProfile(connection, params) {
   await connection.query(Query, params);
 }
 
+async function getRanking(connection, challenge_id) {
+  const Query = `
+    SELECT Ra.user_id, Ra.ranking, U.profile_image_url, SUM(R.end - R.start) AS duration FROM Molip_Rankings Ra
+    INNER JOIN Molip_Users U on Ra.user_id = U.id
+    INNER JOIN Molip_Records R on R.user_id = U.id
+    WHERE Ra.challenge_id = 1 and Ra.dt = '2024-08-03' and Ra.ranking <= 10
+    GROUP BY Ra.user_id;
+  `;
+  const res = await connection.query(Query, [challenge_id]);
+  return res[0];
+}
+
 module.exports = {
   signUp,
   createChallenge,
@@ -141,4 +153,5 @@ module.exports = {
   doesExistConnection,
   checkChallengeName,
   updateUserProfile,
+  getRanking,
 };

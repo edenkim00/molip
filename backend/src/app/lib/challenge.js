@@ -122,10 +122,25 @@ async function disconnectUserChallenge(data, verifiedToken) {
   return response(baseResponse.SUCCESS);
 }
 
+// CONTROLLER
+async function getRanking(data, verifiedToken) {
+  const { challenge_id } = data;
+  const userIdFromToken = verifiedToken.userId;
+  if (!challenge_id) {
+    return errResponse(baseResponse.WRONG_BODY);
+  }
+  const result = await Provider.getRanking(challenge_id);
+  if (!result) {
+    return errResponse(baseResponse.DB_ERROR);
+  }
+  return response(baseResponse.SUCCESS, result);
+}
+
 module.exports = {
   createChallenge,
   getChallenges,
   trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
+  getRanking,
 };

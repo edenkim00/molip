@@ -95,6 +95,13 @@ const ENDPOINT_METADATA = [
     tokenRequired: false,
     next: Controller.uploadImageToS3,
   },
+
+  {
+    endpoint: "/app/ranking",
+    method: "GET",
+    tokenRequired: false,
+    next: Controller.getRanking,
+  },
 ];
 
 module.exports = {

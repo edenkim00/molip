@@ -13,6 +13,7 @@ const {
   trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
+  getRanking,
 } = require("./lib/challenge");
 
 const { uploadImageToS3 } = require("./lib/image");
@@ -30,5 +31,6 @@ exports.trackRecord = trackRecord;
 exports.createChallenge = createChallenge;
 exports.connectUserChallenge = connectUserChallenge;
 exports.disconnectUserChallenge = disconnectUserChallenge;
+exports.getRanking = getRanking;
 
 exports.uploadImageToS3 = uploadImageToS3;

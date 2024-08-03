@@ -1,13 +1,13 @@
 /* */
-const { requestEmailVerification } = require("./src/app/Controller.js");
+const { getRanking } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = requestEmailVerification;
+const testFunction = getRanking;
 //id, password, email
 /* API INPUT */
 const userId = "11234"; // only authorzation required
 const data = {
-  email: "daniel.hojinkim@gmail.com",
+  challenge_id: 1,
   shouldExist: "false",
 };
 

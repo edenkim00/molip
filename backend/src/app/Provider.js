@@ -60,6 +60,11 @@ async function checkChallengeName(name) {
   return false;
 }
 
+async function getRanking(challenge_id) {
+  const result = await select(Dao.getRanking, [challenge_id]);
+  return result;
+}
+
 module.exports = {
   getUserProfile,
   existUser,
@@ -68,4 +73,5 @@ module.exports = {
   getChallengesWithUser,
   doesExistUserHaving,
   checkChallengeName,
+  getRanking,
 };
