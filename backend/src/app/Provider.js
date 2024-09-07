@@ -79,7 +79,7 @@ async function getRankingForChallenge(challengeId) {
     ]);
     const userIdToDuration = _.keyBy(durations, "user_id");
     const userIdToUserInfo = _.keyBy(users, "id");
-    return _.orderBy(rankings, "ranking", "desc").map((ranking, index) => ({
+    return _.orderBy(rankings, "ranking", "asc").map((ranking, index) => ({
       userId: ranking.user_id,
       ranking: rankings.length - index,
       profileImageUrl: userIdToUserInfo[ranking.user_id]?.profile_image_url,
