@@ -64,7 +64,9 @@ async function checkChallengeName(name) {
 
 async function getRankingForChallenge(challengeId) {
   try {
+    console.log("hi", challengeId);
     const dt = getKSTDate(-1); // yesterday
+    console.log(dt);
     const rankings = await Dao.getRankingForChallenge(challengeId, dt);
     if (rankings.length === 0) {
       return [];
