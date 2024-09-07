@@ -87,15 +87,6 @@ const ENDPOINT_METADATA = [
     tokenRequired: true,
     next: Controller.trackRecord,
   },
-
-  // util
-  {
-    endpoint: "/app/image",
-    method: "POST",
-    tokenRequired: false,
-    next: Controller.uploadImageToS3,
-  },
-
   {
     endpoint: "/app/ranking",
     method: "GET",
@@ -108,6 +99,13 @@ const ENDPOINT_METADATA = [
     method: "GET",
     tokenRequired: true,
     next: Controller.getUserRankingForAChallenge,
+  },
+  // util
+  {
+    endpoint: "/app/image",
+    method: "POST",
+    tokenRequired: false,
+    next: Controller.uploadImageToS3,
   },
 ];
 
