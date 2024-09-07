@@ -1,8 +1,8 @@
 /* */
-const { getRankingForChallenge } = require("./src/app/Controller.js");
+const { getUserRankingForAChallenge } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = getRankingForChallenge;
+const testFunction = getUserRankingForAChallenge;
 //id, password, email
 /* API INPUT */
 const userId = "daeseong"; // only authorzation required

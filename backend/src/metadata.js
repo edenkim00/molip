@@ -102,6 +102,13 @@ const ENDPOINT_METADATA = [
     tokenRequired: false,
     next: Controller.getRankingForChallenge,
   },
+
+  {
+    endpoint: "/app/user-ranking",
+    method: "GET",
+    tokenRequired: true,
+    next: Controller.getUserRankingForAChallenge,
+  },
 ];
 
 module.exports = {

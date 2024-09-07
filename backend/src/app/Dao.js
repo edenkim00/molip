@@ -149,6 +149,36 @@ function getUsersInfo(userIds) {
     .whereIn("id", userIds);
 }
 
+function selectRankingsWithUserIdAndChallengeId(
+  userId,
+  challengeId,
+  start,
+  end
+) {
+  return db("Molip_Rankings")
+    .select("dt", "ranking")
+    .whereBetween("dt", [start, end])
+    .where("user_id", userId)
+    .where("challenge_id", challengeId);
+}
+
+function selectDurationWithUserIdAndChallengeId(
+  userId,
+  challengeId,
+  start,
+  end
+) {
+  return db("Molip_Records")
+    .select(
+      db.raw("date_format(start, '%Y-%m-%d') AS dt"),
+      db.raw("SUM(end-start) AS duration")
+    )
+    .whereBetween("start", [start, end])
+    .where("user_id", userId)
+    .where("challenge_id", challengeId)
+    .groupBy(db.raw("date_format(start, '%Y-%m-%d')"));
+}
+
 // async function getRankingForChallenge(connection, params) {
 //   const Query = `
 //     SELECT Ra.user_id, Ra.ranking, U.profile_image_url, SUM(R.end - R.start) AS duration FROM Molip_Rankings Ra
@@ -216,4 +246,6 @@ module.exports = {
   getChallengeDurationWithUserIds,
   getUserRankingForAChallenge,
   getUserDurationForAChallenge,
+  selectRankingsWithUserIdAndChallengeId,
+  selectDurationWithUserIdAndChallengeId,
 };

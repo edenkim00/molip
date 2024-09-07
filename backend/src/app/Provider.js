@@ -90,32 +90,46 @@ async function getRankingForChallenge(challengeId) {
   }
 }
 
-async function getUserRankingForAChallenge(userIdFromToken, challenge_id) {
-  const result = await select(Dao.getUserRankingForAChallenge, [
-    userIdFromToken,
+// Input : userId, challengeId => [{
+//   dt: "2024-08-03",
+//   ranking: 1,
+//   duration: 100,
+// }] }]
+
+async function getUserRankingForAChallenge(userId, challenge_id) {
+  // Molip_Rankings으로부터 ranking정보를 일주일 치 가져온다.
+  // Molip_Records로부터 duration 정보를 일주일 치 가져온다.
+
+  const start = getKSTDate(-180); // 7 days ago
+  const end = getKSTDate(-1); // yesterday
+
+  const rankingData = await Dao.selectRankingsWithUserIdAndChallengeId(
+    userId,
     challenge_id,
-  ]);
-  const result2 = await select(Dao.getUserDurationForAChallenge, [
-    userIdFromToken,
+    start,
+    end
+  );
+
+  const durationData = await Dao.selectDurationWithUserIdAndChallengeId(
+    userId,
     challenge_id,
-  ]);
-  // result: [
-  //   {
-  //     dt: "2024-08-03",
-  //     ranking: 1,
-  //   },
-  //   {
-  //     dt: "2024-08-04",
-  //     ranking: 3,
-  //   },
-  //   {
-  //     dt: "2024-08-05",
-  //     ranking: 8,
-  //   },
-  // ];
-  // return result;
-  console.log(result, result2);
-  // TODO: 09-07 - merge this results and response
+    start,
+    end
+  );
+
+  const rankingDataByDate = _.keyBy(rankingData, "dt");
+  const durationDataByDate = _.keyBy(durationData, "dt");
+  const result = [];
+  for (const dt of Object.keys(rankingDataByDate)) {
+    result.push({
+      dt,
+      ranking: rankingDataByDate[dt].ranking,
+      duration: durationDataByDate[dt]?.duration || 0,
+    });
+  }
+  console.log(result);
+
+  return _.orderBy(result, "dt", "asc");
 }
 
 module.exports = {
