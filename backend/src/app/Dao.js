@@ -1,5 +1,4 @@
 const { db } = require("../../config/database");
-const { generateDateRanges } = require("../utils");
 
 async function signUp(connection, id, password, email) {
   const Query = `INSERT INTO Molip_Users(id, password, email) VALUES(?, ?, ?);`;
@@ -170,7 +169,7 @@ function getUsersInfo(userIds) {
 // }
 
 async function getUserRankingForAChallenge(connection, params) {
-  const daterange = generateDateRanges(7);
+  const daterange = ["2024-08-03", "2024-08-10"];
   const minDt = daterange[daterange.length - 1];
   const maxDt = daterange[0];
 
@@ -183,7 +182,7 @@ async function getUserRankingForAChallenge(connection, params) {
 }
 
 async function getUserDurationForAChallenge(connection, params) {
-  const daterange = generateDateRanges(7);
+  const daterange = ["2024-08-03", "2024-08-10"];
   const minDt = daterange[daterange.length - 1];
   const maxDt = daterange[0];
 
