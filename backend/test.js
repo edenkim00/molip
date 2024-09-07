@@ -1,14 +1,14 @@
 /* */
-const { getRanking } = require("./src/app/Controller.js");
+const { getRankingForChallenge } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = getRanking;
+const testFunction = getRankingForChallenge;
 //id, password, email
 /* API INPUT */
-const userId = "11234"; // only authorzation required
+const userId = "daeseong"; // only authorzation required
 const data = {
   challenge_id: 1,
-  shouldExist: "false",
+  // shouldExist: "false",
 };
 
 /* API CALL */

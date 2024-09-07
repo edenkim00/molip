@@ -82,7 +82,38 @@ async function verifyAccessToken(token) {
   }
 }
 
+function generateDateRanges(cutoffInDays = 7) {
+  const today = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const dates = [];
+  for (const date of Array(cutoffInDays).keys()) {
+    const newDate = new Date(today);
+    newDate.setDate(today.getDate() - date);
+    dates.push(newDate);
+  }
+  return dates.map((date) => date.toISOString().split("T")[0]);
+}
+
+function getKSTDate(offsetInDays = 0) {
+  const date = new Date();
+  date.setDate(date.getDate() + offsetInDays);
+
+  const dt = date
+    .toLocaleString("en-US", {
+      timeZone: "Asia/Seoul",
+    })
+    .split(" ")[0];
+  const [month, day, year] = dt.split("/");
+  console.log(month, day, year);
+
+  return `${year.slice(0, 4)}-${month.padStart(2, "0")}-${day.padStart(
+    2,
+    "0"
+  )}`;
+}
+
 module.exports = {
   parseEvent,
   verifyAccessToken,
+  generateDateRanges,
+  getKSTDate,
 };

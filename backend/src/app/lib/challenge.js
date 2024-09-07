@@ -123,16 +123,34 @@ async function disconnectUserChallenge(data, verifiedToken) {
 }
 
 // CONTROLLER
-async function getRanking(data, verifiedToken) {
+async function getRankingForChallenge(data) {
   const { challenge_id } = data;
   // const userIdFromToken = verifiedToken.userId;
   if (!challenge_id) {
     return errResponse(baseResponse.WRONG_BODY);
   }
-  const result = await Provider.getRanking(challenge_id);
+  const result = await Provider.getRankingForChallenge(challenge_id);
   if (!result) {
     return errResponse(baseResponse.DB_ERROR);
   }
+  return response(baseResponse.SUCCESS, result);
+}
+
+async function getUserRankingForAChallenge(data, verifiedToken) {
+  const { challenge_id } = data;
+  const userIdFromToken = verifiedToken.userId;
+  if (!challenge_id || !userIdFromToken) {
+    return errResponse(baseResponse.WRONG_BODY);
+  }
+
+  const result = await Provider.getUserRankingForAChallenge(
+    userIdFromToken,
+    challenge_id
+  );
+  if (!result) {
+    return errResponse(baseResponse.DB_ERROR);
+  }
+
   return response(baseResponse.SUCCESS, result);
 }
 
@@ -142,5 +160,6 @@ module.exports = {
   trackRecord,
   connectUserChallenge,
   disconnectUserChallenge,
-  getRanking,
+  getRankingForChallenge,
+  getUserRankingForAChallenge,
 };

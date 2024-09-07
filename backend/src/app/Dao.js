@@ -1,3 +1,6 @@
+const { db } = require("../../config/database");
+const { generateDateRanges } = require("../utils");
+
 async function signUp(connection, id, password, email) {
   const Query = `INSERT INTO Molip_Users(id, password, email) VALUES(?, ?, ?);`;
   await connection.query(Query, [id, password, email]);
@@ -124,15 +127,78 @@ async function updateUserProfile(connection, params) {
   await connection.query(Query, params);
 }
 
-async function getRanking(connection, challenge_id) {
-  const Query = `
-    SELECT Ra.user_id, Ra.ranking, U.profile_image_url, SUM(R.end - R.start) AS duration FROM Molip_Rankings Ra
-    INNER JOIN Molip_Users U on Ra.user_id = U.id
-    INNER JOIN Molip_Records R on R.user_id = U.id
-    WHERE Ra.challenge_id = 1 and Ra.dt = '2024-08-03' and Ra.ranking <= 10
-    GROUP BY Ra.user_id;
+function getRankingForChallenge(challengeId, dt) {
+  console.log(
+    "hi",
+    db("Molip_Rankings")
+      .select("user_id", "challenge_id", "ranking")
+      .where({ challenge_id: challengeId, dt })
+      .andWhere("ranking", "<=", 10)
+      .toQuery()
+  );
+  return db("Molip_Rankings")
+    .select("user_id", "challenge_id", "ranking")
+    .where({ challenge_id: challengeId, dt })
+    .andWhere("ranking", "<=", 10);
+}
+
+function getChallengeDurationWithUserIds(challengeId, userIds) {
+  return db("Molip_Records")
+    .select("user_id", "challenge_id")
+    .sum({ duration: db.raw("end - start") })
+    .whereIn("user_id", userIds)
+    .andWhere("challenge_id", challengeId)
+    .groupBy("user_id");
+}
+
+function getUsersInfo(userIds) {
+  return db("Molip_Users")
+    .select("id", "profile_image_url")
+    .whereIn("id", userIds);
+}
+
+// async function getRankingForChallenge(connection, params) {
+//   const Query = `
+//     SELECT Ra.user_id, Ra.ranking, U.profile_image_url, SUM(R.end - R.start) AS duration FROM Molip_Rankings Ra
+//       INNER JOIN Molip_Users U on Ra.user_id = U.id
+//       INNER JOIN Molip_Records R on R.user_id = U.id
+//     WHERE Ra.challenge_id = 1 and Ra.dt = '2024-08-03' and Ra.ranking <= 10
+//     GROUP BY Ra.user_id;
+//   `;
+//   const res = await connection.query(Query, params);
+//   return res[0];
+// }
+
+async function getUserRankingForAChallenge(connection, params) {
+  const daterange = generateDateRanges(7);
+  const minDt = daterange[daterange.length - 1];
+  const maxDt = daterange[0];
+
+  const Query = `SELECT dt, ranking FROM Molip_Rankings WHERE dt between ? and ? and user_id = ?
+  and challenge_id = ? ORDER BY dt
   `;
-  const res = await connection.query(Query, [challenge_id]);
+
+  const res = await connection.query(Query, [minDt, maxDt, ...params]);
+  return res[0];
+}
+
+async function getUserDurationForAChallenge(connection, params) {
+  const daterange = generateDateRanges(7);
+  const minDt = daterange[daterange.length - 1];
+  const maxDt = daterange[0];
+
+  const Query = `
+  SELECT date_format(start, '%Y-%m-%d'), SUM(R.end - R.start) AS duration 
+    FROM Molip_Records R WHERE 
+  date_format(start, '%Y-%m-%d') between ? and ? and user_id = ?  AND
+  challenge_id = ? 
+  GROUP BY date_format(start, '%Y-%m-%d')
+  `
+    .trim()
+    .replace(/\s+/g, " ");
+  console.log(Query);
+  console.log(params);
+  const res = await connection.query(Query, [minDt, maxDt, ...params]);
   return res[0];
 }
 
@@ -153,5 +219,9 @@ module.exports = {
   doesExistConnection,
   checkChallengeName,
   updateUserProfile,
-  getRanking,
+  getRankingForChallenge,
+  getUsersInfo,
+  getChallengeDurationWithUserIds,
+  getUserRankingForAChallenge,
+  getUserDurationForAChallenge,
 };

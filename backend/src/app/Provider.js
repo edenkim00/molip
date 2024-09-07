@@ -1,5 +1,12 @@
 const { pool } = require("../../config/database");
+const { getKSTDate } = require("../utils");
 const Dao = require("./Dao");
+const _ = require("lodash");
+
+async function getConnection() {
+  const connection = await pool.getConnection(async (conn) => conn);
+  return connection;
+}
 
 async function select(daoFunc, params) {
   try {
@@ -60,9 +67,59 @@ async function checkChallengeName(name) {
   return false;
 }
 
-async function getRanking(challenge_id) {
-  const result = await select(Dao.getRanking, [challenge_id]);
-  return result;
+async function getRankingForChallenge(challengeId) {
+  try {
+    const dt = getKSTDate(-1); // yesterday
+    const rankings = await Dao.getRankingForChallenge(challengeId, dt);
+    if (rankings.length === 0) {
+      return [];
+    }
+
+    const userIds = _(rankings).map("user_id").value();
+    const [durations, users] = await Promise.all([
+      Dao.getChallengeDurationWithUserIds(challengeId, userIds),
+      Dao.getUsersInfo(userIds),
+    ]);
+    const userIdToDuration = _.keyBy(durations, "user_id");
+    const userIdToUserInfo = _.keyBy(users, "id");
+    return _.orderBy(rankings, "ranking", "desc").map((ranking, index) => ({
+      user_id: ranking.user_id,
+      ranking: rankings.length - index,
+      profile_image_url: userIdToUserInfo[ranking.user_id]?.profile_image_url,
+      duration: userIdToDuration[ranking.user_id]?.duration,
+    }));
+  } catch (err) {
+    console.error(err, challengeId);
+    return [];
+  }
+}
+
+async function getUserRankingForAChallenge(userIdFromToken, challenge_id) {
+  const result = await select(Dao.getUserRankingForAChallenge, [
+    userIdFromToken,
+    challenge_id,
+  ]);
+  const result2 = await select(Dao.getUserDurationForAChallenge, [
+    userIdFromToken,
+    challenge_id,
+  ]);
+  // result: [
+  //   {
+  //     dt: "2024-08-03",
+  //     ranking: 1,
+  //   },
+  //   {
+  //     dt: "2024-08-04",
+  //     ranking: 3,
+  //   },
+  //   {
+  //     dt: "2024-08-05",
+  //     ranking: 8,
+  //   },
+  // ];
+  // return result;
+  console.log(result, result2);
+  // TODO: 09-07 - merge this results and response
 }
 
 module.exports = {
@@ -73,5 +130,6 @@ module.exports = {
   getChallengesWithUser,
   doesExistUserHaving,
   checkChallengeName,
-  getRanking,
+  getRankingForChallenge,
+  getUserRankingForAChallenge,
 };
