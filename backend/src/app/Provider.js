@@ -3,11 +3,6 @@ const { getKSTDate } = require("../utils");
 const Dao = require("./Dao");
 const _ = require("lodash");
 
-async function getConnection() {
-  const connection = await pool.getConnection(async (conn) => conn);
-  return connection;
-}
-
 async function select(daoFunc, params) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);

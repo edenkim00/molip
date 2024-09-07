@@ -100,7 +100,7 @@ const ENDPOINT_METADATA = [
     endpoint: "/app/ranking",
     method: "GET",
     tokenRequired: false,
-    next: Controller.getRanking,
+    next: Controller.getRankingForChallenge,
   },
 ];
 
