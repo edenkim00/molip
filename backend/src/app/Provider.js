@@ -1,7 +1,7 @@
 const { pool } = require("../../config/database");
 const Dao = require("./Dao");
 const _ = require("lodash");
-const { getKSTDate } = require("../utils");
+const { getKSTDate } = require("./utils/util");
 
 async function select(daoFunc, params) {
   try {
