@@ -127,18 +127,11 @@ async function updateUserProfile(connection, params) {
 }
 
 function getRankingForChallenge(challengeId, dt) {
-  console.log(
-    "hi",
-    db("Molip_Rankings")
-      .select("user_id", "challenge_id", "ranking")
-      .where({ challenge_id: challengeId, dt })
-      .andWhere("ranking", "<=", 10)
-      .toQuery()
-  );
   return db("Molip_Rankings")
     .select("user_id", "challenge_id", "ranking")
-    .where({ challenge_id: challengeId, dt })
-    .andWhere("ranking", "<=", 10);
+    .where("challenge_id", challengeId)
+    .where("dt", dt)
+    .where("ranking", "<=", 10);
 }
 
 function getChallengeDurationWithUserIds(challengeId, userIds) {
@@ -146,7 +139,7 @@ function getChallengeDurationWithUserIds(challengeId, userIds) {
     .select("user_id", "challenge_id")
     .sum({ duration: db.raw("end - start") })
     .whereIn("user_id", userIds)
-    .andWhere("challenge_id", challengeId)
+    .where("challenge_id", challengeId)
     .groupBy("user_id");
 }
 

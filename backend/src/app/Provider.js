@@ -64,9 +64,7 @@ async function checkChallengeName(name) {
 
 async function getRankingForChallenge(challengeId) {
   try {
-    console.log("hi", challengeId);
     const dt = getKSTDate(-1); // yesterday
-    console.log(dt);
     const rankings = await Dao.getRankingForChallenge(challengeId, dt);
     if (rankings.length === 0) {
       return [];
@@ -79,6 +77,7 @@ async function getRankingForChallenge(challengeId) {
     ]);
     const userIdToDuration = _.keyBy(durations, "user_id");
     const userIdToUserInfo = _.keyBy(users, "id");
+
     return _.orderBy(rankings, "ranking", "asc").map((ranking, index) => ({
       userId: ranking.user_id,
       ranking: index + 1,
