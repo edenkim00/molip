@@ -101,7 +101,7 @@ const ENDPOINT_METADATA = [
     next: Controller.getUserRankingForAChallenge,
   },
   // util
-  {
+  {  
     endpoint: "/app/image",
     method: "POST",
     tokenRequired: false,
