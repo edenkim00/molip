@@ -1,12 +1,12 @@
 /* */
-const { trackRecord } = require("./src/app/Controller.js");
+const { trackRecord, getChallenges } = require("./src/app/Controller.js");
 
 /* API TO TEST */
-const testFunction = trackRecord;
+const testFunction = getChallenges;
 //id, password, email
 /* API INPUT */
-const userId = "daeseong"; // only authorzation required
-const data = { challenge_id: 9, start: 1731162582, end: 1731162587 };
+const userId = "edenkim00"; // only authorzation required
+const data = { user_id: "edenkim00" };
 
 /* API CALL */
 testFunction(data, { userId }).then((res) => {

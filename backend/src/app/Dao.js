@@ -69,9 +69,16 @@ async function getAllChallenges(connection) {
 }
 
 async function getChallengesWithUser(connection, params) {
-  const Query = `SELECT MC.* FROM Molip_User_Challenge_Connections MUCC
-       JOIN Molip_Challenges MC ON MUCC.challenge_id = MC.id AND MUCC.status = 'active'
-    WHERE MUCC.user_id = ? AND MUCC.status = 'active';`;
+  const Query = `
+  WITH my_challenges AS (
+    SELECT DISTINCT challenge_id FROM Molip_User_Challenge_Connections WHERE user_id = ? AND status = 'active'
+  )
+  SELECT C.*, SUM(CASE WHEN user_id is not null then 1 else 0 end) AS joined_users_count FROM Molip_Challenges C
+    LEFT OUTER JOIN Molip_User_Challenge_Connections MUCC ON C.id = MUCC.challenge_id AND MUCC.status = 'active'
+    WHERE C.status = 'active' AND C.id IN (SELECT * FROM my_challenges)
+    GROUP BY C.id
+  `;
+
   const result = await connection.query(Query, params);
   return result[0];
 }
