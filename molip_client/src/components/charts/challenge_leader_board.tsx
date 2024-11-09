@@ -230,7 +230,7 @@ export function LeaderBoardModal({
             if (myChallengesFetched) {
                 setMyChallenges(myChallengesFetched);
             }
-
+            setShowPasswordInput(false);
             Alert.alert('Successfully joined the challenge');
         } catch (e: any) {
             Alert.alert(e.message ?? 'Failed to join the challenge');
@@ -238,7 +238,6 @@ export function LeaderBoardModal({
     };
 
     const join = () => {
-        setShowPasswordInput(false);
         if (isPrivate) {
             if (passwordInput !== password) {
                 Alert.alert('Incorrect password');
