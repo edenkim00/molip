@@ -148,7 +148,7 @@ export function LongChallegeCard({
                     <View className="flex flex-row items-center justify-between w-full space-x-3 ">
                         <View className="w-[50%] justify-between flex-row items-center space-x-1">
                             <ChallengeCardImage imageUrl={imageUrl} />
-                            <Text className="font-semibold text-gray-800 w-full tracking-tight">
+                            <Text className="font-semibold text-gray-800 w-full tracking-tight max-w-[60%] px-2">
                                 {title}
                             </Text>
                         </View>
