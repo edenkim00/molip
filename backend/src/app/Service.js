@@ -63,11 +63,15 @@ async function deleteUser(userId) {
   }
 }
 
-async function changePassword(id, newPassword) {
+async function changePassword(id, email, newPassword) {
   const connection = await pool.getConnection(async (conn) => conn); // DB 연결
   try {
     connection.beginTransaction(); // BACKUP
-    await Dao.changePassword(connection, [newPassword, id]);
+    const suc = await Dao.changePassword(connection, [newPassword, id, email]);
+    if (!suc) {
+      return false;
+    }
+
     connection.commit(); // COMMIT
     return true;
   } catch (err) {

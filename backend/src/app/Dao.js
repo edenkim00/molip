@@ -44,9 +44,10 @@ async function selectUser(connection, params) {
 
 async function changePassword(connection, params) {
   const Query =
-    "UPDATE Molip_Users SET password = ? WHERE id = ? AND status = 'active'";
-  await connection.query(Query, params);
-  return;
+    "UPDATE Molip_Users SET password = ? WHERE id = ? AND email = ? AND status = 'active'";
+  const res = await connection.query(Query, params);
+  const isSucceed = res[0].affectedRows > 0;
+  return isSucceed;
 }
 
 async function checkId(connection, params) {

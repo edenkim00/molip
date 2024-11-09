@@ -102,4 +102,11 @@ module.exports = {
     code: 8004,
     message: "Already existing challenge name.",
   },
+
+  // fail to change password
+  WRONG_ID_EMAIL: {
+    isSuccess: false,
+    code: 9001,
+    message: "Unable to change password. Please check your ID and email.",
+  },
 };

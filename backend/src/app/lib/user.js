@@ -108,8 +108,8 @@ async function signIn(data) {
 }
 
 async function changePassword(data) {
-  const { id, newPassword } = data;
-  if (!id || !newPassword) {
+  const { id, email, newPassword } = data;
+  if (!email || !id || !newPassword) {
     return errResponse(baseResponse.WRONG_BODY);
   }
 
@@ -118,7 +118,10 @@ async function changePassword(data) {
   }
 
   try {
-    await Service.changePassword(id, newPassword);
+    const suc = await Service.changePassword(id, email, newPassword);
+    if (!suc) {
+      return errResponse(baseResponse.WRONG_ID_EMAIL);
+    }
   } catch (err) {
     console.error(err);
     return errResponse(baseResponse.DB_ERROR);
