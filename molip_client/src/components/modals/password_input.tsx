@@ -16,6 +16,7 @@ export function PasswordInputModal({
 }) {
     return (
         <Modal
+            style={{zIndex: 30}}
             transparent={true}
             animationType="fade"
             visible={showPasswordInput}

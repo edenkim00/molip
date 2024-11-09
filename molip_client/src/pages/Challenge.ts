@@ -15,3 +15,11 @@ export interface ChallengeRecrod {
     start: number;
     end?: number;
 }
+
+export interface ChallengeRanking {
+    userId: string;
+    dt: string;
+    duration: number;
+    ranking: number;
+    profileImageUrl: string;
+}

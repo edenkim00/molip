@@ -8,6 +8,7 @@ const testFunction = getUserRankingForAChallenge;
 const userId = "daeseong"; // only authorzation required
 const data = {
   challenge_id: 1,
+  offset: -3,
   // shouldExist: "false",
 };
 

@@ -102,7 +102,7 @@ async function getUserRankingForAChallenge(userId, challenge_id, offset = 0) {
   const interval = 7; // 7 days
 
   const start = getKSTDate((offset - 1) * interval); // {offset} week ago
-  const end = getKSTDate(-1); // yesterday
+  const end = getKSTDate(offset * interval - 1); // yesterday
 
   const rankingData = await Dao.selectRankingsWithUserIdAndChallengeId(
     userId,

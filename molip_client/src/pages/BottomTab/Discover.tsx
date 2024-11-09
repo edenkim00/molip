@@ -13,8 +13,6 @@ import {HeaderText} from '@components/header_text';
 import {LoadingSpinner} from '@components/loading_spinner';
 import ApiManager from '@api';
 import {RefreshButton} from '@components/refresh_button';
-import {PAGES} from '@pages/PageConfig';
-import {set} from 'lodash';
 
 export default function Discover({navigation}: any) {
     const myData = useContext(MyDataContext);
@@ -31,8 +29,7 @@ export default function Discover({navigation}: any) {
     }
 
     const filter = (all: Challenge[]) => {
-        const my = myChallenges.map(mc => mc.id);
-        return all.filter(c => !my.includes(c.id));
+        return all;
     };
 
     const [challenges, setChallenges] = React.useState(filter(allChallenges));

@@ -1,6 +1,7 @@
 import AuthManager from '@auth';
 import {ENDPOINTS} from '../constants';
 import Request from './request';
+import {ChallengeRanking} from '@pages/Challenge';
 
 interface SignUpRequestParams {
     id: string;
@@ -184,6 +185,44 @@ class ApiManager {
         });
         await request.setAuth();
         return await request.fire();
+    }
+
+    static async getRanking({
+        challengeId,
+    }: {
+        challengeId: number;
+    }): Promise<ChallengeRanking[]> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.GET_RANKING,
+            method: 'GET',
+            query: {
+                challenge_id: challengeId,
+            },
+        });
+        const res = await request.fire();
+        return res;
+    }
+
+    static async getUserChallengeData({
+        challengeId,
+        offset = 0,
+    }: {
+        challengeId: number;
+        offset?: number;
+    }): Promise<any> {
+        const request = new Request();
+        request.set({
+            endpoint: ENDPOINTS.PATH.GET_USER_CHALLENGE_DATA,
+            method: 'GET',
+            query: {
+                challenge_id: challengeId,
+                offset: offset,
+            },
+        });
+        await request.setAuth();
+        const res = await request.fire();
+        return res;
     }
 }
 

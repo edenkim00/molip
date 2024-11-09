@@ -23,10 +23,12 @@ export const ENDPOINTS: Endpoints = {
         UPLOAD_IMAGE: '/app/image',
         UPDATE_USER_PROFILE_IMAGE: '/app/user/profile-image',
         TRACK_RECORD: '/app/record',
+        GET_RANKING: '/app/ranking',
+        GET_USER_CHALLENGE_DATA: '/app/user-ranking',
     },
 };
 
 export const STORAGE_KEYS = {
-    LOGIN_INFO: 'login_info',
+    LOGIN_INFO: 'loginr_info',
     AUTH: 'auth',
 };

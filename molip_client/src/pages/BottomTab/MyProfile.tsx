@@ -6,6 +6,7 @@ import {
     Text,
     Dimensions,
     TouchableOpacity,
+    ScrollView,
 } from 'react-native';
 import {fetchUserProfile, MyDataContext} from '@lib/context';
 
@@ -18,7 +19,7 @@ import GradientText from '@components/gradient_text';
 import {openImagePicker} from '@components/modals/upload_image_modal';
 import ApiManager from '@api';
 import AuthManager from '@auth';
-import {RankingLineChart, sampleData} from '@components/charts/analytics';
+import {LongChallegeCard} from '@components/challenge';
 
 function MyPageButtonGroup({
     handleLogout,
@@ -56,6 +57,7 @@ export default function MyProfile({navigation}: any) {
     const {
         userId,
         setUserId,
+        myChallenges,
         setMyChallenges,
         setAllChallenges: setChallenges,
         userProfile,
@@ -163,9 +165,25 @@ export default function MyProfile({navigation}: any) {
                     </GradientText>
                 </View>
             </View>
-            <View className="flex-col justify-center items-center w-full">
-                <RankingLineChart rankings={sampleData} />
+            <View className="flex-col justify-center items-center w-full w-full space-y-4 mt-3">
+                <View className="w-4/5">
+                    <Text className="text-lg font-bold text-left ml-3">
+                        My Challenges
+                    </Text>
+                </View>
+                <ScrollView className="w-4/5 space-y-2 h-80 border-0.5 rounded-lg p-2">
+                    {myChallenges.map((challenge, index) => (
+                        <View key={`my-challenge-${index}`}>
+                            <LongChallegeCard
+                                userId={userId || ''}
+                                challenge={challenge}
+                                setMyChallenges={setMyChallenges}
+                            />
+                        </View>
+                    ))}
+                </ScrollView>
             </View>
+
             <MyPageButtonGroup
                 handleLogout={handleLogout}
                 handleDeleteAccount={handleDeleteAccount}
