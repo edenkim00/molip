@@ -87,7 +87,12 @@ async function trackRecord(userId, start, end, challengeId) {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     connection.beginTransaction(); // BACKUP
-    await Dao.trackRecord(connection, [userId, start, end, challengeId]);
+    await Dao.trackRecord(connection, [
+      userId,
+      new Date(start * 1000),
+      new Date(end * 1000),
+      challengeId,
+    ]);
     connection.commit(); // COMMIT
     return true;
   } catch (err) {
