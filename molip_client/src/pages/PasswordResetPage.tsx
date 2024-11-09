@@ -1,10 +1,19 @@
 import React, {useState} from 'react';
-import {View, Image, Text, TextInput, TouchableOpacity} from 'react-native';
+import {
+    View,
+    Image,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Alert,
+} from 'react-native';
 import PhoneImage from '@assets/phone_image.png';
 import {EmailAuthorization} from '@components/inputs';
 import {Space} from '@components/space';
 import {PasswordInput} from '@components/inputs/password';
-import {PageProps} from './PageConfig';
+import {PageProps, PAGES} from './PageConfig';
+import {MolipInput} from '@components/inputs/input';
+import ApiManager from '@api';
 
 function Background(): JSX.Element {
     return (
@@ -28,12 +37,40 @@ function Background(): JSX.Element {
     );
 }
 
-export default function PasswordResetPage({}: PageProps): JSX.Element {
+export default function PasswordResetPage({
+    navigation,
+}: PageProps): JSX.Element {
+    const [id, setId] = useState('');
     const [email, setEmail] = useState('');
     const [verified, setVerified] = useState(false);
 
     const [password, setPassword] = useState('');
     const [passwordChecked, setPasswordChecked] = useState(false);
+
+    const [processing, setProcessing] = useState(false);
+
+    const onPasswordReset = async () => {
+        if (password.length < 4 || password.length > 30) {
+            Alert.alert('Password must be between 4 and 30 characters');
+            return;
+        }
+
+        try {
+            setProcessing(true);
+            await ApiManager.changePassword({
+                email,
+                id,
+                newPassword: password,
+            });
+            Alert.alert('Password reset successful');
+
+            navigation.navigate(PAGES.LoginPage.name);
+        } catch (e: any) {
+            Alert.alert(`Failed to reset password: ${e.message}`);
+        } finally {
+            setProcessing(false);
+        }
+    };
 
     return (
         <View className="w-full h-full flex-col justify-end items-center relative bg-white">
@@ -46,13 +83,42 @@ export default function PasswordResetPage({}: PageProps): JSX.Element {
                     verified={verified}
                     setVerified={setVerified}
                 />
+
                 <Space heightClassName={'h-3'} />
+
                 {verified && (
-                    <PasswordInput
-                        setChecked={setPasswordChecked}
-                        password={password}
-                        setPassword={setPassword}
-                    />
+                    <>
+                        <MolipInput
+                            text={id}
+                            onChangeText={text => setId(text)}
+                            placeholder="ID"
+                        />
+                        <Space heightClassName={'h-3'} />
+                        <PasswordInput
+                            setChecked={setPasswordChecked}
+                            password={password}
+                            setPassword={setPassword}
+                        />
+                    </>
+                )}
+
+                {verified && id && password && passwordChecked && (
+                    <View className="w-[80%] mt-2.5">
+                        <TouchableOpacity
+                            onPress={onPasswordReset}
+                            disabled={!verified || !passwordChecked}
+                            className="bg-[#342D60] rounded py-3">
+                            {processing ? (
+                                <Text className="text-white font-bold text-center">
+                                    Processing...
+                                </Text>
+                            ) : (
+                                <Text className="text-white font-bold text-center">
+                                    Reset Password
+                                </Text>
+                            )}
+                        </TouchableOpacity>
+                    </View>
                 )}
             </View>
         </View>

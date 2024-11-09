@@ -26,15 +26,13 @@ import {
 } from '@lib/context';
 import {Space} from '@components/space';
 
-
 import {
     login,
     logout,
     getProfile as getKakaoProfile,
     shippingAddresses as getKakaoShippingAddresses,
     unlink,
-  } from "@react-native-seoul/kakao-login";
-  
+} from '@react-native-seoul/kakao-login';
 
 function BackgroundImages(): JSX.Element {
     return (
@@ -118,12 +116,14 @@ function LoginInput({
             <TextInput
                 className="px-6 py-4 border-b border-gray-600 "
                 placeholder="ID"
+                placeholderTextColor={'gray'}
                 value={id}
                 onChangeText={text => setId(text)}
             />
             <TextInput
                 className="px-6 py-4 "
                 placeholder="Password"
+                placeholderTextColor={'gray'}
                 value={password}
                 onChangeText={text => setPassword(text)}
             />
@@ -286,9 +286,9 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
                     processing={processing}
                 />
             </View>
-
-            <MethodDivider />
-            <KakaoLoginButton callback={kakaoLoginCallback} />
+            <Space heightClassName={'h-8'} />
+            {/* <MethodDivider /> */}
+            {/* <KakaoLoginButton callback={kakaoLoginCallback} /> */}
         </View>
     );
 }

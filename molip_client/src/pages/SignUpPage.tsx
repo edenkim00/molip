@@ -28,7 +28,6 @@ export default function SignUpPage({navigation}: PageProps) {
     const [email, setEmail] = useState('');
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
-
     const [emailVerified, setEmailVerified] = useState(false);
     const [passwordChecked, setPasswordChecked] = useState(false);
 
@@ -54,7 +53,7 @@ export default function SignUpPage({navigation}: PageProps) {
             Alert.alert('Sign up successful');
             navigation.navigate(PAGES.LoginPage.name);
         } catch (e) {
-            Alert.alert('Failed to sign up: ' + e.message);
+            Alert.alert(`Failed to sign up: ${e.message}`);
         }
     };
 

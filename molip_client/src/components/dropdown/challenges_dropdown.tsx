@@ -141,6 +141,7 @@ export function ChallengesDropdown({
                                     : 'Enter your challenge name'
                             }
                             ref={inputRef}
+                            placeholderTextColor={'gray'}
                         />
                         <View className="space-x-1 flex-row items-center justify-center absolute right-3">
                             {!!selectedChallenge && (

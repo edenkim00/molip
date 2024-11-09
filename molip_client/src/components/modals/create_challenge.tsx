@@ -142,6 +142,7 @@ export function CreateChallengeModal({
                             <TextInput
                                 className="rounded-xl px-3 py-4 w-full mb-2 h-12 overflow-hidden bg-white opacity-80 !shadow-2xl shadow-blue-300"
                                 placeholder="Challenge name"
+                                placeholderTextColor={'gray'}
                                 value={challengeName}
                                 onChangeText={setChallengeName}
                             />
@@ -149,6 +150,7 @@ export function CreateChallengeModal({
                             <TextInput
                                 className="rounded-xl px-3 py-4 w-full mb-2 h-24 overflow-hidden bg-white opacity-80"
                                 placeholder="Challenge description"
+                                placeholderTextColor={'gray'}
                                 multiline={true}
                                 value={challengeDescription}
                                 onChangeText={setChallengeDescription}
@@ -158,6 +160,7 @@ export function CreateChallengeModal({
                                 <TextInput
                                     className="rounded-xl px-3 py-4 w-5/6 mb-2 overflow-hidden bg-white opacity-80"
                                     placeholder="Enter PW"
+                                    placeholderTextColor={'gray'}
                                     secureTextEntry
                                     value={password}
                                     onChangeText={setPassword}

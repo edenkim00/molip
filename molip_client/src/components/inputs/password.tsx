@@ -16,6 +16,7 @@ export function PasswordInput({
     const [passwordForCheck, setPasswordForCheck] = useState('');
     useEffect(() => {
         if (passwordForCheck === '') {
+            setChecked(false);
             return;
         }
         setChecked(password === passwordForCheck);

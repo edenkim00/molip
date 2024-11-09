@@ -86,6 +86,12 @@ export function UserDataModal({
                     <View className="w-full flex-col justify-start space-y-10">
                         {fetching ? (
                             <LoadingSpinner />
+                        ) : challengeRankings.length === 0 ? (
+                            <View className="w-full h-full flex-col justify-center items-center">
+                                <Text className="text-center text-black">
+                                    No data available
+                                </Text>
+                            </View>
                         ) : (
                             <ChallengeMyData
                                 mode={mode}
@@ -236,8 +242,6 @@ function ChallengeDurationChart({
 }: {
     challengeRankings: ChallengeRanking[];
 }) {
-    console.log('challengeRankings', challengeRankings);
-
     const refinedDurationData = _.map(challengeRankings, ({duration, dt}) => ({
         duration: duration / 60 || 0, // 단위 변환
         dt,

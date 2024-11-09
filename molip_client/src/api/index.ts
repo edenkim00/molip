@@ -10,6 +10,7 @@ interface SignUpRequestParams {
 }
 
 interface ChangePasswordRequestParams {
+    email: string;
     id: string;
     newPassword: string;
 }
@@ -30,11 +31,17 @@ class ApiManager {
     }
 
     static async changePassword({
+        email,
         id,
         newPassword,
     }: ChangePasswordRequestParams): Promise<any> {
         const request = new Request();
-        // request.set({});
+        request.set({
+            endpoint: ENDPOINTS.PATH.CHANGE_PASSWORD,
+            method: 'PATCH',
+            body: JSON.stringify({email, id, newPassword}),
+        });
+        return await request.fire();
     }
 
     static async getUserProfile(): Promise<any> {

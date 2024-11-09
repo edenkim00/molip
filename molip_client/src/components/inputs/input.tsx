@@ -27,11 +27,12 @@ export function MolipInput({
                 value={text}
                 onChangeText={onChangeText}
                 placeholder={placeholder}
+                placeholderTextColor={'gray'}
                 className={`px-6 py-4 border-gray-600 ${borderClassName}`}
-                onFocus={() =>
-                    setBorderClassName('border-[#504593] text-[#504593]')
-                }
-                onBlur={() => setBorderClassName('border-black text-black')}
+                // onFocus={() =>
+                //     setBorderClassName('border-[#504593] text-[#504593]')
+                // }
+                // onBlur={() => setBorderClassName('border-black text-black')}
                 secureTextEntry={secureTextEntry}
             />
         </View>

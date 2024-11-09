@@ -29,6 +29,7 @@ export function PasswordInputModal({
                     <TextInput
                         className="border border-gray-300 rounded-lg p-2 w-full mt-2"
                         placeholder="Enter password"
+                        placeholderTextColor={'gray'}
                         secureTextEntry
                         value={passwordInput}
                         onChangeText={setPasswordInput}

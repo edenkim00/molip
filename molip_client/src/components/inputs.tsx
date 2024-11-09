@@ -37,14 +37,13 @@ export function EmailAuthorization({
             <View
                 className={`w-[80%] border rounded-3xl flex-row relative ${border}`}>
                 <TextInput
-                    className={`px-6 py-3.5 ${border}`}
+                    className={`px-6 py-3.5 ${border} w-full`}
                     style={{opacity: verified ? 0.5 : 1, borderColor: border}}
                     placeholder={'Email'}
                     value={email}
                     onChangeText={setEmail}
                     secureTextEntry={false}
-                    onFocus={() => setBorder('border-[#504593] text-[#504593]')}
-                    onBlur={() => setBorder('border-black text-black')}
+                    placeholderTextColor={'gray'}
                     readOnly={verified}
                 />
                 {!processing && !requested && (
@@ -83,15 +82,10 @@ export function EmailAuthorization({
                     <TextInput
                         className={`px-6 py-3.5 ${authCodeBorder}`}
                         placeholder={'Verification Code'}
+                        placeholderTextColor={'gray'}
                         value={authCode}
                         onChangeText={setAuthCode}
                         secureTextEntry={false}
-                        onFocus={() =>
-                            setAuthCodeBorder('border-[#504593] text-[#504593]')
-                        }
-                        onBlur={() =>
-                            setAuthCodeBorder('border-black text-black')
-                        }
                     />
                     {requested && processing && (
                         <TouchableOpacity
