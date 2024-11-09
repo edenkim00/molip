@@ -90,12 +90,6 @@ async function getRankingForChallenge(challengeId) {
   }
 }
 
-// Input : userId, challengeId => [{
-//   dt: "2024-08-03",
-//   ranking: 1,
-//   duration: 100,
-// }] }]
-
 async function getUserRankingForAChallenge(userId, challenge_id, offset = 0) {
   // Molip_Rankings으로부터 ranking정보를 일주일 치 가져온다.
   // Molip_Records로부터 duration 정보를 일주일 치 가져온다.
