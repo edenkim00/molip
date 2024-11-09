@@ -58,11 +58,10 @@ export function CreateChallengeModal({
                 imageUrl: imageUrl || undefined,
             });
             Alert.alert('Challenge created');
+            onClose();
         } catch (err: any) {
             Alert.alert(err.message ?? 'Failed to create challenge');
         }
-
-        onClose();
     };
 
     async function selectImageAndUpload(imageUri?: string) {

@@ -230,10 +230,11 @@ export function LeaderBoardModal({
             if (myChallengesFetched) {
                 setMyChallenges(myChallengesFetched);
             }
-            setShowPasswordInput(false);
             Alert.alert('Successfully joined the challenge');
         } catch (e: any) {
             Alert.alert(e.message ?? 'Failed to join the challenge');
+        } finally {
+            setShowPasswordInput(false);
         }
     };
 
