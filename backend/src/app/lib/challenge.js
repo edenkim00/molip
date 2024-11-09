@@ -122,7 +122,6 @@ async function disconnectUserChallenge(data, verifiedToken) {
   return response(baseResponse.SUCCESS);
 }
 
-// CONTROLLER
 async function getRankingForChallenge(data) {
   const { challenge_id } = data;
   // const userIdFromToken = verifiedToken.userId;
@@ -137,7 +136,7 @@ async function getRankingForChallenge(data) {
 }
 
 async function getUserRankingForAChallenge(data, verifiedToken) {
-  const { challenge_id } = data;
+  const { challenge_id, offset } = data;
   const userIdFromToken = verifiedToken.userId;
   if (!challenge_id || !userIdFromToken) {
     return errResponse(baseResponse.WRONG_BODY);
@@ -145,7 +144,8 @@ async function getUserRankingForAChallenge(data, verifiedToken) {
 
   const result = await Provider.getUserRankingForAChallenge(
     userIdFromToken,
-    challenge_id
+    challenge_id,
+    offset
   );
   if (!result) {
     return errResponse(baseResponse.DB_ERROR);

@@ -96,11 +96,12 @@ async function getRankingForChallenge(challengeId) {
 //   duration: 100,
 // }] }]
 
-async function getUserRankingForAChallenge(userId, challenge_id) {
+async function getUserRankingForAChallenge(userId, challenge_id, offset = 0) {
   // Molip_Rankings으로부터 ranking정보를 일주일 치 가져온다.
   // Molip_Records로부터 duration 정보를 일주일 치 가져온다.
+  const interval = 7; // 7 days
 
-  const start = getKSTDate(-180); // 7 days ago
+  const start = getKSTDate(-1 * (interval + offset)); // {offset} week ago
   const end = getKSTDate(-1); // yesterday
 
   const rankingData = await Dao.selectRankingsWithUserIdAndChallengeId(
