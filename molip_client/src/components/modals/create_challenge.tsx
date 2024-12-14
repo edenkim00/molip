@@ -33,6 +33,12 @@ export function CreateChallengeModal({
             Alert.alert('Please enter challenge name');
             return false;
         }
+
+        if (challengeName.length > 10) {
+            Alert.alert('Challenge name should be less than 10 characters');
+            return false;
+        }
+
         if (!challengeDescription) {
             Alert.alert('Please enter challenge description');
             return false;
