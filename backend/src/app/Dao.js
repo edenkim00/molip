@@ -178,13 +178,17 @@ function selectDurationWithUserIdAndChallengeId(
 ) {
   return db("Molip_Records")
     .select(
-      db.raw("date_format(start, '%Y-%m-%d') AS dt"),
+      db.raw(
+        "DATE_FORMAT(CONVERT_TZ(start, '+00:00', '+09:00'), '%Y-%m-%d') AS dt"
+      ),
       db.raw("SUM(end-start) AS duration")
     )
-    .whereBetween("start", [start, end])
     .where("user_id", userId)
     .where("challenge_id", challengeId)
-    .groupBy(db.raw("date_format(start, '%Y-%m-%d')"));
+    .groupBy(
+      db.raw("DATE_FORMAT(CONVERT_TZ(start, '+00:00', '+09:00'), '%Y-%m-%d')")
+    )
+    .havingBetween("dt", [start, end]);
 }
 
 // async function getRankingForChallenge(connection, params) {
