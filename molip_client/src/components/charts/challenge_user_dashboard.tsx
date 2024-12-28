@@ -9,6 +9,12 @@ import {BarChart, LineChart} from 'react-native-gifted-charts';
 
 import {ButtonGroup} from 'react-native-elements';
 import _ from 'lodash';
+
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs([
+    'Warning: TextElement: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+]);
+
 type ChallengeMyDataMode = 'ranking' | 'duration';
 const covertLabel = (dt: string) => {
     return dt.split('-').slice(1).join('/');
@@ -48,6 +54,7 @@ export function UserDataModal({
     useEffect(() => {
         console.log('fetching user challenge data', offset);
         fetchUserChallengeData().then(res => {
+            console.log(res);
             setChallengeRankings(res);
         });
     }, [offset]);
@@ -202,8 +209,11 @@ function ChallengeRankingLineChart({
         yLabels.push(min.toString());
     }
 
-    if (yLabels.length < 10) {
-        yLabels = Array.from({length: 10}, (_, i) => (9 - i).toString());
+    const len = yLabels.length;
+    if (len < 10) {
+        yLabels = yLabels.concat(
+            Array.from({length: 10 - len}, (_, i) => (10 - len - i).toString()),
+        );
     }
 
     return (

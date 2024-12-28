@@ -1,0 +1,138 @@
+{
+  "/Users/aike/Desktop/0711/molip/aggregator": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.18",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>",
+      "sls": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "aggregator",
+            "useDotenv": true,
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "stage": "local",
+              "region": "ap-northeast-2",
+              "versionFunctions": true,
+              "environment": {
+                "IS_LOCAL": "true"
+              }
+            },
+            "functions": {
+              "aggregator": {
+                "name": "webhook-delivery",
+                "handler": "index.handler",
+                "memorySize": 512,
+                "timeout": 300,
+                "events": []
+              }
+            },
+            "package": {
+              "exclude": [
+                "mock/**"
+              ],
+              "artifactsS3KeyDirname": "serverless/aggregator/local/code-artifacts"
+            }
+          },
+          "configFileDirPath": "/Users/aike/Desktop/0711/molip/aggregator",
+          "config": {
+            "type": "sls"
+          },
+          "options": {
+            "function": "aggregator",
+            "stage": "local"
+          },
+          "stage": "local",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:sls",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "/Users/aike/Desktop/0711/molip/aggregator",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "aggregator",
+      "useDotenv": true,
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "stage": "local",
+        "region": "ap-northeast-2",
+        "versionFunctions": true,
+        "environment": {
+          "IS_LOCAL": "true"
+        }
+      },
+      "functions": {
+        "aggregator": {
+          "name": "webhook-delivery",
+          "handler": "index.handler",
+          "memorySize": 512,
+          "timeout": 300,
+          "events": []
+        }
+      },
+      "package": {
+        "exclude": [
+          "mock/**"
+        ],
+        "artifactsS3KeyDirname": "serverless/aggregator/local/code-artifacts"
+      }
+    },
+    "serviceRawFile": "service: aggregator\nuseDotenv: true\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  stage: local\n  region: ap-northeast-2\n\nfunctions:\n  aggregator:\n    name: webhook-delivery\n    handler: index.handler\n    memorySize: 512\n    timeout: 300\n\npackage:\n  exclude:\n    - mock/**\n",
+    "command": [
+      "invoke",
+      "local"
+    ],
+    "options": {
+      "function": "aggregator",
+      "stage": "local"
+    },
+    "error": null,
+    "params": {},
+    "machineId": "da9878893bea08548b8dfdbff1efe42e",
+    "stage": "local",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "6532caf9-ead6-4779-bafe-f8a82bc0607a",
+    "orgName": "greybox",
+    "userId": "1LknKFFtytJpdmBPPW",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "greybox",
+    "subscription": null,
+    "userEmail": "daeseong@greyboxhq.com",
+    "serviceProviderAwsRegion": "ap-northeast-2",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "702197142747",
+    "projectType": "traditional",
+    "versionSf": "4.4.18",
+    "serviceProviderAwsCfStackName": "aggregator-local",
+    "integrations": {},
+    "serviceUniqueId": null,
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}
