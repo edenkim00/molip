@@ -11,7 +11,6 @@ export default class Storage {
         try {
             return await AsyncStorage.getItem(key);
         } catch (err) {
-            console.log(err);
             return null;
         }
     }
@@ -20,7 +19,7 @@ export default class Storage {
         try {
             await AsyncStorage.setItem(key, value);
         } catch (err) {
-            console.log(err);
+            // Do nothing
         }
     }
 

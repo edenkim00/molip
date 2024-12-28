@@ -104,7 +104,6 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
     async function trackLap() {
         const newLapRecords = [...lapRecords, seconds];
         // ORDER BY DESC AND SET RECORDS
-        console.log('newLapRecords', newLapRecords);
         setLapRecords(_.orderBy(newLapRecords, [], ['desc']));
     }
 

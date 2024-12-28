@@ -97,10 +97,6 @@ export function EmailAuthorization({
                                     setProcessing(false);
                                     setVerified(true);
                                 } else {
-                                    console.log(
-                                        'publishedAuthCode: ',
-                                        authCodePublished,
-                                    );
                                     Alert.alert('Wrong auth code');
                                 }
                             }}

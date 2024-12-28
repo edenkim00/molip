@@ -179,7 +179,6 @@ class ApiManager {
     }
 
     static async track(challengeRecord: any): Promise<any> {
-        console.log(challengeRecord);
         const request = new Request();
         request.set({
             endpoint: ENDPOINTS.PATH.TRACK_RECORD,

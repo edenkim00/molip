@@ -134,7 +134,6 @@ function ModeSelector({
 }
 
 export function RankingLineChart({rankings}: {rankings: ChallengeRanking[]}) {
-    console.log('RANKING: ', rankings);
     const [mode, setMode] = React.useState<rankingChartMode>('ranking');
     if (!rankings || rankings.length === 0) {
         return (

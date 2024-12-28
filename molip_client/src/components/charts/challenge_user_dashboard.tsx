@@ -52,9 +52,7 @@ export function UserDataModal({
     };
 
     useEffect(() => {
-        console.log('fetching user challenge data', offset);
         fetchUserChallengeData().then(res => {
-            console.log(res);
             setChallengeRankings(res);
         });
     }, [offset]);

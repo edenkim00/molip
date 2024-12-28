@@ -83,7 +83,6 @@ function InputTypeSelector({navigation}: {navigation?: any}): JSX.Element {
                         if (!navigation) {
                             Alert.alert('Cannot navigate to SignUpPage');
                         }
-                        console.log('navigation', PAGES.SignUpPage.name);
                         navigation.navigate(PAGES.SignUpPage.name);
                     }}>
                     <Text className="tracking-tight text-[15px] text-center font-light text-gray-700 x">
