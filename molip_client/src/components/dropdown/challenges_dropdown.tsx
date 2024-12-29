@@ -127,11 +127,11 @@ export function ChallengesDropdown({
 
     return (
         <TouchableWithoutFeedback onPress={handleOutsidePress}>
-            <View className="flex w-full items-center justify-center max-h-24">
+            <View className="flex w-full items-center justify-center max-h-24 z-10">
                 <View className="relative">
-                    <View className="flex-row items-center border rounded-3xl px-4 pb-3 pt-2 justify-center ">
+                    <View className="flex-row items-center border rounded-3xl justify-center h-10 text-black z-30">
                         <TextInput
-                            className={`w-full text-sm ${queryTextColorClassName}`}
+                            className={`w-full text-sm ${queryTextColorClassName}  px-4 py-2`}
                             value={query}
                             onChangeText={handleInputChange}
                             onFocus={() => setIsDropdownVisible(true)}
