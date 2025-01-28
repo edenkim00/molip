@@ -164,7 +164,7 @@ export function LongChallegeCard({
                             </TouchableOpacity>
                         </View>
                         <View>
-                            <View className="flex-row items-center space-x-2">
+                            <View className="flex-row items-center space-x-2 w-10">
                                 <Icon name="person" size={20} />
                                 <Text className="text-sm">
                                     {joined_users_count ?? '0'}

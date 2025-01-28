@@ -16,9 +16,7 @@ import BackgroundImage from '@assets/login_page_background.png';
 
 import {PAGES, PageProps} from '@pages/PageConfig';
 
-import {KakaoLoginButton} from '@components/buttons/kakao_login';
 import {LoadingSpinner} from '@components/loading_spinner';
-import {MethodDivider} from '@components/divider';
 import {
     fetchChallengeData,
     fetchUserProfile,
@@ -26,17 +24,9 @@ import {
 } from '@lib/context';
 import {Space} from '@components/space';
 
-import {
-    login,
-    logout,
-    getProfile as getKakaoProfile,
-    shippingAddresses as getKakaoShippingAddresses,
-    unlink,
-} from '@react-native-seoul/kakao-login';
-
 function BackgroundImages(): JSX.Element {
     return (
-        <View className="flex w-full flex-col justify-start items-center">
+        <View className="flex w-full flex-col justify-start items-center h-1/2 absolute top-24">
             <Image
                 source={LogoImage}
                 alt="Logo"
@@ -221,8 +211,6 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
         }
     }, [userId]);
 
-    const kakaoLoginCallback = async () => {};
-
     const handleLogin = async () => {
         setProcessing(true);
         if (!id || !password) {
@@ -266,10 +254,9 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
 
     return (
         <View className="w-full h-full flex-col justify-between items-center bg-white overflow-hidden relative pb-8">
-            <Space heightClassName={'h-24'} />
             <BackgroundImages />
-            <Space heightClassName={'h-4'} />
-            <View className="w-full justify-center items-center flex-col">
+            <View className="w-full justify-center items-center flex-col absolute bottom-10">
+                <Space heightClassName={'h-10'} />
                 <WelcomeText />
                 <InputTypeSelector navigation={navigation} />
                 <LoginInput
@@ -286,8 +273,6 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
                 />
             </View>
             <Space heightClassName={'h-8'} />
-            {/* <MethodDivider /> */}
-            {/* <KakaoLoginButton callback={kakaoLoginCallback} /> */}
         </View>
     );
 }

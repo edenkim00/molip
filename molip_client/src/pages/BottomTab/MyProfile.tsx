@@ -125,10 +125,10 @@ export default function MyProfile({navigation}: any) {
     }
 
     return (
-        <View className="w-full flex-col justify-between items-center bg-white h-full">
-            <View className="flex-col justify-start items-center w-full relative bg-white">
+        <View className="w-full flex-col justify-start items-center bg-white h-full">
+            <View className="flex-col justify-start items-center w-full relative bg-white w-4/5">
                 <Bubble />
-                <Space heightClassName={'h-24'} />
+                <Space heightClassName={'h-20'} />
                 <View className="flex-row justify-center w-full">
                     <GradientText
                         startColor="#3E00E6"
@@ -137,53 +137,48 @@ export default function MyProfile({navigation}: any) {
                         My Profile
                     </GradientText>
                 </View>
-
-                <View className="flex-col justify-center items-center w-full">
-                    <View className="flex-col justify-center items-center w-32 h-32 rounded-full bg-gray-200">
-                        <TouchableOpacity
-                            onPress={() => {
-                                openImagePicker(
-                                    selectImageAndUploadUserProfileImage,
-                                );
-                            }}>
-                            <Image
-                                source={
-                                    profile_image_url
-                                        ? {uri: profile_image_url}
-                                        : DEFAULT_PROFILE_IMAGE
-                                }
-                                className="w-32 h-32 rounded-full"
-                            />
-                        </TouchableOpacity>
+                <View className="flex-col justify-center items-center w-24 rounded-full bg-gray-200">
+                    <TouchableOpacity
+                        onPress={() => {
+                            openImagePicker(
+                                selectImageAndUploadUserProfileImage,
+                            );
+                        }}>
+                        <Image
+                            source={
+                                profile_image_url
+                                    ? {uri: profile_image_url}
+                                    : DEFAULT_PROFILE_IMAGE
+                            }
+                            className="w-24 h-24 rounded-full"
+                        />
+                    </TouchableOpacity>
+                </View>
+                <Space heightClassName={'h-2'} />
+                <GradientText
+                    startColor="#3E00E6"
+                    endColor="#13315F"
+                    fontSize={20}>
+                    {`Welcome, ${id}!`}
+                </GradientText>
+            </View>
+            <Space heightClassName={'h-2'} />
+            <View className="flex-col w-4/5">
+                <Text className="text-lg font-bold text-left ml-3">
+                    My Challenges
+                </Text>
+            </View>
+            <ScrollView className="w-4/5 space-y-2 h-80 border-0.5 rounded-lg p-2 max-h-70 mt-2">
+                {myChallenges.map((challenge, index) => (
+                    <View key={`my-challenge-${index}`}>
+                        <LongChallegeCard
+                            userId={userId || ''}
+                            challenge={challenge}
+                            setMyChallenges={setMyChallenges}
+                        />
                     </View>
-                    <Space heightClassName={'h-2'} />
-                    <GradientText
-                        startColor="#3E00E6"
-                        endColor="#13315F"
-                        fontSize={20}>
-                        {`Welcome, ${id}!`}
-                    </GradientText>
-                </View>
-            </View>
-            <View className="flex-col justify-center items-center w-full w-full space-y-4 mt-3">
-                <View className="w-4/5">
-                    <Text className="text-lg font-bold text-left ml-3">
-                        My Challenges
-                    </Text>
-                </View>
-                <ScrollView className="w-4/5 space-y-2 h-80 border-0.5 rounded-lg p-2">
-                    {myChallenges.map((challenge, index) => (
-                        <View key={`my-challenge-${index}`}>
-                            <LongChallegeCard
-                                userId={userId || ''}
-                                challenge={challenge}
-                                setMyChallenges={setMyChallenges}
-                            />
-                        </View>
-                    ))}
-                </ScrollView>
-            </View>
-
+                ))}
+            </ScrollView>
             <MyPageButtonGroup
                 handleLogout={handleLogout}
                 handleDeleteAccount={handleDeleteAccount}

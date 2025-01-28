@@ -14,6 +14,7 @@ import {
 import {LinearGradient} from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {openImagePicker} from './upload_image_modal';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export function CreateChallengeModal({
     visible,
@@ -106,7 +107,7 @@ export function CreateChallengeModal({
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={{flex: 1}}>
-                <View className="flex-1 justify-center items-center">
+                <View className="flex-col justify-center items-center h-full">
                     <LinearGradient
                         colors={['#8BC6A3', '#D8EBDD']}
                         className="px-6 py-4 rounded-lg w-5/6 shadow-2xl relative">
@@ -119,8 +120,8 @@ export function CreateChallengeModal({
                                 />
                             </TouchableOpacity>
                         </View>
-                        <View className="items-center my-4 space-y-1">
-                            <View className="w-24 h-24 rounded-full bg-gray-100 justify-center items-center">
+                        <View className="items-center my-4 space-y-1 h-24">
+                            <View className="w-20 h-20 rounded-full bg-gray-100 justify-center items-center">
                                 <TouchableOpacity
                                     onPress={() => {
                                         openImagePicker(selectImageAndUpload);
@@ -143,7 +144,9 @@ export function CreateChallengeModal({
                                 Challenge Image
                             </Text>
                         </View>
-                        <View className="flex-col w-full space-y-1">
+                        <ScrollView
+                            className="flex-col w-full space-y-1 h-40"
+                            nestedScrollEnabled={true}>
                             <TextInput
                                 className="rounded-xl px-3 py-4 w-full mb-2 h-12 overflow-hidden bg-white opacity-80 !shadow-2xl shadow-blue-300"
                                 placeholder="Challenge name"
@@ -185,7 +188,8 @@ export function CreateChallengeModal({
                                     />
                                 </TouchableOpacity>
                             </View>
-                        </View>
+                        </ScrollView>
+
                         <TouchableOpacity
                             className="bg-[#342D60] rounded-lg p-3 mt-4"
                             onPress={saveChallenge}>

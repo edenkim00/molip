@@ -17,7 +17,7 @@ import ApiManager from '@api';
 
 function Background(): JSX.Element {
     return (
-        <View className="flex-col items-center top-[10%] absolute">
+        <View className="flex-col items-center absolute top-10">
             <Image
                 source={PhoneImage}
                 alt="phone image"
@@ -75,17 +75,14 @@ export default function PasswordResetPage({
     return (
         <View className="w-full h-full flex-col justify-end items-center relative bg-white">
             <Background />
-            <Space heightClassName={'h-6'} />
-            <View className="w-full h-[40%] flex-col items-center pb-10">
+            <View className="w-full flex-col items-center pb-8 absolute bottom-0">
                 <EmailAuthorization
                     email={email}
                     setEmail={setEmail}
                     verified={verified}
                     setVerified={setVerified}
                 />
-
                 <Space heightClassName={'h-3'} />
-
                 {verified && (
                     <>
                         <MolipInput

@@ -49,7 +49,7 @@ export default function Discover({navigation}: any) {
             {showCreateChallengeModal ? (
                 <CreateChallengeBackground />
             ) : (
-                <View className="flex-col justify-betwen items-center w-full h-full bg-white ">
+                <View className="flex-col justify-betwen items-center w-full h-full bg-white relative">
                     <View className="flex-col justify-start items-center w-full relative h-full bg-white max-h-[90%] overflow-hidden">
                         <Bubble />
                         <Space heightClassName={'h-24'} />
@@ -91,7 +91,7 @@ export default function Discover({navigation}: any) {
                             </View>
                             <Space heightClassName={'h-2'} />
                             {filteredChalleges.length > 0 && (
-                                <View className="w-[90%] flex-col border rounded-md border-gray-200 px-[4%] py-[3%] relative">
+                                <View className="w-[90%] flex-col border rounded-md border-gray-200 px-[4%] py-[3%] relative max-h-64">
                                     <ScrollView className="w-full flex-col  space-y-2 ">
                                         {filteredChalleges.map(
                                             (
@@ -116,7 +116,7 @@ export default function Discover({navigation}: any) {
                             )}
                         </View>
                     </View>
-                    <View className="w-full flex-row justify-center items-end min-h-[10%] pb-3 mt-2">
+                    <View className="w-full flex-row justify-center items-end min-h-[10%] pb-3 mt-2 absolute bottom-0">
                         <View className="w-[80%]">
                             <TouchableOpacity
                                 onPress={() => {
