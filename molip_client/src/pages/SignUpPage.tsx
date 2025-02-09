@@ -16,8 +16,12 @@ import {validateEmail} from '@lib/utils';
 function Background() {
     return (
         <View className="w-full flex-col items-center absolute top-[15%]">
-            <Image source={LogoImage} alt="Learning Application Banner" />
-            <Text className="text-center text-blakc text-sm font-bold mt-8 text-xl tracking-tight">
+            <Image
+                source={LogoImage}
+                alt="Learning Application Banner"
+                style={{width: 140, resizeMode: 'contain'}}
+            />
+            <Text className="text-center text-blakc text-sm font-bold mt-4 text-base tracking-tight">
                 Let's get started!
             </Text>
         </View>

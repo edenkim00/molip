@@ -21,7 +21,7 @@ function Background(): JSX.Element {
             <Image
                 source={PhoneImage}
                 alt="phone image"
-                style={{width: 180, height: 156}}
+                style={{width: 150, height: 120, resizeMode: 'contain'}}
             />
             <View className="flex-row justify-center w-[85%] mt-4">
                 <Text className="font-semibold text-2xl tracking-tight">

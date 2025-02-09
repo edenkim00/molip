@@ -6,6 +6,7 @@ import {
     TextInput,
     TouchableOpacity,
     Alert,
+    Keyboard,
 } from 'react-native';
 
 import AuthManager from '@auth';
@@ -26,25 +27,33 @@ import {Space} from '@components/space';
 
 function BackgroundImages(): JSX.Element {
     return (
-        <View className="flex w-full flex-col justify-start items-center h-1/2 absolute top-24">
-            <Image
-                source={LogoImage}
-                alt="Logo"
-                className="w-[40%]"
-                style={{resizeMode: 'contain'}}
-            />
-            <Image
-                source={LearningApplicationBanner}
-                alt="Learning Application Banner"
-                className="w-[60%]"
-                style={{resizeMode: 'contain'}}
-            />
-            <Image
-                source={BackgroundImage}
-                alt="Login Page Background"
-                className="mr-3 w-[100%]"
-                style={{resizeMode: 'contain'}}
-            />
+        <View className="flex w-full flex-col justify-start items-center absolute h-1/2 max-h-1/2 pt-24">
+            <View className="w-full h-[50%] overflow-hidden flex-col justify-center items-center">
+                <Image
+                    source={LogoImage}
+                    alt="Logo"
+                    className="w-[100%]"
+                    style={{resizeMode: 'contain'}}
+                />
+                <Image
+                    source={LearningApplicationBanner}
+                    alt="Learning Application Banner"
+                    className="w-[100%]"
+                    style={{resizeMode: 'contain'}}
+                />
+            </View>
+            <View className="w-full h-[50%] overflow-hidden flex-col justify-center items-center">
+                <Image
+                    source={BackgroundImage}
+                    alt="Login Page Background"
+                    className="mr-3"
+                    style={{
+                        resizeMode: 'contain',
+                        width: '150%',
+                        height: '100%',
+                    }}
+                />
+            </View>
         </View>
     );
 }
@@ -182,6 +191,28 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
     const [password, setPassword] = useState('');
     const [processing, setProcessing] = useState(false);
 
+    const [onKeyboard, setOnKeyboard] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setOnKeyboard(true);
+            },
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setOnKeyboard(false);
+            },
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
     useEffect(() => {
         const fetchData = async (userId: string) => {
             try {
@@ -254,7 +285,7 @@ export default function LoginPage({navigation}: PageProps): JSX.Element {
 
     return (
         <View className="w-full h-full flex-col justify-between items-center bg-white overflow-hidden relative pb-8">
-            <BackgroundImages />
+            {!onKeyboard && <BackgroundImages />}
             <View className="w-full justify-center items-center flex-col absolute bottom-10">
                 <Space heightClassName={'h-10'} />
                 <WelcomeText />
