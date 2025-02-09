@@ -132,7 +132,7 @@ async function changePassword(data) {
 }
 
 async function requestEmailVerification(data) {
-  const { email, shouldExist } = data;
+  const { email, shouldExist, appName } = data;
   if (shouldExist === "true" || shouldExist === true) {
     const exist = await Provider.doesExistUserHaving(email);
     if (!exist) {
@@ -149,17 +149,17 @@ async function requestEmailVerification(data) {
     smtpTransport({
       service: "gmail",
       auth: {
-        user: "nlcsjejusportshall@gmail.com",
+        user: "bettertogetherprjt@gmail.com",
         // eslint-disable-next-line no-undef
-        pass: process.env.EMAIL_AUTH_PASSWORD,
+        pass: process.env.COMMON_EMAIL_AUTH_PASSWORD,
       },
     })
   );
 
   const mailOptions = {
-    from: "nlcsjejusportshall@gmail.com",
+    from: "bettertogetherprjt@gmail.com",
     to: email,
-    subject: "[Molip] Email Verification Code",
+    subject: `[${appName ?? "Molip"}] Email Verification Code`,
     text: "The Auth Code is " + authNum,
   };
   return new Promise((resolve) => {
