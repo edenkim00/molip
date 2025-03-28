@@ -122,6 +122,7 @@ function LoginInput({
                 className="px-6 py-4 "
                 placeholder="Password"
                 placeholderTextColor={'gray'}
+                secureTextEntry={true}
                 value={password}
                 onChangeText={text => setPassword(text)}
             />
