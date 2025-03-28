@@ -6542,6 +6542,11 @@ react-native-autocomplete-input@^5.4.0:
   dependencies:
     deprecated-react-native-prop-types "^2.3.0"
 
+react-native-background-timer@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/react-native-background-timer/-/react-native-background-timer-2.4.1.tgz"
+  integrity sha512-TE4Kiy7jUyv+hugxDxitzu38sW1NqjCk4uE5IgU2WevLv7sZacaBc6PZKOShNRPGirLl1NWkaG3LDEkdb9Um5g==
+
 react-native-chart-kit@^6.12.0:
   version "6.12.0"
   resolved "https://registry.npmjs.org/react-native-chart-kit/-/react-native-chart-kit-6.12.0.tgz"
@@ -6670,7 +6675,7 @@ react-native-vector-icons@^10.2.0, react-native-vector-icons@>7.0.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.50.0", react-native@>=0.50.0, react-native@>=0.59.0, react-native@>=0.65.0, react-native@0.74.1:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.50.0", react-native@>=0.47.0, react-native@>=0.50.0, react-native@>=0.59.0, react-native@>=0.65.0, react-native@0.74.1:
   version "0.74.1"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.1.tgz"
   integrity sha512-0H2XpmghwOtfPpM2LKqHIN7gxy+7G/r1hwJHKLV6uoyXGC/gCojRtoo5NqyKrWpFC8cqyT6wTYCLuG7CxEKilg==

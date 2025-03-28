@@ -15,6 +15,7 @@ import {Space} from './space';
 import _ from 'lodash';
 import {Challenge, ChallengeRecrod} from '@pages/Challenge';
 import ApiManager from '@api';
+import BackgroundTimer from 'react-native-background-timer';
 
 const getButtonClassNames: (enable: boolean) => string = (enable: boolean) => {
     return `w-[28%] p-2 justify-center items-center ${
@@ -80,14 +81,14 @@ function TimerScreen({selectedChallenge}: {selectedChallenge?: Challenge}) {
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
         if (isActive) {
-            interval = setInterval(() => {
+            interval = BackgroundTimer.setInterval(() => {
                 setSeconds(seconds => seconds + 1);
             }, 1000);
         } else if (!isActive && seconds !== 0) {
-            clearInterval(interval!);
+            BackgroundTimer.clearInterval(interval!);
         }
-        return () => clearInterval(interval!);
-    }, [isActive, seconds]);
+        return () => BackgroundTimer.clearInterval(interval!);
+    }, [isActive]);
 
     useEffect(() => {
         setTimeDisplay(convertSecondsToTimeDisplay(seconds));
