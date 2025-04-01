@@ -134,5 +134,77 @@
     "serviceProviderAwsCfStackUpdated": null,
     "serviceProviderAwsCfStackStatus": null,
     "serviceProviderAwsCfStackOutputs": null
+  },
+  "/Users/eden/Desktop/kds/hojin/molip/aggregator/serverless.yml": {
+    "versionFramework": "4.10.0",
+    "servicePath": "/Users/eden/Desktop/kds/hojin/molip/aggregator/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "aggregator",
+      "useDotenv": true,
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "stage": "local",
+        "region": "ap-northeast-2",
+        "versionFunctions": true,
+        "environment": {
+          "IS_LOCAL": "true"
+        }
+      },
+      "functions": {
+        "aggregator": {
+          "name": "webhook-delivery",
+          "handler": "index.handler",
+          "memorySize": 512,
+          "timeout": 300,
+          "events": []
+        }
+      },
+      "package": {
+        "exclude": [
+          "mock/**"
+        ],
+        "artifactsS3KeyDirname": "serverless/aggregator/local/code-artifacts"
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "stage": "local",
+      "region": "ap-northeast-2",
+      "versionFunctions": true,
+      "environment": {
+        "IS_LOCAL": "true"
+      }
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "service: aggregator\nuseDotenv: true\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  stage: local\n  region: ap-northeast-2\n\nfunctions:\n  aggregator:\n    name: webhook-delivery\n    handler: index.handler\n    memorySize: 512\n    timeout: 300\n\npackage:\n  exclude:\n    - mock/**\n",
+    "command": [
+      "invoke",
+      "local"
+    ],
+    "options": {
+      "function": "aggregator",
+      "stage": "local"
+    },
+    "orgId": "d3c44ec2-ecf8-4b9c-b22e-841c37efb12f",
+    "orgName": "kimdaeseong",
+    "userId": "TCPFj06LtpRwP5ZNpM",
+    "userName": "kimdaeseong",
+    "serviceProviderAwsAccountId": "702197142747",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
   }
 }
